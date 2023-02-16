@@ -6,7 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.constant.RedisPrefixConst;
-import org.boson.domain.dto.UniqueViewDTO;
+import org.boson.domain.dto.UniqueViewDto;
 import org.boson.domain.po.UniqueView;
 import org.boson.mapper.UniqueViewMapper;
 import org.boson.service.RedisService;
@@ -38,7 +38,7 @@ public class UniqueViewServiceImpl extends ServiceImpl<UniqueViewMapper, UniqueV
     private UniqueViewMapper uniqueViewMapper;
 
     @Override
-    public List<UniqueViewDTO> listUniqueViews() {
+    public List<UniqueViewDto> listUniqueViews() {
         DateTime startTime = DateUtil.beginOfDay(DateUtil.offsetDay(new Date(), -7));
         DateTime endTime = DateUtil.endOfDay(new Date());
         return uniqueViewMapper.listUniqueViews(startTime, endTime);

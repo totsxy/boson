@@ -1,22 +1,23 @@
 package org.boson.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.boson.domain.dto.LabelOptionDTO;
-import org.boson.domain.dto.ResourceDTO;
+import org.boson.domain.dto.LabelOptionDto;
+import org.boson.domain.dto.ResourceDto;
 import org.boson.domain.po.Resource;
 import org.boson.domain.po.RoleResource;
-import org.boson.domain.vo.ConditionVO;
+import org.boson.domain.vo.ConditionVo;
 import org.boson.exception.BizException;
-import org.boson.handler.FilterInvocationSecurityMetadataSourceImpl;
-import org.boson.domain.vo.ResourceVO;
+import org.boson.handler.ResourceRoleMetadataSourceImpl;
+import org.boson.domain.vo.ResourceVo;
 import org.boson.mapper.ResourceMapper;
-import org.boson.mapper.RoleResourceMapper;
 import org.boson.service.ResourceService;
+import org.boson.service.RoleResourceService;
+import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.boson.util.BeanCopyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.boson.util.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,128 +28,123 @@ import static org.boson.constant.CommonConst.FALSE;
 /**
  * 资源服务
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service
-public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
-    @Autowired
-    private ResourceMapper resourceMapper;
-    @Autowired
-    private RoleResourceMapper roleResourceMapper;
-    @Autowired
-    private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
+public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resource> implements ResourceService {
 
+    private final RoleResourceService roleResourceService;
 
-    @Override
-    public void saveOrUpdateResource(ResourceVO resourceVO) {
-        // 更新资源信息
-        Resource resource = BeanCopyUtils.copyObject(resourceVO, Resource.class);
-        this.saveOrUpdate(resource);
-        // 重新加载角色资源信息
-        filterInvocationSecurityMetadataSource.clearDataSource();
+    private final ResourceRoleMetadataSourceImpl resourceRoleMetadataSource;
+
+    public ResourceServiceImpl(RoleResourceService roleResourceService, ResourceRoleMetadataSourceImpl resourceRoleMetadataSource) {
+        this.roleResourceService = roleResourceService;
+        this.resourceRoleMetadataSource = resourceRoleMetadataSource;
     }
 
     @Override
-    public void deleteResource(Integer resourceId) {
+    public boolean saveOrUpdateResource(ResourceVo resourceVo) {
+        Resource resource = BeanUtils.bean2Bean(resourceVo, Resource.class);
+        return this.resourceRoleMetadataSource.clearDataSource(this.saveOrUpdate(resource));
+    }
+
+    @Override
+    public boolean deleteResource(Integer resourceId) {
         // 查询是否有角色关联
-        Integer count = roleResourceMapper.selectCount(new LambdaQueryWrapper<RoleResource>()
-                .eq(RoleResource::getResourceId, resourceId));
+        int count = this.roleResourceService.beginQuery()
+                .eq(RoleResource::getResourceId, resourceId)
+                .count();
+
         if (count > 0) {
             throw new BizException("该资源下存在角色");
         }
+
         // 删除子资源
-        List<Integer> resourceIdList = resourceMapper.selectList(new LambdaQueryWrapper<Resource>()
-                        .select(Resource::getId).
-                        eq(Resource::getPid, resourceId))
+        List<Integer> resourceIdList = this.beginQuery()
+                .select(Resource::getId)
+                .eq(Resource::getPid, resourceId)
+                .queryList()
                 .stream()
                 .map(Resource::getId)
                 .collect(Collectors.toList());
+
         resourceIdList.add(resourceId);
-        resourceMapper.deleteBatchIds(resourceIdList);
+
+        boolean delResult = resourceIdList.size() == getBaseMapper().deleteBatchIds(resourceIdList);
+        return this.resourceRoleMetadataSource.clearDataSource(delResult);
     }
 
     @Override
-    public List<ResourceDTO> listResources(ConditionVO conditionVO) {
-        // 查询资源列表
-        List<Resource> resourceList = resourceMapper.selectList(new LambdaQueryWrapper<Resource>()
-                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Resource::getResourceName, conditionVO.getKeywords()));
-        // 获取所有模块
-        List<Resource> parentList = listResourceModule(resourceList);
-        // 根据父id分组获取模块下的资源
-        Map<Integer, List<Resource>> childrenMap = listResourceChildren(resourceList);
-        // 绑定模块下的所有接口
-        List<ResourceDTO> resourceDTOList = parentList.stream().map(item -> {
-            ResourceDTO resourceDTO = BeanCopyUtils.copyObject(item, ResourceDTO.class);
-            List<ResourceDTO> childrenList = BeanCopyUtils.copyList(childrenMap.get(item.getId()), ResourceDTO.class);
-            resourceDTO.setChildren(childrenList);
-            childrenMap.remove(item.getId());
-            return resourceDTO;
-        }).collect(Collectors.toList());
+    public List<ResourceDto> listResources(ConditionVo conditionVo) {
+        List<Resource> resourceList = this.beginQuery()
+                .like(StringUtils.isNotBlank(conditionVo.getKeywords()), Resource::getResourceName, conditionVo.getKeywords())
+                .queryList();
+        Map<Integer, List<Resource>> childrenResourceMap = this.listChildrenResource(resourceList);
+
+        List<ResourceDto> resourceDtoList = this.listModule(resourceList).stream()
+                .map(module -> {
+                    ResourceDto resourceDto = BeanUtils.bean2Bean(module, ResourceDto.class);
+                    List<ResourceDto> children = BeanUtils.bean2Bean(childrenResourceMap.remove(module.getId()), ResourceDto.class);
+                    resourceDto.setChildren(children);
+                    return resourceDto;
+                }).collect(Collectors.toList());
+
         // 若还有资源未取出则拼接
-        if (CollectionUtils.isNotEmpty(childrenMap)) {
-            List<Resource> childrenList = new ArrayList<>();
-            childrenMap.values().forEach(childrenList::addAll);
-            List<ResourceDTO> childrenDTOList = childrenList.stream()
-                    .map(item -> BeanCopyUtils.copyObject(item, ResourceDTO.class))
+        if (CollectionUtils.isNotEmpty(childrenResourceMap)) {
+            List<Resource> childrenResourceList = new ArrayList<>();
+            childrenResourceMap.values().forEach(childrenResourceList::addAll);
+
+            List<ResourceDto> childrenResourceDtoList = childrenResourceList.stream()
+                    .map(resource -> BeanCopyUtils.copyObject(resource, ResourceDto.class))
                     .collect(Collectors.toList());
-            resourceDTOList.addAll(childrenDTOList);
+            resourceDtoList.addAll(childrenResourceDtoList);
         }
-        return resourceDTOList;
+        return resourceDtoList;
     }
 
     @Override
-    public List<LabelOptionDTO> listResourceOption() {
-        // 查询资源列表
-        List<Resource> resourceList = resourceMapper.selectList(new LambdaQueryWrapper<Resource>()
+    public List<LabelOptionDto> listResourceOption() {
+        List<Resource> resourceList = this.beginQuery()
                 .select(Resource::getId, Resource::getResourceName, Resource::getPid)
-                .eq(Resource::getIsAnonymous, FALSE));
-        // 获取所有模块
-        List<Resource> parentList = listResourceModule(resourceList);
-        // 根据父id分组获取模块下的资源
-        Map<Integer, List<Resource>> childrenMap = listResourceChildren(resourceList);
-        // 组装父子数据
-        return parentList.stream().map(item -> {
-            List<LabelOptionDTO> list = new ArrayList<>();
-            List<Resource> children = childrenMap.get(item.getId());
-            if (CollectionUtils.isNotEmpty(children)) {
-                list = children.stream()
-                        .map(resource -> LabelOptionDTO.builder()
-                                .id(resource.getId())
-                                .label(resource.getResourceName())
-                                .build())
-                        .collect(Collectors.toList());
-            }
-            return LabelOptionDTO.builder()
-                    .id(item.getId())
-                    .label(item.getResourceName())
-                    .children(list)
-                    .build();
-        }).collect(Collectors.toList());
+                .eq(Resource::getIsAnonymous, FALSE)
+                .queryList();
+
+        Map<Integer, List<Resource>> childrenResourceMap = listChildrenResource(resourceList);
+
+        return this.listModule(resourceList).stream()
+                .map(module -> {
+                    List<LabelOptionDto> children;
+                    List<Resource> childrenResourceList = childrenResourceMap.get(module.getId());
+
+                    if (CollectionUtil.isEmpty(childrenResourceList)) {
+                        children = new ArrayList<>(0);
+                    } else {
+                        children = childrenResourceList.stream()
+                                .map(resource -> LabelOptionDto.builder()
+                                        .id(resource.getId())
+                                        .label(resource.getResourceName())
+                                        .build())
+                                .collect(Collectors.toList());
+                    }
+
+                    return LabelOptionDto.builder()
+                            .id(module.getId())
+                            .label(module.getResourceName())
+                            .children(children)
+                            .build();
+                }).collect(Collectors.toList());
     }
 
-    /**
-     * 获取模块下的所有资源
-     *
-     * @param resourceList 资源列表
-     * @return 模块资源
-     */
-    private Map<Integer, List<Resource>> listResourceChildren(List<Resource> resourceList) {
+    private List<Resource> listModule(List<Resource> resourceList) {
         return resourceList.stream()
-                .filter(item -> Objects.nonNull(item.getPid()))
-                .collect(Collectors.groupingBy(Resource::getPid));
-    }
-
-    /**
-     * 获取所有资源模块
-     *
-     * @param resourceList 资源列表
-     * @return 资源模块列表
-     */
-    private List<Resource> listResourceModule(List<Resource> resourceList) {
-        return resourceList.stream()
-                .filter(item -> Objects.isNull(item.getPid()))
+                .filter(resource -> Objects.isNull(resource.getPid()))
                 .collect(Collectors.toList());
     }
 
+    private Map<Integer, List<Resource>> listChildrenResource(List<Resource> resourceList) {
+        return resourceList.stream()
+                .filter(resource -> Objects.nonNull(resource.getPid()))
+                .collect(Collectors.groupingBy(Resource::getPid));
+    }
 }

@@ -3,13 +3,13 @@ package org.boson.strategy.impl;
 import com.alibaba.fastjson.JSON;
 import org.boson.config.WeiboConfigProperties;
 import org.boson.constant.SocialLoginConst;
-import org.boson.domain.dto.SocialTokenDTO;
-import org.boson.domain.dto.SocialUserInfoDTO;
-import org.boson.domain.dto.WeiboTokenDTO;
-import org.boson.domain.dto.WeiboUserInfoDTO;
+import org.boson.domain.dto.SocialTokenDto;
+import org.boson.domain.dto.SocialUserInfoDto;
+import org.boson.domain.dto.WeiboTokenDto;
+import org.boson.domain.dto.WeiboUserInfoDto;
 import org.boson.enums.LoginTypeEnum;
 import org.boson.exception.BizException;
-import org.boson.domain.vo.WeiboLoginVO;
+import org.boson.domain.vo.WeiboLoginVo;
 import org.boson.enums.StatusCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -37,12 +37,12 @@ public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenDTO getSocialToken(String data) {
-        WeiboLoginVO weiBoLoginVO = JSON.parseObject(data, WeiboLoginVO.class);
+    public SocialTokenDto getSocialToken(String data) {
+        WeiboLoginVo weiBoLoginVO = JSON.parseObject(data, WeiboLoginVo.class);
         // 获取微博token信息
-        WeiboTokenDTO weiboToken = getWeiboToken(weiBoLoginVO);
+        WeiboTokenDto weiboToken = getWeiboToken(weiBoLoginVO);
         // 返回token信息
-        return SocialTokenDTO.builder()
+        return SocialTokenDto.builder()
                 .openId(weiboToken.getUid())
                 .accessToken(weiboToken.getAccess_token())
                 .loginType(LoginTypeEnum.WEIBO.getType())
@@ -50,15 +50,15 @@ public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
     }
 
     @Override
-    public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialTokenDTO) {
+    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDTO) {
         // 定义请求参数
         Map<String, String> data = new HashMap<>(2);
         data.put(SocialLoginConst.UID, socialTokenDTO.getOpenId());
         data.put(SocialLoginConst.ACCESS_TOKEN, socialTokenDTO.getAccessToken());
         // 获取微博用户信息
-        WeiboUserInfoDTO weiboUserInfoDTO = restTemplate.getForObject(weiboConfigProperties.getUserInfoUrl(), WeiboUserInfoDTO.class, data);
+        WeiboUserInfoDto weiboUserInfoDTO = restTemplate.getForObject(weiboConfigProperties.getUserInfoUrl(), WeiboUserInfoDto.class, data);
         // 返回用户信息
-        return SocialUserInfoDTO.builder()
+        return SocialUserInfoDto.builder()
                 .nickname(Objects.requireNonNull(weiboUserInfoDTO).getScreen_name())
                 .avatar(weiboUserInfoDTO.getAvatar_hd())
                 .build();
@@ -68,9 +68,9 @@ public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
      * 获取微博token信息
      *
      * @param weiBoLoginVO 微博登录信息
-     * @return {@link WeiboTokenDTO} 微博token
+     * @return {@link WeiboTokenDto} 微博token
      */
-    private WeiboTokenDTO getWeiboToken(WeiboLoginVO weiBoLoginVO) {
+    private WeiboTokenDto getWeiboToken(WeiboLoginVo weiBoLoginVO) {
         // 根据code换取微博uid和accessToken
         MultiValueMap<String, String> weiboData = new LinkedMultiValueMap<>();
         // 定义微博token请求参数
@@ -81,7 +81,7 @@ public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
         weiboData.add(SocialLoginConst.CODE, weiBoLoginVO.getCode());
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(weiboData, null);
         try {
-            return restTemplate.exchange(weiboConfigProperties.getAccessTokenUrl(), HttpMethod.POST, requestEntity, WeiboTokenDTO.class).getBody();
+            return restTemplate.exchange(weiboConfigProperties.getAccessTokenUrl(), HttpMethod.POST, requestEntity, WeiboTokenDto.class).getBody();
         } catch (Exception e) {
             throw new BizException(StatusCodeEnum.WEIBO_LOGIN_ERROR);
         }

@@ -4,7 +4,7 @@ package org.boson.controller;
 import org.boson.annotation.OperationLog;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
-import org.boson.domain.dto.UserOnlineDTO;
+import org.boson.domain.dto.UserOnlineDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +38,7 @@ public class UserInfoController {
      */
     @ApiOperation(value = "更新用户信息")
     @PutMapping("/users/info")
-    public Result<?> updateUserInfo(@Valid @RequestBody UserInfoVO userInfoVO) {
+    public Result<?> updateUserInfo(@Valid @RequestBody UserInfoVo userInfoVO) {
         userInfoService.updateUserInfo(userInfoVO);
         return Result.ok();
     }
@@ -64,7 +64,7 @@ public class UserInfoController {
      */
     @ApiOperation(value = "绑定用户邮箱")
     @PostMapping("/users/email")
-    public Result<?> saveUserEmail(@Valid @RequestBody EmailVO emailVO) {
+    public Result<?> saveUserEmail(@Valid @RequestBody EmailVo emailVO) {
         userInfoService.saveUserEmail(emailVO);
         return Result.ok();
     }
@@ -78,7 +78,7 @@ public class UserInfoController {
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/admin/users/role")
-    public Result<?> updateUserRole(@Valid @RequestBody UserRoleVO userRoleVO) {
+    public Result<?> updateUserRole(@Valid @RequestBody UserRoleVo userRoleVO) {
         userInfoService.updateUserRole(userRoleVO);
         return Result.ok();
     }
@@ -92,7 +92,7 @@ public class UserInfoController {
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户禁用状态")
     @PutMapping("/admin/users/disable")
-    public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVO userDisableVO) {
+    public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVo userDisableVO) {
         userInfoService.updateUserDisable(userDisableVO);
         return Result.ok();
     }
@@ -101,11 +101,11 @@ public class UserInfoController {
      * 查看在线用户
      *
      * @param conditionVO 条件
-     * @return {@link Result<UserOnlineDTO>} 在线用户列表
+     * @return {@link Result< UserOnlineDto >} 在线用户列表
      */
     @ApiOperation(value = "查看在线用户")
     @GetMapping("/admin/users/online")
-    public Result<PageResult<UserOnlineDTO>> listOnlineUsers(ConditionVO conditionVO) {
+    public Result<PageResult<UserOnlineDto>> listOnlineUsers(ConditionVo conditionVO) {
         return Result.ok(userInfoService.listOnlineUsers(conditionVO));
     }
 

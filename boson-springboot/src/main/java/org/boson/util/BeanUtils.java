@@ -2,9 +2,7 @@ package org.boson.util;
 
 import lombok.SneakyThrows;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,9 @@ public final class BeanUtils {
      * @return 目标对象
      */
     public static <T1, T2> T2 bean2Bean(T1 from, T2 to) {
-        org.springframework.beans.BeanUtils.copyProperties(from, to);
+        if (Objects.nonNull(from)) {
+            org.springframework.beans.BeanUtils.copyProperties(from, to);
+        }
         return to;
     }
 
@@ -62,7 +62,10 @@ public final class BeanUtils {
      * @return 目标对象序列
      */
     public static <T1, T2> List<T2> bean2Bean(Collection<T1> from, Supplier<? extends T2> supplier) {
-        return from.stream().map(t -> bean2Bean(t, supplier)).collect(Collectors.toList());
+        return Objects.isNull(from) ? new ArrayList<>(0)
+                : from.stream()
+                .map(t -> bean2Bean(t, supplier))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -84,7 +87,10 @@ public final class BeanUtils {
      * @return 目标字典
      */
     public static <T1, T2, T3> Map<T1, T3> bean2Bean(Map<T1, T2> from, Supplier<? extends T3> supplier) {
-        return from.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> bean2Bean(t.getValue(), supplier)));
+        return Objects.isNull(from) ? new HashMap<>(0)
+                : from.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, t -> bean2Bean(t.getValue(), supplier)));
     }
 
     /**

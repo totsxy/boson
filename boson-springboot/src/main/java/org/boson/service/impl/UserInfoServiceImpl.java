@@ -8,8 +8,8 @@ import org.boson.domain.po.UserRole;
 import org.boson.service.UserInfoService;
 import org.boson.service.UserRoleService;
 import org.boson.strategy.context.UploadStrategyContext;
-import org.boson.domain.dto.UserDetailDTO;
-import org.boson.domain.dto.UserOnlineDTO;
+import org.boson.domain.dto.UserDetailDto;
+import org.boson.domain.dto.UserOnlineDto;
 import org.boson.domain.po.UserInfo;
 import org.boson.mapper.UserInfoMapper;
 import org.boson.enums.FilePathEnum;
@@ -57,7 +57,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateUserInfo(UserInfoVO userInfoVO) {
+    public void updateUserInfo(UserInfoVo userInfoVO) {
         // 封装用户信息
         UserInfo userInfo = UserInfo.builder()
                 .id(UserUtils.getLoginUser().getUserInfoId())
@@ -84,7 +84,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveUserEmail(EmailVO emailVO) {
+    public void saveUserEmail(EmailVo emailVO) {
         if (!emailVO.getCode().equals(redisService.get(USER_CODE_KEY + emailVO.getEmail()).toString())) {
             throw new BizException("验证码错误！");
         }
@@ -97,7 +97,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateUserRole(UserRoleVO userRoleVO) {
+    public void updateUserRole(UserRoleVo userRoleVO) {
         // 更新用户角色和昵称
         UserInfo userInfo = UserInfo.builder()
                 .id(userRoleVO.getUserInfoId())
@@ -118,7 +118,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateUserDisable(UserDisableVO userDisableVO) {
+    public void updateUserDisable(UserDisableVo userDisableVO) {
         // 更新用户禁用状态
         UserInfo userInfo = UserInfo.builder()
                 .id(userDisableVO.getId())
@@ -128,27 +128,27 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     }
 
     @Override
-    public PageResult<UserOnlineDTO> listOnlineUsers(ConditionVO conditionVO) {
+    public PageResult<UserOnlineDto> listOnlineUsers(ConditionVo conditionVO) {
         // 获取security在线session
-        List<UserOnlineDTO> userOnlineDTOList = sessionRegistry.getAllPrincipals().stream()
+        List<UserOnlineDto> userOnlineDtoList = sessionRegistry.getAllPrincipals().stream()
                 .filter(item -> sessionRegistry.getAllSessions(item, false).size() > 0)
-                .map(item -> JSON.parseObject(JSON.toJSONString(item), UserOnlineDTO.class))
+                .map(item -> JSON.parseObject(JSON.toJSONString(item), UserOnlineDto.class))
                 .filter(item -> StringUtils.isBlank(conditionVO.getKeywords()) || item.getNickname().contains(conditionVO.getKeywords()))
-                .sorted(Comparator.comparing(UserOnlineDTO::getLastLoginTime).reversed())
+                .sorted(Comparator.comparing(UserOnlineDto::getLastLoginTime).reversed())
                 .collect(Collectors.toList());
         // 执行分页
         int fromIndex = PageUtils.getLimitCurrent().intValue();
         int size = PageUtils.getSize().intValue();
-        int toIndex = userOnlineDTOList.size() - fromIndex > size ? fromIndex + size : userOnlineDTOList.size();
-        List<UserOnlineDTO> userOnlineList = userOnlineDTOList.subList(fromIndex, toIndex);
-        return new PageResult<>(userOnlineList, userOnlineDTOList.size());
+        int toIndex = userOnlineDtoList.size() - fromIndex > size ? fromIndex + size : userOnlineDtoList.size();
+        List<UserOnlineDto> userOnlineList = userOnlineDtoList.subList(fromIndex, toIndex);
+        return new PageResult<>(userOnlineList, userOnlineDtoList.size());
     }
 
     @Override
     public void removeOnlineUser(Integer userInfoId) {
         // 获取用户session
         List<Object> userInfoList = sessionRegistry.getAllPrincipals().stream().filter(item -> {
-            UserDetailDTO userDetailDTO = (UserDetailDTO) item;
+            UserDetailDto userDetailDTO = (UserDetailDto) item;
             return userDetailDTO.getUserInfoId().equals(userInfoId);
         }).collect(Collectors.toList());
         List<SessionInformation> allSessions = new ArrayList<>();

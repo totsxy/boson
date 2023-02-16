@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.PageResult;
 import org.boson.util.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public interface Queryable<T> extends IService<T> {
 
         List<R> resVoList;
         if (CollectionUtil.isEmpty(records)) {
-            resVoList = CollectionUtil.newArrayList();
+            resVoList = new ArrayList<>(0);
         } else {
             resVoList = BeanUtils.bean2Bean(records, clazz)
                     .stream()

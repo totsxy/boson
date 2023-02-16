@@ -3,7 +3,7 @@
 <mapper namespace="org.boson.mapper.UniqueViewMapper">
 
 
-    <select id="listUniqueViews" resultType="org.boson.domain.dto.UniqueViewDTO">
+    <select id="listUniqueViews" resultType="org.boson.domain.dto.UniqueViewDto">
         SELECT
         DATE_FORMAT( create_at, "%Y-%m-%d" ) as `day`,
         views_count

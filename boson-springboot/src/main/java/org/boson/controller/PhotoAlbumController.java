@@ -3,10 +3,10 @@ package org.boson.controller;
 import org.boson.annotation.OperationLog;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
-import org.boson.domain.dto.PhotoAlbumBackDTO;
-import org.boson.domain.dto.PhotoAlbumDTO;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.PhotoAlbumVO;
+import org.boson.domain.dto.PhotoAlbumBackDto;
+import org.boson.domain.dto.PhotoAlbumDto;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.PhotoAlbumVo;
 import org.boson.enums.FilePathEnum;
 import org.boson.enums.OperationEnum;
 import org.boson.service.PhotoAlbumService;
@@ -57,7 +57,7 @@ public class PhotoAlbumController {
     @OperationLog(OperationEnum.SaveOrUpdate)
     @ApiOperation("保存或更新相册")
     @PostMapping("/admin/photos/albums")
-    public Result<?> saveOrUpdatePhotoAlbum(@Valid @RequestBody PhotoAlbumVO photoAlbumVO) {
+    public Result<?> saveOrUpdatePhotoAlbum(@Valid @RequestBody PhotoAlbumVo photoAlbumVO) {
         photoAlbumService.saveOrUpdatePhotoAlbum(photoAlbumVO);
         return Result.ok();
     }
@@ -66,22 +66,22 @@ public class PhotoAlbumController {
      * 查看后台相册列表
      *
      * @param condition 条件
-     * @return {@link Result<PhotoAlbumBackDTO>} 相册列表
+     * @return {@link Result< PhotoAlbumBackDto >} 相册列表
      */
     @ApiOperation("查看后台相册列表")
     @GetMapping("/admin/photos/albums")
-    public Result<PageResult<PhotoAlbumBackDTO>> listPhotoAlbumBacks(ConditionVO condition) {
+    public Result<PageResult<PhotoAlbumBackDto>> listPhotoAlbumBacks(ConditionVo condition) {
         return Result.ok(photoAlbumService.listPhotoAlbumBacks(condition));
     }
 
     /**
      * 获取后台相册列表信息
      *
-     * @return {@link Result<PhotoAlbumDTO>} 相册列表信息
+     * @return {@link Result< PhotoAlbumDto >} 相册列表信息
      */
     @ApiOperation("获取后台相册列表信息")
     @GetMapping("/admin/photos/albums/info")
-    public Result<List<PhotoAlbumDTO>> listPhotoAlbumBackInfos() {
+    public Result<List<PhotoAlbumDto>> listPhotoAlbumBackInfos() {
         return Result.ok(photoAlbumService.listPhotoAlbumBackInfos());
     }
 
@@ -94,7 +94,7 @@ public class PhotoAlbumController {
     @ApiOperation("根据id获取后台相册信息")
     @ApiImplicitParam(name = "albumId", value = "相册id", required = true, dataType = "Integer")
     @GetMapping("/admin/photos/albums/{albumId}/info")
-    public Result<PhotoAlbumBackDTO> getPhotoAlbumBackById(@PathVariable("albumId") Integer albumId) {
+    public Result<PhotoAlbumBackDto> getPhotoAlbumBackById(@PathVariable("albumId") Integer albumId) {
         return Result.ok(photoAlbumService.getPhotoAlbumBackById(albumId));
     }
 
@@ -116,11 +116,11 @@ public class PhotoAlbumController {
     /**
      * 获取相册列表
      *
-     * @return {@link Result<PhotoAlbumDTO>} 相册列表
+     * @return {@link Result< PhotoAlbumDto >} 相册列表
      */
     @ApiOperation(value = "获取相册列表")
     @GetMapping("/photos/albums")
-    public Result<List<PhotoAlbumDTO>> listPhotoAlbums() {
+    public Result<List<PhotoAlbumDto>> listPhotoAlbums() {
         return Result.ok(photoAlbumService.listPhotoAlbums());
     }
 

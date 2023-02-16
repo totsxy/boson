@@ -1,12 +1,12 @@
 package org.boson.service;
 
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.ResourceRoleDTO;
-import org.boson.domain.dto.RoleDTO;
-import org.boson.domain.dto.UserRoleDTO;
+import org.boson.domain.dto.ResourceRoleDto;
+import org.boson.domain.dto.RoleDto;
+import org.boson.domain.dto.UserRoleDto;
 import org.boson.domain.po.Role;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.RoleVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.RoleVo;
 import org.boson.support.mybatisplus.service.Queryable;
 
 import java.util.List;
@@ -24,13 +24,13 @@ public interface RoleService extends Queryable<Role> {
      *
      * @return 角色
      */
-    List<UserRoleDTO> listUserRoles();
+    List<UserRoleDto> listUserRoles();
 
     /**
      * 获取资源角色选项
      * @return 资源
      */
-    List<ResourceRoleDTO> listResourceRoles();
+    List<ResourceRoleDto> listResourceRoles();
 
     /**
      * 查询角色列表
@@ -38,14 +38,14 @@ public interface RoleService extends Queryable<Role> {
      * @param conditionVO 条件
      * @return 角色列表
      */
-    PageResult<RoleDTO> listRoles(ConditionVO conditionVO);
+    PageResult<RoleDto> listRoles(ConditionVo conditionVO);
 
     /**
      * 保存或更新角色
      *
      * @param roleVO 角色
      */
-    void saveOrUpdateRole(RoleVO roleVO);
+    void saveOrUpdateRole(RoleVo roleVO);
 
     /**
      * 删除角色

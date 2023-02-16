@@ -1,7 +1,7 @@
 package org.boson.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.boson.domain.dto.UniqueViewDTO;
+import org.boson.domain.dto.UniqueViewDto;
 import org.boson.domain.po.UniqueView;
 
 import java.util.List;
@@ -19,6 +19,6 @@ public interface UniqueViewService extends IService<UniqueView> {
      *
      * @return 用户量
      */
-    List<UniqueViewDTO> listUniqueViews();
+    List<UniqueViewDto> listUniqueViews();
 
 }

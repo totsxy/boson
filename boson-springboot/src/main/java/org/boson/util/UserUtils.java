@@ -1,6 +1,6 @@
 package org.boson.util;
 
-import org.boson.domain.dto.UserDetailDTO;
+import org.boson.domain.dto.UserDetailDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +19,8 @@ public class UserUtils {
      *
      * @return 用户登录信息
      */
-    public static UserDetailDTO getLoginUser() {
-        return (UserDetailDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static UserDetailDto getLoginUser() {
+        return (UserDetailDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

@@ -2,7 +2,7 @@ package org.boson.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
-import org.boson.domain.dto.UniqueViewDTO;
+import org.boson.domain.dto.UniqueViewDto;
 import org.boson.domain.po.UniqueView;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +26,6 @@ public interface UniqueViewMapper extends BaseMapper<UniqueView> {
      * @param endTime   结束时间
      * @return 用户量
      */
-    List<UniqueViewDTO> listUniqueViews(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    List<UniqueViewDto> listUniqueViews(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 }

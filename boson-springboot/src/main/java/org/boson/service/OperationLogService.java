@@ -1,9 +1,9 @@
 package org.boson.service;
 
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.OperationLogDTO;
+import org.boson.domain.dto.OperationLogDto;
 import org.boson.domain.po.OperationLog;
-import org.boson.domain.vo.ConditionVO;
+import org.boson.domain.vo.ConditionVo;
 import org.boson.support.mybatisplus.service.Queryable;
 
 
@@ -18,8 +18,8 @@ public interface OperationLogService extends Queryable<OperationLog> {
     /**
      * 查询操作日志列表
      *
-     * @param conditionVO 查询条件
+     * @param conditionVo 查询条件
      * @return 操作日志列表
      */
-    PageResult<OperationLogDTO> pageOperationLogs(ConditionVO conditionVO);
+    PageResult<OperationLogDto> pageOperationLogs(ConditionVo conditionVo);
 }

@@ -2,7 +2,7 @@ package org.boson.service;
 
 import org.boson.domain.PageResult;
 import org.boson.domain.vo.*;
-import org.boson.domain.dto.UserOnlineDTO;
+import org.boson.domain.dto.UserOnlineDto;
 import org.boson.domain.po.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,7 +21,7 @@ public interface UserInfoService extends IService<UserInfo> {
      *
      * @param userInfoVO 用户资料
      */
-    void updateUserInfo(UserInfoVO userInfoVO);
+    void updateUserInfo(UserInfoVo userInfoVO);
 
     /**
      * 修改用户头像
@@ -36,21 +36,21 @@ public interface UserInfoService extends IService<UserInfo> {
      *
      * @param emailVO 邮箱
      */
-    void saveUserEmail(EmailVO emailVO);
+    void saveUserEmail(EmailVo emailVO);
 
     /**
      * 更新用户角色
      *
      * @param userRoleVO 更新用户角色
      */
-    void updateUserRole(UserRoleVO userRoleVO);
+    void updateUserRole(UserRoleVo userRoleVO);
 
     /**
      * 修改用户禁用状态
      *
      * @param userDisableVO 用户禁用信息
      */
-    void updateUserDisable(UserDisableVO userDisableVO);
+    void updateUserDisable(UserDisableVo userDisableVO);
 
     /**
      * 查看在线用户列表
@@ -58,7 +58,7 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param conditionVO 条件
      * @return 在线用户列表
      */
-    PageResult<UserOnlineDTO> listOnlineUsers(ConditionVO conditionVO);
+    PageResult<UserOnlineDto> listOnlineUsers(ConditionVo conditionVO);
 
     /**
      * 下线用户

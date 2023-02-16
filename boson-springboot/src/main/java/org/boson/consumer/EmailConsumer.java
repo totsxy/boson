@@ -1,7 +1,7 @@
 package org.boson.consumer;
 
 import com.alibaba.fastjson.JSON;
-import org.boson.domain.dto.EmailDTO;
+import org.boson.domain.dto.EmailDto;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +35,12 @@ public class EmailConsumer {
 
     @RabbitHandler
     public void process(byte[] data) {
-        EmailDTO emailDTO = JSON.parseObject(new String(data), EmailDTO.class);
+        EmailDto emailDto = JSON.parseObject(new String(data), EmailDto.class);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(email);
-        message.setTo(emailDTO.getEmail());
-        message.setSubject(emailDTO.getSubject());
-        message.setText(emailDTO.getContent());
+        message.setTo(emailDto.getEmail());
+        message.setSubject(emailDto.getSubject());
+        message.setText(emailDto.getContent());
         javaMailSender.send(message);
     }
 

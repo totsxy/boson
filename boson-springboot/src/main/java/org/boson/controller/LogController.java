@@ -4,8 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
-import org.boson.domain.dto.OperationLogDTO;
-import org.boson.domain.vo.ConditionVO;
+import org.boson.domain.dto.OperationLogDto;
+import org.boson.domain.vo.ConditionVo;
 import org.boson.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,13 +36,13 @@ public class LogController {
     /**
      * 查看操作日志
      *
-     * @param conditionVO 查询条件
-     * @return {@link Result<OperationLogDTO>} 日志列表
+     * @param conditionVo 查询条件
+     * @return {@link Result<OperationLogDto>} 日志列表
      */
     @ApiOperation(value = "分页查看操作日志")
     @GetMapping("/admin/operation/logs")
-    public Result<PageResult<OperationLogDTO>> pageOperationLogs(ConditionVO conditionVO) {
-        return Result.ok(operationLogService.pageOperationLogs(conditionVO));
+    public Result<PageResult<OperationLogDto>> pageOperationLogs(ConditionVo conditionVo) {
+        return Result.ok(operationLogService.pageOperationLogs(conditionVo));
     }
 
     /**

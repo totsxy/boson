@@ -1,11 +1,11 @@
 package org.boson.service;
 
-import org.boson.domain.dto.LabelOptionDTO;
-import org.boson.domain.dto.MenuDTO;
-import org.boson.domain.dto.UserMenuDTO;
+import org.boson.domain.dto.LabelOptionDto;
+import org.boson.domain.dto.MenuDto;
+import org.boson.domain.dto.UserMenuDto;
 import org.boson.domain.po.Menu;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.MenuVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.MenuVo;
 import org.boson.support.mybatisplus.service.Queryable;
 
 import java.util.List;
@@ -19,39 +19,38 @@ import java.util.List;
 public interface MenuService extends Queryable<Menu> {
 
     /**
-     * 查看菜单列表
-     *
-     * @param conditionVO 查询条件
-     * @return 菜单列表
-     */
-    List<MenuDTO> listMenus(ConditionVO conditionVO);
-
-    /**
      * 新增或修改菜单
      *
-     * @param menuVO 菜单信息
+     * @param menuVo 菜单信息
      */
-    Boolean saveOrUpdateMenu(MenuVO menuVO);
+    boolean saveOrUpdateMenu(MenuVo menuVo);
 
     /**
      * 删除菜单
      *
      * @param menuId 菜单id
      */
-    Boolean deleteMenu(Integer menuId);
+    boolean deleteMenuById(Integer menuId);
+
+    /**
+     * 查看菜单列表
+     *
+     * @param conditionVo 查询条件
+     * @return 菜单列表
+     */
+    List<MenuDto> listMenus(ConditionVo conditionVo);
+
+    /**
+     * 查看当前用户菜单
+     *
+     * @return 当前用户菜单列表
+     */
+    List<UserMenuDto> listUserMenus();
 
     /**
      * 查看角色菜单选项
      *
-     * @return 角色菜单选项
+     * @return 角色菜单选项列表
      */
-    List<LabelOptionDTO> listMenuOptions();
-
-    /**
-     * 查看用户菜单
-     *
-     * @return 菜单列表
-     */
-    List<UserMenuDTO> listUserMenus();
-
+    List<LabelOptionDto> listMenuOptions();
 }

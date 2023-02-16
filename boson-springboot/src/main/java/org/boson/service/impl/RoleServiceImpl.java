@@ -4,22 +4,22 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.boson.constant.CommonConst;
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.ResourceRoleDTO;
+import org.boson.domain.dto.ResourceRoleDto;
+import org.boson.domain.dto.UserRoleDto;
 import org.boson.domain.po.UserRole;
-import org.boson.domain.vo.ConditionVO;
+import org.boson.domain.vo.ConditionVo;
 import org.boson.mapper.RoleMapper;
 import org.boson.mapper.UserRoleMapper;
-import org.boson.domain.dto.RoleDTO;
-import org.boson.domain.dto.UserRoleDTO;
+import org.boson.domain.dto.RoleDto;
 import org.boson.domain.po.Role;
 import org.boson.domain.po.RoleMenu;
 import org.boson.domain.po.RoleResource;
 import org.boson.exception.BizException;
-import org.boson.handler.FilterInvocationSecurityMetadataSourceImpl;
+import org.boson.handler.ResourceRoleMetadataSourceImpl;
 import org.boson.service.RoleMenuService;
 import org.boson.service.RoleResourceService;
 import org.boson.service.RoleService;
-import org.boson.domain.vo.RoleVO;
+import org.boson.domain.vo.RoleVo;
 import org.boson.service.UserRoleService;
 import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.boson.util.PageUtils;
@@ -50,29 +50,29 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private UserRoleService userRoleService;
 
     @Autowired
-    private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
+    private ResourceRoleMetadataSourceImpl filterInvocationSecurityMetadataSource;
 
     @Override
-    public List<UserRoleDTO> listUserRoles() {
+    public List<UserRoleDto> listUserRoles() {
         // 查询角色列表
 //        List<Role> roleList = roleMapper.selectList(new LambdaQueryWrapper<Role>()
 //                .select(Role::getId, Role::getRoleName));
-//        return BeanCopyUtils.copyList(roleList, UserRoleDTO.class);
+//        return BeanCopyUtils.copyList(roleList, UserRoleDto.class);
 
         return this.beginQuery()
                 .select(Role::getId, Role::getRoleName)
-                .queryListAndPo2Vo(UserRoleDTO.class);
+                .queryListAndPo2Vo(UserRoleDto.class);
     }
 
     @Override
-    public List<ResourceRoleDTO> listResourceRoles() {
+    public List<ResourceRoleDto> listResourceRoles() {
         return this.getBaseMapper().listResourceRoles();
     }
 
     @Override
-    public PageResult<RoleDTO> listRoles(ConditionVO conditionVO) {
+    public PageResult<RoleDto> listRoles(ConditionVo conditionVO) {
         // 查询角色列表
-        List<RoleDTO> roleDTOList = getBaseMapper().listRoles(PageUtils.getLimitCurrent(), PageUtils.getSize(), conditionVO);
+        List<RoleDto> roleDtoList = getBaseMapper().listRoles(PageUtils.getLimitCurrent(), PageUtils.getSize(), conditionVO);
         // 查询总量
 //        Integer count = roleMapper.selectCount(new LambdaQueryWrapper<Role>()
 //                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Role::getRoleName, conditionVO.getKeywords()));
@@ -81,12 +81,12 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Role::getRoleName, conditionVO.getKeywords())
                 .count();
 
-        return new PageResult<>(roleDTOList, count);
+        return new PageResult<>(roleDtoList, count);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveOrUpdateRole(RoleVO roleVO) {
+    public void saveOrUpdateRole(RoleVo roleVO) {
         // 判断角色名重复
 //        Role existRole = roleMapper.selectOne(new LambdaQueryWrapper<Role>()
 //                .select(Role::getId)
@@ -127,7 +127,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
             roleResourceService.saveBatch(roleResourceList);
             // 重新加载角色资源信息
-            filterInvocationSecurityMetadataSource.clearDataSource();
+            filterInvocationSecurityMetadataSource.clearDataSource(true);
         }
 
         // 更新角色菜单关系

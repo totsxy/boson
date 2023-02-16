@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.PhotoAlbumBackDTO;
-import org.boson.domain.dto.PhotoAlbumDTO;
+import org.boson.domain.dto.PhotoAlbumBackDto;
+import org.boson.domain.dto.PhotoAlbumDto;
 import org.boson.domain.po.Photo;
 import org.boson.domain.po.PhotoAlbum;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.PhotoAlbumVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.PhotoAlbumVo;
 import org.boson.exception.BizException;
 import org.boson.mapper.PhotoAlbumMapper;
 import org.boson.mapper.PhotoMapper;
@@ -43,7 +43,7 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveOrUpdatePhotoAlbum(PhotoAlbumVO photoAlbumVO) {
+    public void saveOrUpdatePhotoAlbum(PhotoAlbumVo photoAlbumVO) {
         // 查询相册名是否存在
         PhotoAlbum album = photoAlbumMapper.selectOne(new LambdaQueryWrapper<PhotoAlbum>()
                 .select(PhotoAlbum::getId)
@@ -56,7 +56,7 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
     }
 
     @Override
-    public PageResult<PhotoAlbumBackDTO> listPhotoAlbumBacks(ConditionVO condition) {
+    public PageResult<PhotoAlbumBackDto> listPhotoAlbumBacks(ConditionVo condition) {
         // 查询相册数量
         Integer count = photoAlbumMapper.selectCount(new LambdaQueryWrapper<PhotoAlbum>()
                 .like(StringUtils.isNotBlank(condition.getKeywords()), PhotoAlbum::getAlbumName, condition.getKeywords())
@@ -65,26 +65,26 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
             return new PageResult<>();
         }
         // 查询相册信息
-        List<PhotoAlbumBackDTO> photoAlbumBackList = photoAlbumMapper.listPhotoAlbumBacks(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
+        List<PhotoAlbumBackDto> photoAlbumBackList = photoAlbumMapper.listPhotoAlbumBacks(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
         return new PageResult<>(photoAlbumBackList, count);
     }
 
     @Override
-    public List<PhotoAlbumDTO> listPhotoAlbumBackInfos() {
+    public List<PhotoAlbumDto> listPhotoAlbumBackInfos() {
         List<PhotoAlbum> photoAlbumList = photoAlbumMapper.selectList(new LambdaQueryWrapper<PhotoAlbum>()
                 .eq(PhotoAlbum::getIsDelete, FALSE));
-        return BeanCopyUtils.copyList(photoAlbumList, PhotoAlbumDTO.class);
+        return BeanCopyUtils.copyList(photoAlbumList, PhotoAlbumDto.class);
     }
 
     @Override
-    public PhotoAlbumBackDTO getPhotoAlbumBackById(Integer albumId) {
+    public PhotoAlbumBackDto getPhotoAlbumBackById(Integer albumId) {
         // 查询相册信息
         PhotoAlbum photoAlbum = photoAlbumMapper.selectById(albumId);
         // 查询照片数量
         Integer photoCount = photoMapper.selectCount(new LambdaQueryWrapper<Photo>()
                 .eq(Photo::getAlbumId, albumId)
                 .eq(Photo::getIsDelete, FALSE));
-        PhotoAlbumBackDTO album = BeanCopyUtils.copyObject(photoAlbum, PhotoAlbumBackDTO.class);
+        PhotoAlbumBackDto album = BeanCopyUtils.copyObject(photoAlbum, PhotoAlbumBackDto.class);
         album.setPhotoCount(photoCount);
         return album;
     }
@@ -110,13 +110,13 @@ public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumMapper, PhotoAl
     }
 
     @Override
-    public List<PhotoAlbumDTO> listPhotoAlbums() {
+    public List<PhotoAlbumDto> listPhotoAlbums() {
         // 查询相册列表
         List<PhotoAlbum> photoAlbumList = photoAlbumMapper.selectList(new LambdaQueryWrapper<PhotoAlbum>()
                 .eq(PhotoAlbum::getStatus, PhotoAlbumStatusEnum.PUBLIC.getStatus())
                 .eq(PhotoAlbum::getIsDelete, FALSE)
                 .orderByDesc(PhotoAlbum::getId));
-        return BeanCopyUtils.copyList(photoAlbumList, PhotoAlbumDTO.class);
+        return BeanCopyUtils.copyList(photoAlbumList, PhotoAlbumDto.class);
     }
 
 }

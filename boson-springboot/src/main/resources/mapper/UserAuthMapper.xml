@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.boson.mapper.UserAuthMapper">
 
-    <resultMap id="UserBackMap" type="org.boson.domain.dto.UserBackDTO">
+    <resultMap id="UserBackMap" type="org.boson.domain.dto.UserBackDto">
         <id column="id" property="id"/>
         <result column="user_info_id" property="userInfoId"/>
         <result column="avatar" property="avatar"/>
@@ -13,7 +13,7 @@
         <result column="create_at" property="createTime"/>
         <result column="last_login_time" property="lastLoginTime"/>
         <result column="is_disable" property="isDisable"/>
-        <collection property="roleList" ofType="org.boson.domain.dto.UserRoleDTO">
+        <collection property="roleList" ofType="org.boson.domain.dto.UserRoleDto">
             <id column="role_id" property="id"/>
             <id column="role_name" property="roleName"/>
         </collection>

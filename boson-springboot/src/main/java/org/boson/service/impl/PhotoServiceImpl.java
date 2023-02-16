@@ -6,14 +6,14 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.PhotoBackDTO;
-import org.boson.domain.dto.PhotoDTO;
+import org.boson.domain.dto.PhotoBackDto;
+import org.boson.domain.dto.PhotoDto;
 import org.boson.domain.po.Photo;
 import org.boson.domain.po.PhotoAlbum;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.DeleteVO;
-import org.boson.domain.vo.PhotoInfoVO;
-import org.boson.domain.vo.PhotoVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.DeleteVo;
+import org.boson.domain.vo.PhotoInfoVo;
+import org.boson.domain.vo.PhotoVo;
 import org.boson.exception.BizException;
 import org.boson.mapper.PhotoMapper;
 import org.boson.service.PhotoAlbumService;
@@ -45,7 +45,7 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
     private PhotoAlbumService photoAlbumService;
 
     @Override
-    public PageResult<PhotoBackDTO> listPhotos(ConditionVO condition) {
+    public PageResult<PhotoBackDto> listPhotos(ConditionVo condition) {
         // 查询照片列表
         Page<Photo> page = new Page<>(PageUtils.getCurrent(), PageUtils.getSize());
         Page<Photo> photoPage = photoMapper.selectPage(page, new LambdaQueryWrapper<Photo>()
@@ -53,20 +53,20 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
                 .eq(Photo::getIsDelete, condition.getIsDelete())
                 .orderByDesc(Photo::getId)
                 .orderByDesc(Photo::getUpdateAt));
-        List<PhotoBackDTO> photoList = BeanCopyUtils.copyList(photoPage.getRecords(), PhotoBackDTO.class);
+        List<PhotoBackDto> photoList = BeanCopyUtils.copyList(photoPage.getRecords(), PhotoBackDto.class);
         return new PageResult<>(photoList, (int) photoPage.getTotal());
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updatePhoto(PhotoInfoVO photoInfoVO) {
+    public void updatePhoto(PhotoInfoVo photoInfoVO) {
         Photo photo = BeanCopyUtils.copyObject(photoInfoVO, Photo.class);
         photoMapper.updateById(photo);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void savePhotos(PhotoVO photoVO) {
+    public void savePhotos(PhotoVo photoVO) {
         List<Photo> photoList = photoVO.getPhotoUrlList().stream().map(item -> Photo.builder()
                         .albumId(photoVO.getAlbumId())
                         .photoName(IdWorker.getIdStr())
@@ -78,7 +78,7 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updatePhotosAlbum(PhotoVO photoVO) {
+    public void updatePhotosAlbum(PhotoVo photoVO) {
         List<Photo> photoList = photoVO.getPhotoIdList().stream().map(item -> Photo.builder()
                         .id(item)
                         .albumId(photoVO.getAlbumId())
@@ -89,7 +89,7 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updatePhotoDelete(DeleteVO deleteVO) {
+    public void updatePhotoDelete(DeleteVo deleteVO) {
         // 更新照片状态
         List<Photo> photoList = deleteVO.getIdList().stream().map(item -> Photo.builder()
                         .id(item)
@@ -120,7 +120,7 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
     }
 
     @Override
-    public PhotoDTO listPhotosByAlbumId(Integer albumId) {
+    public PhotoDto listPhotosByAlbumId(Integer albumId) {
         // 查询相册信息
         PhotoAlbum photoAlbum = photoAlbumService.getOne(new LambdaQueryWrapper<PhotoAlbum>()
                 .eq(PhotoAlbum::getId, albumId)
@@ -140,7 +140,7 @@ public class PhotoServiceImpl extends ServiceImpl<PhotoMapper, Photo> implements
                 .stream()
                 .map(Photo::getPhotoSrc)
                 .collect(Collectors.toList());
-        return PhotoDTO.builder()
+        return PhotoDto.builder()
                 .photoAlbumCover(photoAlbum.getAlbumCover())
                 .photoAlbumName(photoAlbum.getAlbumName())
                 .photoList(photoList)

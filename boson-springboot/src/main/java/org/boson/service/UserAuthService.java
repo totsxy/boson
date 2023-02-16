@@ -1,9 +1,9 @@
 package org.boson.service;
 
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.UserAreaDTO;
-import org.boson.domain.dto.UserBackDTO;
-import org.boson.domain.dto.UserInfoDTO;
+import org.boson.domain.dto.UserAreaDto;
+import org.boson.domain.dto.UserBackDto;
+import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.domain.vo.*;
 import org.boson.support.mybatisplus.service.Queryable;
@@ -30,16 +30,16 @@ public interface UserAuthService extends Queryable<UserAuth> {
      * 获取用户区域分布
      *
      * @param conditionVO 条件签证官
-     * @return {@link List< UserAreaDTO >} 用户区域分布
+     * @return {@link List<  UserAreaDto  >} 用户区域分布
      */
-    List<UserAreaDTO> listUserAreas(ConditionVO conditionVO);
+    List<UserAreaDto> listUserAreas(ConditionVo conditionVO);
 
     /**
      * 用户注册
      *
      * @param user 用户对象
      */
-    void register(UserVO user);
+    void register(UserVo user);
 
     /**
      * qq登录
@@ -47,7 +47,7 @@ public interface UserAuthService extends Queryable<UserAuth> {
      * @param qqLoginVO qq登录信息
      * @return 用户登录信息
      */
-    UserInfoDTO qqLogin(QQLoginVO qqLoginVO);
+    UserInfoDto qqLogin(QQLoginVo qqLoginVO);
 
     /**
      * 微博登录
@@ -55,21 +55,21 @@ public interface UserAuthService extends Queryable<UserAuth> {
      * @param weiboLoginVO 微博登录信息
      * @return 用户登录信息
      */
-    UserInfoDTO weiboLogin(WeiboLoginVO weiboLoginVO);
+    UserInfoDto weiboLogin(WeiboLoginVo weiboLoginVO);
 
     /**
      * 修改密码
      *
      * @param user 用户对象
      */
-    void updatePassword(UserVO user);
+    void updatePassword(UserVo user);
 
     /**
      * 修改管理员密码
      *
      * @param passwordVO 密码对象
      */
-    void updateAdminPassword(PasswordVO passwordVO);
+    void updateAdminPassword(PasswordVo passwordVO);
 
     /**
      * 查询后台用户列表
@@ -77,6 +77,6 @@ public interface UserAuthService extends Queryable<UserAuth> {
      * @param condition 条件
      * @return 用户列表
      */
-    PageResult<UserBackDTO> listUserBackDTO(ConditionVO condition);
+    PageResult<UserBackDto> listUserBackDTO(ConditionVo condition);
 
 }

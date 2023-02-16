@@ -32,12 +32,12 @@ public class Menu extends Entity {
     private String name;
 
     /**
-     * 路径
+     * 菜单路径
      */
     private String path;
 
     /**
-     * icon
+     * 菜单图标
      */
     private String icon;
 
@@ -47,14 +47,13 @@ public class Menu extends Entity {
     private String component;
 
     /**
-     * 排序
-     */
-    private Integer orderNum;
-
-    /**
      * 是否隐藏
      */
     private Integer isHidden;
 
+    /**
+     * 排序
+     */
+    private Integer orderNum;
 }
 

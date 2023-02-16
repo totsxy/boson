@@ -1,11 +1,11 @@
 package org.boson.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.boson.domain.dto.RoleDTO;
-import org.boson.domain.dto.ResourceRoleDTO;
+import org.boson.domain.dto.RoleDto;
+import org.boson.domain.dto.ResourceRoleDto;
 import org.boson.domain.po.Role;
 import org.apache.ibatis.annotations.Param;
-import org.boson.domain.vo.ConditionVO;
+import org.boson.domain.vo.ConditionVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      *
      * @return 角色标签
      */
-    List<ResourceRoleDTO> listResourceRoles();
+    List<ResourceRoleDto> listResourceRoles();
 
     /**
      * 根据用户id获取角色列表
@@ -42,6 +42,6 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param conditionVO 条件
      * @return 角色列表
      */
-    List<RoleDTO> listRoles(@Param("current") Long current, @Param("size") Long size, @Param("conditionVO") ConditionVO conditionVO);
+    List<RoleDto> listRoles(@Param("current") Long current, @Param("size") Long size, @Param("conditionVO") ConditionVo conditionVO);
 
 }

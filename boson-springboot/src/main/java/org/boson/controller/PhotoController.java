@@ -3,12 +3,12 @@ package org.boson.controller;
 import org.boson.annotation.OperationLog;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
-import org.boson.domain.dto.PhotoBackDTO;
-import org.boson.domain.dto.PhotoDTO;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.DeleteVO;
-import org.boson.domain.vo.PhotoInfoVO;
-import org.boson.domain.vo.PhotoVO;
+import org.boson.domain.dto.PhotoBackDto;
+import org.boson.domain.dto.PhotoDto;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.DeleteVo;
+import org.boson.domain.vo.PhotoInfoVo;
+import org.boson.domain.vo.PhotoVo;
 import org.boson.enums.OperationEnum;
 import org.boson.service.PhotoService;
 import io.swagger.annotations.Api;
@@ -35,11 +35,11 @@ public class PhotoController {
      * 获取后台照片列表
      *
      * @param condition 条件
-     * @return {@link Result < PhotoBackDTO >} 照片列表
+     * @return {@link Result < PhotoBackDto >} 照片列表
      */
     @ApiOperation(value = "根据相册id获取照片列表")
     @GetMapping("/admin/photos")
-    public Result<PageResult<PhotoBackDTO>> listPhotos(ConditionVO condition) {
+    public Result<PageResult<PhotoBackDto>> listPhotos(ConditionVo condition) {
         return Result.ok(photoService.listPhotos(condition));
     }
 
@@ -52,7 +52,7 @@ public class PhotoController {
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "更新照片信息")
     @PutMapping("/admin/photos")
-    public Result<?> updatePhoto(@Valid @RequestBody PhotoInfoVO photoInfoVO) {
+    public Result<?> updatePhoto(@Valid @RequestBody PhotoInfoVo photoInfoVO) {
         photoService.updatePhoto(photoInfoVO);
         return Result.ok();
     }
@@ -66,7 +66,7 @@ public class PhotoController {
     @OperationLog(OperationEnum.Save)
     @ApiOperation(value = "保存照片")
     @PostMapping("/admin/photos")
-    public Result<?> savePhotos(@Valid @RequestBody PhotoVO photoVO) {
+    public Result<?> savePhotos(@Valid @RequestBody PhotoVo photoVO) {
         photoService.savePhotos(photoVO);
         return Result.ok();
     }
@@ -80,7 +80,7 @@ public class PhotoController {
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "移动照片相册")
     @PutMapping("/admin/photos/album")
-    public Result<?> updatePhotosAlbum(@Valid @RequestBody PhotoVO photoVO) {
+    public Result<?> updatePhotosAlbum(@Valid @RequestBody PhotoVo photoVO) {
         photoService.updatePhotosAlbum(photoVO);
         return Result.ok();
     }
@@ -94,7 +94,7 @@ public class PhotoController {
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "更新照片删除状态")
     @PutMapping("/admin/photos/delete")
-    public Result<?> updatePhotoDelete(@Valid @RequestBody DeleteVO deleteVO) {
+    public Result<?> updatePhotoDelete(@Valid @RequestBody DeleteVo deleteVO) {
         photoService.updatePhotoDelete(deleteVO);
         return Result.ok();
     }
@@ -117,11 +117,11 @@ public class PhotoController {
      * 根据相册id查看照片列表
      *
      * @param albumId 相册id
-     * @return {@link Result< PhotoDTO >} 照片列表
+     * @return {@link Result<  PhotoDto  >} 照片列表
      */
     @ApiOperation(value = "根据相册id查看照片列表")
     @GetMapping("/albums/{albumId}/photos")
-    public Result<PhotoDTO> listPhotosByAlbumId(@PathVariable("albumId") Integer albumId) {
+    public Result<PhotoDto> listPhotosByAlbumId(@PathVariable("albumId") Integer albumId) {
         return Result.ok(photoService.listPhotosByAlbumId(albumId));
     }
 

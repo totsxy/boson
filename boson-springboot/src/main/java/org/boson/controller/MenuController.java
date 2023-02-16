@@ -1,11 +1,11 @@
 package org.boson.controller;
 
 import org.boson.domain.Result;
-import org.boson.domain.dto.LabelOptionDTO;
-import org.boson.domain.dto.MenuDTO;
-import org.boson.domain.dto.UserMenuDTO;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.MenuVO;
+import org.boson.domain.dto.LabelOptionDto;
+import org.boson.domain.dto.MenuDto;
+import org.boson.domain.dto.UserMenuDto;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.MenuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.boson.service.MenuService;
@@ -34,27 +34,15 @@ public class MenuController {
     }
 
     /**
-     * 查询菜单列表
-     *
-     * @param conditionVO 查询条件
-     * @return {@link Result<MenuDTO>} 菜单列表
-     */
-    @ApiOperation(value = "查看菜单列表")
-    @GetMapping("/admin/menus")
-    public Result<List<MenuDTO>> listMenus(ConditionVO conditionVO) {
-        return Result.ok(menuService.listMenus(conditionVO));
-    }
-
-    /**
      * 新增或修改菜单
      *
-     * @param menuVO 菜单
+     * @param menuVo 菜单
      * @return {@link Result<>}
      */
     @ApiOperation(value = "新增或修改菜单")
     @PostMapping("/admin/menus")
-    public Result<?> saveOrUpdateMenu(@Valid @RequestBody MenuVO menuVO) {
-        return Result.check(menuService.saveOrUpdateMenu(menuVO));
+    public Result<?> saveOrUpdateMenu(@Valid @RequestBody MenuVo menuVo) {
+        return Result.check(menuService.saveOrUpdateMenu(menuVo));
     }
 
     /**
@@ -66,29 +54,40 @@ public class MenuController {
     @ApiOperation(value = "删除菜单")
     @DeleteMapping("/admin/menus/{menuId}")
     public Result<?> deleteMenu(@PathVariable("menuId") Integer menuId) {
-        return Result.check(menuService.deleteMenu(menuId));
+        return Result.check(menuService.deleteMenuById(menuId));
+    }
+
+    /**
+     * 查询菜单列表
+     *
+     * @param conditionVo 查询条件
+     * @return {@link Result<MenuDto>} 菜单列表
+     */
+    @ApiOperation(value = "查看菜单列表")
+    @GetMapping("/admin/menus")
+    public Result<List<MenuDto>> listMenus(ConditionVo conditionVo) {
+        return Result.ok(menuService.listMenus(conditionVo));
     }
 
     /**
      * 查看角色菜单选项
      *
-     * @return {@link Result<LabelOptionDTO>} 查看角色菜单选项
+     * @return {@link Result<LabelOptionDto>} 角色菜单选项列表
      */
     @ApiOperation(value = "查看角色菜单选项")
     @GetMapping("/admin/role/menus")
-    public Result<List<LabelOptionDTO>> listMenuOptions() {
+    public Result<List<LabelOptionDto>> listMenuOptions() {
         return Result.ok(menuService.listMenuOptions());
     }
 
     /**
      * 查看当前用户菜单
      *
-     * @return {@link Result< UserMenuDTO >} 菜单列表
+     * @return {@link Result<UserMenuDto>} 当前用户菜单列表
      */
     @ApiOperation(value = "查看当前用户菜单")
     @GetMapping("/admin/user/menus")
-    public Result<List<UserMenuDTO>> listUserMenus() {
+    public Result<List<UserMenuDto>> listUserMenus() {
         return Result.ok(menuService.listUserMenus());
     }
-
 }

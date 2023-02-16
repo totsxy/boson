@@ -3,13 +3,13 @@ package org.boson.strategy.impl;
 import com.alibaba.fastjson.JSON;
 import org.boson.config.QQConfigProperties;
 import org.boson.constant.SocialLoginConst;
-import org.boson.domain.dto.QQTokenDTO;
-import org.boson.domain.dto.QQUserInfoDTO;
-import org.boson.domain.dto.SocialTokenDTO;
-import org.boson.domain.dto.SocialUserInfoDTO;
+import org.boson.domain.dto.QQTokenDto;
+import org.boson.domain.dto.QQUserInfoDto;
+import org.boson.domain.dto.SocialTokenDto;
+import org.boson.domain.dto.SocialUserInfoDto;
 import org.boson.enums.LoginTypeEnum;
 import org.boson.exception.BizException;
-import org.boson.domain.vo.QQLoginVO;
+import org.boson.domain.vo.QQLoginVo;
 import org.boson.enums.StatusCodeEnum;
 import org.boson.util.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +34,12 @@ public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
     private RestTemplate restTemplate;
 
     @Override
-    public SocialTokenDTO getSocialToken(String data) {
-        QQLoginVO qqLoginVO = JSON.parseObject(data, QQLoginVO.class);
+    public SocialTokenDto getSocialToken(String data) {
+        QQLoginVo qqLoginVO = JSON.parseObject(data, QQLoginVo.class);
         // 校验QQ token信息
         checkQQToken(qqLoginVO);
         // 返回token信息
-        return SocialTokenDTO.builder()
+        return SocialTokenDto.builder()
                 .openId(qqLoginVO.getOpenId())
                 .accessToken(qqLoginVO.getAccessToken())
                 .loginType(LoginTypeEnum.QQ.getType())
@@ -47,16 +47,16 @@ public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
     }
 
     @Override
-    public SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialTokenDTO) {
+    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDTO) {
         // 定义请求参数
         Map<String, String> formData = new HashMap<>(3);
         formData.put(SocialLoginConst.QQ_OPEN_ID, socialTokenDTO.getOpenId());
         formData.put(SocialLoginConst.ACCESS_TOKEN, socialTokenDTO.getAccessToken());
         formData.put(SocialLoginConst.OAUTH_CONSUMER_KEY, qqConfigProperties.getAppId());
         // 获取QQ返回的用户信息
-        QQUserInfoDTO qqUserInfoDTO = JSON.parseObject(restTemplate.getForObject(qqConfigProperties.getUserInfoUrl(), String.class, formData), QQUserInfoDTO.class);
+        QQUserInfoDto qqUserInfoDTO = JSON.parseObject(restTemplate.getForObject(qqConfigProperties.getUserInfoUrl(), String.class, formData), QQUserInfoDto.class);
         // 返回用户信息
-        return SocialUserInfoDTO.builder()
+        return SocialUserInfoDto.builder()
                 .nickname(Objects.requireNonNull(qqUserInfoDTO).getNickname())
                 .avatar(qqUserInfoDTO.getFigureurl_qq_1())
                 .build();
@@ -67,13 +67,13 @@ public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
      *
      * @param qqLoginVO qq登录信息
      */
-    private void checkQQToken(QQLoginVO qqLoginVO) {
+    private void checkQQToken(QQLoginVo qqLoginVO) {
         // 根据token获取qq openId信息
         Map<String, String> qqData = new HashMap<>(1);
         qqData.put(SocialLoginConst.ACCESS_TOKEN, qqLoginVO.getAccessToken());
         try {
             String result = restTemplate.getForObject(qqConfigProperties.getCheckTokenUrl(), String.class, qqData);
-            QQTokenDTO qqTokenDTO = JSON.parseObject(CommonUtils.getBracketsContent(Objects.requireNonNull(result)), QQTokenDTO.class);
+            QQTokenDto qqTokenDTO = JSON.parseObject(CommonUtils.getBracketsContent(Objects.requireNonNull(result)), QQTokenDto.class);
             // 判断openId是否一致
             if (!qqLoginVO.getOpenId().equals(qqTokenDTO.getOpenid())) {
                 throw new BizException(StatusCodeEnum.QQ_LOGIN_ERROR);

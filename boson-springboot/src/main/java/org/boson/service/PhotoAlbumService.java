@@ -1,12 +1,12 @@
 package org.boson.service;
 
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.PhotoAlbumBackDTO;
-import org.boson.domain.dto.PhotoAlbumDTO;
+import org.boson.domain.dto.PhotoAlbumBackDto;
+import org.boson.domain.dto.PhotoAlbumDto;
 import org.boson.domain.po.PhotoAlbum;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.PhotoAlbumVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.PhotoAlbumVo;
 
 import java.util.List;
 
@@ -23,30 +23,30 @@ public interface PhotoAlbumService extends IService<PhotoAlbum> {
      *
      * @param photoAlbumVO 相册信息
      */
-    void saveOrUpdatePhotoAlbum(PhotoAlbumVO photoAlbumVO);
+    void saveOrUpdatePhotoAlbum(PhotoAlbumVo photoAlbumVO);
 
     /**
      * 查看后台相册列表
      *
      * @param condition 条件
-     * @return {@link PageResult< PhotoAlbumBackDTO >} 相册列表
+     * @return {@link PageResult<  PhotoAlbumBackDto  >} 相册列表
      */
-    PageResult<PhotoAlbumBackDTO> listPhotoAlbumBacks(ConditionVO condition);
+    PageResult<PhotoAlbumBackDto> listPhotoAlbumBacks(ConditionVo condition);
 
     /**
      * 获取后台相册列表信息
      *
-     * @return {@link List<PhotoAlbumDTO>} 相册列表信息
+     * @return {@link List< PhotoAlbumDto >} 相册列表信息
      */
-    List<PhotoAlbumDTO> listPhotoAlbumBackInfos();
+    List<PhotoAlbumDto> listPhotoAlbumBackInfos();
 
     /**
      * 根据id获取相册信息
      *
      * @param albumId 相册id
-     * @return {@link PhotoAlbumBackDTO} 相册信息
+     * @return {@link PhotoAlbumBackDto} 相册信息
      */
-    PhotoAlbumBackDTO getPhotoAlbumBackById(Integer albumId);
+    PhotoAlbumBackDto getPhotoAlbumBackById(Integer albumId);
 
     /**
      * 根据id删除相册
@@ -58,8 +58,8 @@ public interface PhotoAlbumService extends IService<PhotoAlbum> {
     /**
      * 获取相册列表
      *
-     * @return {@link List<PhotoAlbumDTO>}相册列表
+     * @return {@link List< PhotoAlbumDto >}相册列表
      */
-    List<PhotoAlbumDTO> listPhotoAlbums();
+    List<PhotoAlbumDto> listPhotoAlbums();
 
 }

@@ -3,15 +3,15 @@ package org.boson.strategy.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.boson.constant.CommonConst;
-import org.boson.domain.dto.SocialTokenDTO;
-import org.boson.domain.dto.SocialUserInfoDTO;
-import org.boson.domain.dto.UserInfoDTO;
+import org.boson.domain.dto.SocialTokenDto;
+import org.boson.domain.dto.SocialUserInfoDto;
+import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.domain.po.UserRole;
 import org.boson.mapper.UserAuthMapper;
 import org.boson.mapper.UserInfoMapper;
 import org.boson.mapper.UserRoleMapper;
-import org.boson.domain.dto.UserDetailDTO;
+import org.boson.domain.dto.UserDetailDto;
 import org.boson.domain.po.UserInfo;
 import org.boson.enums.RoleEnum;
 import org.boson.exception.BizException;
@@ -52,11 +52,11 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
     private HttpServletRequest request;
 
     @Override
-    public UserInfoDTO login(String data) {
+    public UserInfoDto login(String data) {
         // 创建登录信息
-        UserDetailDTO userDetailDTO;
+        UserDetailDto userDetailDTO;
         // 获取第三方token信息
-        SocialTokenDTO socialToken = getSocialToken(data);
+        SocialTokenDto socialToken = getSocialToken(data);
         // 获取用户ip信息
         String ipAddress = IpUtils.getIpAddress(request);
         String ipSource = IpUtils.getIpSource(ipAddress);
@@ -77,31 +77,31 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetailDTO, null, userDetailDTO.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
         // 返回用户信息
-        return BeanCopyUtils.copyObject(userDetailDTO, UserInfoDTO.class);
+        return BeanCopyUtils.copyObject(userDetailDTO, UserInfoDto.class);
     }
 
     /**
      * 获取第三方token信息
      *
      * @param data 数据
-     * @return {@link SocialTokenDTO} 第三方token信息
+     * @return {@link SocialTokenDto} 第三方token信息
      */
-    public abstract SocialTokenDTO getSocialToken(String data);
+    public abstract SocialTokenDto getSocialToken(String data);
 
     /**
      * 获取第三方用户信息
      *
      * @param socialTokenDTO 第三方token信息
-     * @return {@link SocialUserInfoDTO} 第三方用户信息
+     * @return {@link SocialUserInfoDto} 第三方用户信息
      */
-    public abstract SocialUserInfoDTO getSocialUserInfo(SocialTokenDTO socialTokenDTO);
+    public abstract SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDTO);
 
     /**
      * 获取用户账号
      *
      * @return {@link UserAuth} 用户账号
      */
-    private UserAuth getUserAuth(SocialTokenDTO socialTokenDTO) {
+    private UserAuth getUserAuth(SocialTokenDto socialTokenDTO) {
         return userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>()
                 .eq(UserAuth::getUsername, socialTokenDTO.getOpenId())
                 .eq(UserAuth::getLoginType, socialTokenDTO.getLoginType()));
@@ -113,9 +113,9 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
      * @param user      用户账号
      * @param ipAddress ip地址
      * @param ipSource  ip源
-     * @return {@link UserDetailDTO} 用户信息
+     * @return {@link UserDetailDto} 用户信息
      */
-    private UserDetailDTO getUserDetail(UserAuth user, String ipAddress, String ipSource) {
+    private UserDetailDto getUserDetail(UserAuth user, String ipAddress, String ipSource) {
         // 更新登录信息
         userAuthMapper.update(new UserAuth(), new LambdaUpdateWrapper<UserAuth>()
                 .set(UserAuth::getLastLoginTime, LocalDateTime.now())
@@ -132,11 +132,11 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
      * @param socialToken token信息
      * @param ipAddress   ip地址
      * @param ipSource    ip源
-     * @return {@link UserDetailDTO} 用户信息
+     * @return {@link UserDetailDto} 用户信息
      */
-    private UserDetailDTO saveUserDetail(SocialTokenDTO socialToken, String ipAddress, String ipSource) {
+    private UserDetailDto saveUserDetail(SocialTokenDto socialToken, String ipAddress, String ipSource) {
         // 获取第三方用户信息
-        SocialUserInfoDTO socialUserInfo = getSocialUserInfo(socialToken);
+        SocialUserInfoDto socialUserInfo = getSocialUserInfo(socialToken);
         // 保存用户信息
         UserInfo userInfo = UserInfo.builder()
                 .nickname(socialUserInfo.getNickname())

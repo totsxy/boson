@@ -6,7 +6,7 @@ import org.boson.domain.po.UserAuth;
 import org.boson.mapper.RoleMapper;
 import org.boson.mapper.UserAuthMapper;
 import org.boson.mapper.UserInfoMapper;
-import org.boson.domain.dto.UserDetailDTO;
+import org.boson.domain.dto.UserDetailDto;
 import org.boson.domain.po.UserInfo;
 import org.boson.exception.BizException;
 import org.boson.service.RedisService;
@@ -69,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @param request 请求
      * @return 用户登录信息
      */
-    public UserDetailDTO convertUserDetail(UserAuth user, HttpServletRequest request) {
+    public UserDetailDto convertUserDetail(UserAuth user, HttpServletRequest request) {
         // 查询账号信息
         UserInfo userInfo = userInfoMapper.selectById(user.getUserInfoId());
         // 查询账号角色
@@ -83,7 +83,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String ipSource = IpUtils.getIpSource(ipAddress);
         UserAgent userAgent = IpUtils.getUserAgent(request);
         // 封装权限集合
-        return UserDetailDTO.builder()
+        return UserDetailDto.builder()
                 .id(user.getId())
                 .loginType(user.getLoginType())
                 .userInfoId(userInfo.getId())

@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.boson.constant.CommonConst;
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.EmailDTO;
-import org.boson.domain.dto.UserInfoDTO;
+import org.boson.domain.dto.EmailDto;
+import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.domain.po.UserRole;
 import org.boson.domain.vo.*;
@@ -23,8 +23,8 @@ import org.boson.exception.BizException;
 import org.boson.service.RedisService;
 import org.boson.service.UserAuthService;
 import org.boson.strategy.context.SocialLoginStrategyContext;
-import org.boson.domain.dto.UserAreaDTO;
-import org.boson.domain.dto.UserBackDTO;
+import org.boson.domain.dto.UserAreaDto;
+import org.boson.domain.dto.UserBackDto;
 import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.boson.util.CommonUtils;
 import org.boson.util.PageUtils;
@@ -76,48 +76,48 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
         // 生成六位随机验证码发送
         String code = CommonUtils.getRandomCode();
         // 发送验证码
-        EmailDTO emailDTO = EmailDTO.builder()
+        EmailDto emailDto = EmailDto.builder()
                 .email(username)
                 .subject("验证码")
                 .content("您的验证码为 " + code + " 有效期15分钟，请不要告诉他人哦！")
                 .build();
-        rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(emailDTO), new MessageProperties()));
+        rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(emailDto), new MessageProperties()));
         // 将验证码存入redis，设置过期时间为15分钟
         redisService.set(USER_CODE_KEY + username, code, CODE_EXPIRE_TIME);
     }
 
     @Override
-    public List<UserAreaDTO> listUserAreas(ConditionVO conditionVO) {
-        List<UserAreaDTO> userAreaDTOList = new ArrayList<>();
+    public List<UserAreaDto> listUserAreas(ConditionVo conditionVO) {
+        List<UserAreaDto> userAreaDtoList = new ArrayList<>();
         switch (Objects.requireNonNull(UserAreaTypeEnum.getUserAreaType(conditionVO.getType()))) {
             case USER:
                 // 查询注册用户区域分布
                 Object userArea = redisService.get(USER_AREA);
                 if (Objects.nonNull(userArea)) {
-                    userAreaDTOList = JSON.parseObject(userArea.toString(), List.class);
+                    userAreaDtoList = JSON.parseObject(userArea.toString(), List.class);
                 }
-                return userAreaDTOList;
+                return userAreaDtoList;
             case VISITOR:
                 // 查询游客区域分布
                 Map<String, Object> visitorArea = redisService.hGetAll(VISITOR_AREA);
                 if (Objects.nonNull(visitorArea)) {
-                    userAreaDTOList = visitorArea.entrySet().stream()
-                            .map(item -> UserAreaDTO.builder()
+                    userAreaDtoList = visitorArea.entrySet().stream()
+                            .map(item -> UserAreaDto.builder()
                                     .name(item.getKey())
                                     .value(Long.valueOf(item.getValue().toString()))
                                     .build())
                             .collect(Collectors.toList());
                 }
-                return userAreaDTOList;
+                return userAreaDtoList;
             default:
                 break;
         }
-        return userAreaDTOList;
+        return userAreaDtoList;
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void register(UserVO user) {
+    public void register(UserVo user) {
         // 校验账号是否合法
         if (checkUser(user)) {
             throw new BizException("邮箱已被注册！");
@@ -147,7 +147,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
     }
 
     @Override
-    public void updatePassword(UserVO user) {
+    public void updatePassword(UserVo user) {
         // 校验账号是否合法
         if (!checkUser(user)) {
             throw new BizException("邮箱尚未注册！");
@@ -159,7 +159,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
     }
 
     @Override
-    public void updateAdminPassword(PasswordVO passwordVO) {
+    public void updateAdminPassword(PasswordVo passwordVO) {
         // 查询旧密码是否正确
 //        UserAuth user = userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>()
 //                .eq(UserAuth::getId, UserUtils.getLoginUser().getId()));
@@ -180,26 +180,26 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
     }
 
     @Override
-    public PageResult<UserBackDTO> listUserBackDTO(ConditionVO condition) {
+    public PageResult<UserBackDto> listUserBackDTO(ConditionVo condition) {
         // 获取后台用户数量
         Integer count = userAuthMapper.countUser(condition);
         if (count == 0) {
             return new PageResult<>();
         }
         // 获取后台用户列表
-        List<UserBackDTO> userBackDTOList = userAuthMapper.listUsers(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
-        return new PageResult<>(userBackDTOList, count);
+        List<UserBackDto> userBackDtoList = userAuthMapper.listUsers(PageUtils.getLimitCurrent(), PageUtils.getSize(), condition);
+        return new PageResult<>(userBackDtoList, count);
     }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public UserInfoDTO qqLogin(QQLoginVO qqLoginVO) {
+    public UserInfoDto qqLogin(QQLoginVo qqLoginVO) {
         return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(qqLoginVO), LoginTypeEnum.QQ);
     }
 
     @Transactional(rollbackFor = BizException.class)
     @Override
-    public UserInfoDTO weiboLogin(WeiboLoginVO weiboLoginVO) {
+    public UserInfoDto weiboLogin(WeiboLoginVo weiboLoginVO) {
         return socialLoginStrategyContext.executeLoginStrategy(JSON.toJSONString(weiboLoginVO), LoginTypeEnum.WEIBO);
     }
 
@@ -209,7 +209,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
      * @param user 用户数据
      * @return 结果
      */
-    private Boolean checkUser(UserVO user) {
+    private Boolean checkUser(UserVo user) {
         if (!user.getCode().equals(redisService.get(USER_CODE_KEY + user.getUsername()))) {
             throw new BizException("验证码错误！");
         }
@@ -238,8 +238,8 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
                 })
                 .collect(Collectors.groupingBy(item -> item, Collectors.counting()));
         // 转换格式
-        List<UserAreaDTO> userAreaList = userAreaMap.entrySet().stream()
-                .map(item -> UserAreaDTO.builder()
+        List<UserAreaDto> userAreaList = userAreaMap.entrySet().stream()
+                .map(item -> UserAreaDto.builder()
                         .name(item.getKey())
                         .value(item.getValue())
                         .build())

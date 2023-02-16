@@ -1,14 +1,14 @@
 package org.boson.service;
 
 import org.boson.domain.PageResult;
-import org.boson.domain.dto.PhotoBackDTO;
-import org.boson.domain.dto.PhotoDTO;
+import org.boson.domain.dto.PhotoBackDto;
+import org.boson.domain.dto.PhotoDto;
 import org.boson.domain.po.Photo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.DeleteVO;
-import org.boson.domain.vo.PhotoInfoVO;
-import org.boson.domain.vo.PhotoVO;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.DeleteVo;
+import org.boson.domain.vo.PhotoInfoVo;
+import org.boson.domain.vo.PhotoVo;
 
 import java.util.List;
 
@@ -24,37 +24,37 @@ public interface PhotoService extends IService<Photo> {
      * 根据相册id获取照片列表
      *
      * @param condition 条件
-     * @return {@link PageResult < PhotoBackDTO >} 照片列表
+     * @return {@link PageResult < PhotoBackDto >} 照片列表
      */
-    PageResult<PhotoBackDTO> listPhotos(ConditionVO condition);
+    PageResult<PhotoBackDto> listPhotos(ConditionVo condition);
 
     /**
      * 更新照片信息
      *
      * @param photoInfoVO 照片信息
      */
-    void updatePhoto(PhotoInfoVO photoInfoVO);
+    void updatePhoto(PhotoInfoVo photoInfoVO);
 
     /**
      * 保存照片
      *
      * @param photoVO 照片
      */
-    void savePhotos(PhotoVO photoVO);
+    void savePhotos(PhotoVo photoVO);
 
     /**
      * 移动照片相册
      *
      * @param photoVO 照片信息
      */
-    void updatePhotosAlbum(PhotoVO photoVO);
+    void updatePhotosAlbum(PhotoVo photoVO);
 
     /**
      * 更新照片删除状态
      *
      * @param deleteVO 删除信息
      */
-    void updatePhotoDelete(DeleteVO deleteVO);
+    void updatePhotoDelete(DeleteVo deleteVO);
 
     /**
      * 删除照片
@@ -67,8 +67,8 @@ public interface PhotoService extends IService<Photo> {
      * 根据相册id查看照片列表
      *
      * @param albumId 相册id
-     * @return {@link List< PhotoDTO >} 照片列表
+     * @return {@link List<  PhotoDto  >} 照片列表
      */
-    PhotoDTO listPhotosByAlbumId(Integer albumId);
+    PhotoDto listPhotosByAlbumId(Integer albumId);
 
 }

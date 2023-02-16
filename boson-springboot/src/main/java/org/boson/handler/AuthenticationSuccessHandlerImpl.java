@@ -1,7 +1,7 @@
 package org.boson.handler;
 
 import org.boson.domain.Result;
-import org.boson.domain.dto.UserInfoDTO;
+import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.service.UserAuthService;
 import org.boson.util.BeanUtils;
@@ -36,7 +36,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        UserInfoDTO userInfoDTO = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDTO.class);
+        UserInfoDto userInfoDTO = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDto.class);
         HttpUtils.writeJSON(httpServletResponse, Result.ok(userInfoDTO));
         updateUserInfo();
     }

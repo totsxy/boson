@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.boson.mapper.RoleMapper">
 
-    <resultMap id="RolePermissionMap" type="org.boson.domain.dto.ResourceRoleDTO">
+    <resultMap id="RolePermissionMap" type="org.boson.domain.dto.ResourceRoleDto">
         <id column="id" property="id"/>
         <result column="url" property="url"/>
         <result column="request_method" property="requestMethod"/>
@@ -13,7 +13,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="RoleMap" type="org.boson.domain.dto.RoleDTO">
+    <resultMap id="RoleMap" type="org.boson.domain.dto.RoleDto">
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
         <result column="role_label" property="roleLabel"/>

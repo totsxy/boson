@@ -69,15 +69,15 @@ public class Result<T> {
         return restResult(false, null, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
     }
 
-    public static <T> Result<T> check(Boolean condition) {
+    public static <T> Result<T> check(boolean condition) {
         return condition ? Result.ok() : Result.fail();
     }
 
-    public static <T> Result<T> check(Boolean condition, String failMessage) {
+    public static <T> Result<T> check(boolean condition, String failMessage) {
         return condition ? Result.ok() : Result.fail(failMessage);
     }
 
-    private static <T> Result<T> restResult(Boolean flag, T data, Integer code, String message) {
+    private static <T> Result<T> restResult(boolean flag, T data, Integer code, String message) {
         Result<T> result = new Result<>();
         result.setFlag(flag);
         result.setData(data);
@@ -86,7 +86,7 @@ public class Result<T> {
         return result;
     }
 
-    private static <T> Result<T> restResult(Boolean flag, T data, StatusCodeEnum statusCodeEnum) {
+    private static <T> Result<T> restResult(boolean flag, T data, StatusCodeEnum statusCodeEnum) {
         return Result.restResult(flag, data, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
     }
 }

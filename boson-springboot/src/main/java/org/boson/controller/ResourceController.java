@@ -1,10 +1,10 @@
 package org.boson.controller;
 
 import org.boson.domain.Result;
-import org.boson.domain.dto.LabelOptionDTO;
-import org.boson.domain.dto.ResourceDTO;
-import org.boson.domain.vo.ConditionVO;
-import org.boson.domain.vo.ResourceVO;
+import org.boson.domain.dto.LabelOptionDto;
+import org.boson.domain.dto.ResourceDto;
+import org.boson.domain.vo.ConditionVo;
+import org.boson.domain.vo.ResourceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.boson.service.ResourceService;
@@ -17,24 +17,30 @@ import java.util.List;
 /**
  * 资源控制器
  *
- * @author yezhiqiu
- * @date 2021/07/27
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Api(tags = "资源模块")
 @RestController
 public class ResourceController {
+
+    private final ResourceService resourceService;
+
     @Autowired
-    private ResourceService resourceService;
+    public ResourceController(ResourceService resourceService) {
+        this.resourceService = resourceService;
+    }
 
     /**
-     * 查看资源列表
+     * 新增或修改资源
      *
-     * @return {@link Result< ResourceDTO >} 资源列表
+     * @param resourceVo 资源信息
+     * @return {@link Result<>}
      */
-    @ApiOperation(value = "查看资源列表")
-    @GetMapping("/admin/resources")
-    public Result<List<ResourceDTO>> listResources(ConditionVO conditionVO) {
-        return Result.ok(resourceService.listResources(conditionVO));
+    @ApiOperation(value = "新增或修改资源")
+    @PostMapping("/admin/resources")
+    public Result<?> saveOrUpdateResource(@RequestBody @Valid ResourceVo resourceVo) {
+        return Result.check(resourceService.saveOrUpdateResource(resourceVo));
     }
 
     /**
@@ -46,33 +52,28 @@ public class ResourceController {
     @ApiOperation(value = "删除资源")
     @DeleteMapping("/admin/resources/{resourceId}")
     public Result<?> deleteResource(@PathVariable("resourceId") Integer resourceId) {
-        resourceService.deleteResource(resourceId);
-        return Result.ok();
+        return Result.check(resourceService.deleteResource(resourceId));
     }
 
     /**
-     * 新增或修改资源
+     * 查看资源列表
      *
-     * @param resourceVO 资源信息
-     * @return {@link Result<>}
+     * @return {@link Result<ResourceDto>} 资源列表
      */
-    @ApiOperation(value = "新增或修改资源")
-    @PostMapping("/admin/resources")
-    public Result<?> saveOrUpdateResource(@RequestBody @Valid ResourceVO resourceVO) {
-        resourceService.saveOrUpdateResource(resourceVO);
-        return Result.ok();
+    @ApiOperation(value = "查看资源列表")
+    @GetMapping("/admin/resources")
+    public Result<List<ResourceDto>> listResources(ConditionVo conditionVo) {
+        return Result.ok(resourceService.listResources(conditionVo));
     }
 
     /**
      * 查看角色资源选项
      *
-     * @return {@link Result<LabelOptionDTO>} 角色资源选项
+     * @return {@link Result<LabelOptionDto>} 角色资源选项列表
      */
     @ApiOperation(value = "查看角色资源选项")
     @GetMapping("/admin/role/resources")
-    public Result<List<LabelOptionDTO>> listResourceOption() {
+    public Result<List<LabelOptionDto>> listResourceOption() {
         return Result.ok(resourceService.listResourceOption());
     }
-
-
 }
