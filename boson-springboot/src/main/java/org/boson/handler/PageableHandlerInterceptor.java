@@ -34,5 +34,4 @@ public class PageableHandlerInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         PageUtils.remove();
     }
-
 }

@@ -14,28 +14,31 @@ import lombok.Data;
 public class Result<T> {
 
     /**
-     * 返回状态
+     * 响应状态
      */
     private Boolean flag;
+
     /**
-     * 返回码
+     * 响应编码
      */
     private Integer code;
+
     /**
-     * 返回信息
+     * 响应信息
      */
     private String message;
+
     /**
-     * 返回数据
+     * 响应数据
      */
     private T data;
 
     public static <T> Result<T> ok() {
-        return restResult(true, null, StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getDesc());
+        return restResult(true, null, StatusCodeEnum.SUCCESS);
     }
 
     public static <T> Result<T> ok(T data) {
-        return restResult(true, data, StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getDesc());
+        return restResult(true, data, StatusCodeEnum.SUCCESS);
     }
 
     public static <T> Result<T> ok(T data, String message) {
@@ -43,44 +46,47 @@ public class Result<T> {
     }
 
     public static <T> Result<T> fail() {
-        return restResult(false, null, StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getDesc());
-    }
-
-    public static <T> Result<T> fail(StatusCodeEnum statusCodeEnum) {
-        return restResult(false, null, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
-    }
-
-    public static <T> Result<T> fail(String message) {
-        return restResult(false, message);
+        return restResult(false, null, StatusCodeEnum.FAIL);
     }
 
     public static <T> Result<T> fail(T data) {
-        return restResult(false, data, StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getDesc());
+        return restResult(false, data, StatusCodeEnum.FAIL);
     }
 
     public static <T> Result<T> fail(T data, String message) {
         return restResult(false, data, StatusCodeEnum.FAIL.getCode(), message);
     }
 
+    public static <T> Result<T> fail(String message) {
+        return restResult(false, null, StatusCodeEnum.FAIL.getCode(), message);
+    }
+
     public static <T> Result<T> fail(Integer code, String message) {
         return restResult(false, null, code, message);
     }
 
-    private static <T> Result<T> restResult(Boolean flag, String message) {
-        Result<T> apiResult = new Result<>();
-        apiResult.setFlag(flag);
-        apiResult.setCode(flag ? StatusCodeEnum.SUCCESS.getCode() : StatusCodeEnum.FAIL.getCode());
-        apiResult.setMessage(message);
-        return apiResult;
+    public static <T> Result<T> fail(StatusCodeEnum statusCodeEnum) {
+        return restResult(false, null, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
+    }
+
+    public static <T> Result<T> check(Boolean condition) {
+        return condition ? Result.ok() : Result.fail();
+    }
+
+    public static <T> Result<T> check(Boolean condition, String failMessage) {
+        return condition ? Result.ok() : Result.fail(failMessage);
     }
 
     private static <T> Result<T> restResult(Boolean flag, T data, Integer code, String message) {
-        Result<T> apiResult = new Result<>();
-        apiResult.setFlag(flag);
-        apiResult.setData(data);
-        apiResult.setCode(code);
-        apiResult.setMessage(message);
-        return apiResult;
+        Result<T> result = new Result<>();
+        result.setFlag(flag);
+        result.setData(data);
+        result.setCode(code);
+        result.setMessage(message);
+        return result;
     }
 
+    private static <T> Result<T> restResult(Boolean flag, T data, StatusCodeEnum statusCodeEnum) {
+        return Result.restResult(flag, data, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
+    }
 }

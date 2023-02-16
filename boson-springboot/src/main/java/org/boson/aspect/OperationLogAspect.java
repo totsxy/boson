@@ -70,7 +70,7 @@ public class OperationLogAspect {
         // 操作模块
         operationLog.setOptModule(api.tags()[0]);
         // 操作类型
-        operationLog.setOptType(log.value());
+        operationLog.setOptType(log.value().getType());
         // 操作描述
         operationLog.setOptDesc(apiOperation.value());
         // 获取请求的类名

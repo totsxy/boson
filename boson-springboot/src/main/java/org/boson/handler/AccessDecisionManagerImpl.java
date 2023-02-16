@@ -12,26 +12,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * 访问决策管理器
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Component
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         // 获取用户权限列表
-        List<String> permissionList = authentication.getAuthorities()
+        List<String> permissions = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        for (ConfigAttribute item : collection) {
-            if (permissionList.contains(item.getAttribute())) {
-                return;
-            }
+
+
+        if(collection.stream().anyMatch(it -> permissions.contains(it.getAttribute()))) {
+            return;
         }
+
         throw new AccessDeniedException("没有操作权限");
     }
 
@@ -41,7 +43,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
     }
 
     @Override
-    public boolean supports(Class<?> aClass) {
+    public boolean supports(Class<?> clazz) {
         return true;
     }
 }

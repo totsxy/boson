@@ -1,11 +1,11 @@
 package org.boson.handler;
 
-import com.alibaba.fastjson.JSON;
 import org.boson.domain.Result;
 import org.boson.domain.dto.UserInfoDTO;
 import org.boson.domain.po.UserAuth;
-import org.boson.mapper.UserAuthMapper;
-import org.boson.util.BeanCopyUtils;
+import org.boson.service.UserAuthService;
+import org.boson.util.BeanUtils;
+import org.boson.util.HttpUtils;
 import org.boson.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -17,27 +17,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.boson.constant.CommonConst.APPLICATION_JSON;
-
 
 /**
  * 登录成功处理
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+
+    private final UserAuthService userAuthService;
+
     @Autowired
-    private UserAuthMapper userAuthMapper;
+    public AuthenticationSuccessHandlerImpl(UserAuthService userAuthService) {
+        this.userAuthService = userAuthService;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        // 返回登录信息
-        UserInfoDTO userLoginDTO = BeanCopyUtils.copyObject(UserUtils.getLoginUser(), UserInfoDTO.class);
-        httpServletResponse.setContentType(APPLICATION_JSON);
-        httpServletResponse.getWriter().write(JSON.toJSONString(Result.ok(userLoginDTO)));
-        // 更新用户ip，最近登录时间
+        UserInfoDTO userInfoDTO = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDTO.class);
+        HttpUtils.writeJSON(httpServletResponse, Result.ok(userInfoDTO));
         updateUserInfo();
     }
 
@@ -52,7 +52,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 .ipSource(UserUtils.getLoginUser().getIpSource())
                 .lastLoginTime(UserUtils.getLoginUser().getLastLoginTime())
                 .build();
-        userAuthMapper.updateById(userAuth);
+        userAuthService.updateById(userAuth);
     }
-
 }

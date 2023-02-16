@@ -1,7 +1,7 @@
 package org.boson.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.po.UserRole;
+import org.boson.support.mybatisplus.service.Queryable;
 
 /**
  * 用户角色服务
@@ -9,6 +9,6 @@ import org.boson.domain.po.UserRole;
  * @author yezhiqiu
  * @date 2021/07/29
  */
-public interface UserRoleService extends IService<UserRole> {
+public interface UserRoleService extends Queryable<UserRole> {
 
 }

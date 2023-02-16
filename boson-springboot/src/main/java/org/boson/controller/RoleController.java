@@ -6,11 +6,11 @@ import org.boson.domain.Result;
 import org.boson.domain.dto.RoleDTO;
 import org.boson.domain.dto.UserRoleDTO;
 import org.boson.domain.vo.ConditionVO;
+import org.boson.enums.OperationEnum;
 import org.boson.service.RoleService;
 import org.boson.domain.vo.RoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.boson.constant.OptTypeConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +58,7 @@ public class RoleController {
      * @param roleVO 角色信息
      * @return {@link Result<>}
      */
-    @OperationLog(value = OptTypeConst.SAVE_OR_UPDATE)
+    @OperationLog(OperationEnum.SaveOrUpdate)
     @ApiOperation(value = "保存或更新角色")
     @PostMapping("/admin/role")
     public Result<?> saveOrUpdateRole(@RequestBody @Valid RoleVO roleVO) {
@@ -72,7 +72,7 @@ public class RoleController {
      * @param roleIdList 角色id列表
      * @return {@link Result<>}
      */
-    @OperationLog(value = OptTypeConst.REMOVE)
+    @OperationLog(OperationEnum.Remove)
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/admin/roles")
     public Result<?> deleteRoles(@RequestBody List<Integer> roleIdList) {

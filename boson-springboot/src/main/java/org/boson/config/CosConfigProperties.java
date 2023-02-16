@@ -22,6 +22,4 @@ public class CosConfigProperties {
     private String region;
 
     private String bucketName;
-
-
 }

@@ -8,8 +8,8 @@ import org.boson.domain.dto.UserOnlineDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.boson.constant.OptTypeConst;
 import org.boson.domain.vo.*;
+import org.boson.enums.OperationEnum;
 import org.boson.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +75,7 @@ public class UserInfoController {
      * @param userRoleVO 用户角色信息
      * @return {@link Result<>}
      */
-    @OperationLog(value = OptTypeConst.UPDATE)
+    @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/admin/users/role")
     public Result<?> updateUserRole(@Valid @RequestBody UserRoleVO userRoleVO) {
@@ -89,7 +89,7 @@ public class UserInfoController {
      * @param userDisableVO 用户禁用信息
      * @return {@link Result<>}
      */
-    @OperationLog(value = OptTypeConst.UPDATE)
+    @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户禁用状态")
     @PutMapping("/admin/users/disable")
     public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVO userDisableVO) {

@@ -1,9 +1,9 @@
 package org.boson.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.mapper.RoleMenuMapper;
 import org.boson.domain.po.RoleMenu;
 import org.boson.service.RoleMenuService;
+import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +13,5 @@ import org.springframework.stereotype.Service;
  * @date 2021/07/28
  */
 @Service
-public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
-
-
+public class RoleMenuServiceImpl extends BaseServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
 }

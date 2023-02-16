@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 /**
  * redis操作
  *
- * @author yezhqiu
- * @date 2021/06/13
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Service
 public class RedisServiceImpl implements RedisService {
+    
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -327,5 +327,4 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.opsForGeo()
                 .hash(key, place);
     }
-
 }

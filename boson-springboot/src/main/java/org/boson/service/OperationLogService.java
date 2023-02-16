@@ -1,10 +1,10 @@
 package org.boson.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.PageResult;
 import org.boson.domain.dto.OperationLogDTO;
 import org.boson.domain.po.OperationLog;
 import org.boson.domain.vo.ConditionVO;
+import org.boson.support.mybatisplus.service.Queryable;
 
 
 /**
@@ -13,14 +13,13 @@ import org.boson.domain.vo.ConditionVO;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface OperationLogService extends IService<OperationLog> {
+public interface OperationLogService extends Queryable<OperationLog> {
 
     /**
-     * 查询日志列表
+     * 查询操作日志列表
      *
-     * @param conditionVO 条件
-     * @return 日志列表
+     * @param conditionVO 查询条件
+     * @return 操作日志列表
      */
-    PageResult<OperationLogDTO> queryPage(ConditionVO conditionVO);
-
+    PageResult<OperationLogDTO> pageOperationLogs(ConditionVO conditionVO);
 }

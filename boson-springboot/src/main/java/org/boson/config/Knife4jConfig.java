@@ -17,7 +17,8 @@ import java.util.Collections;
 /**
  * Knife4j配置类
  *
- * @author yezhiqiu
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Configuration
 @EnableSwagger2WebMvc
@@ -27,22 +28,21 @@ public class Knife4jConfig {
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .protocols(Collections.singleton("https"))
-                .host("https://www.talkxj.com")
+                .host("https://www.boson.org")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.minzheng.blog.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.boson.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("博客api文档")
-                .description("springboot+vue开发的博客项目")
-                .contact(new Contact("风丶宇", "https://github.com/X1192176811", "1192176811@qq.com"))
-                .termsOfServiceUrl("https://www.talkxj.com/api")
+                .title("boson api document")
+                .description("3d editor service")
+                .contact(new Contact("沈孝余", "https://github.com/totsxy", "305352505@qq.com"))
+                .termsOfServiceUrl("https://www.boson.org/api")
                 .version("1.0")
                 .build();
     }
-
 }

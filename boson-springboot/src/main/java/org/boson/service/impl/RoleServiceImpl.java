@@ -2,9 +2,9 @@ package org.boson.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.constant.CommonConst;
 import org.boson.domain.PageResult;
+import org.boson.domain.dto.ResourceRoleDTO;
 import org.boson.domain.po.UserRole;
 import org.boson.domain.vo.ConditionVO;
 import org.boson.mapper.RoleMapper;
@@ -20,7 +20,8 @@ import org.boson.service.RoleMenuService;
 import org.boson.service.RoleResourceService;
 import org.boson.service.RoleService;
 import org.boson.domain.vo.RoleVO;
-import org.boson.util.BeanCopyUtils;
+import org.boson.service.UserRoleService;
+import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.boson.util.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,13 +40,15 @@ import java.util.stream.Collectors;
 @Service
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
     @Autowired
-    private RoleMapper roleMapper;
-    @Autowired
     private RoleResourceService roleResourceService;
     @Autowired
     private RoleMenuService roleMenuService;
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
     @Autowired
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
 
@@ -62,9 +65,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     }
 
     @Override
+    public List<ResourceRoleDTO> listResourceRoles() {
+        return this.getBaseMapper().listResourceRoles();
+    }
+
+    @Override
     public PageResult<RoleDTO> listRoles(ConditionVO conditionVO) {
         // 查询角色列表
-        List<RoleDTO> roleDTOList = roleMapper.listRoles(PageUtils.getLimitCurrent(), PageUtils.getSize(), conditionVO);
+        List<RoleDTO> roleDTOList = getBaseMapper().listRoles(PageUtils.getLimitCurrent(), PageUtils.getSize(), conditionVO);
         // 查询总量
 //        Integer count = roleMapper.selectCount(new LambdaQueryWrapper<Role>()
 //                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Role::getRoleName, conditionVO.getKeywords()));
@@ -142,12 +150,18 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Override
     public void deleteRoles(List<Integer> roleIdList) {
         // 判断角色下是否有用户
-        Integer count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
-                .in(UserRole::getRoleId, roleIdList));
+//        Integer count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
+//                .in(UserRole::getRoleId, roleIdList));
+
+        int count = userRoleService.beginQuery()
+                .in(UserRole::getRoleId, roleIdList)
+                .count();
+
         if (count > 0) {
             throw new BizException("该角色下存在用户");
         }
-        roleMapper.deleteBatchIds(roleIdList);
+
+        getBaseMapper().deleteBatchIds(roleIdList);
     }
 
 }

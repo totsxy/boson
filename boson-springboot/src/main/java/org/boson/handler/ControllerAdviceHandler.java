@@ -14,8 +14,8 @@ import java.util.Objects;
 /**
  * 全局异常处理
  *
- * @author yezhqiu
- * @date 2021/06/11
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Log4j2
 @RestControllerAdvice
@@ -27,8 +27,8 @@ public class ControllerAdviceHandler {
      * @param e 异常
      * @return 接口异常信息
      */
-    @ExceptionHandler(value = BizException.class)
-    public Result<?> errorHandler(BizException e) {
+    @ExceptionHandler(BizException.class)
+    public Result<?> handle(BizException e) {
         return Result.fail(e.getCode(), e.getMessage());
     }
 
@@ -39,7 +39,7 @@ public class ControllerAdviceHandler {
      * @return 接口异常信息
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result<?> errorHandler(MethodArgumentNotValidException e) {
+    public Result<?> handle(MethodArgumentNotValidException e) {
         return Result.fail(StatusCodeEnum.VALID_ERROR.getCode(), Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
     }
 
@@ -50,9 +50,7 @@ public class ControllerAdviceHandler {
      * @return 接口异常信息
      */
     @ExceptionHandler(value = Exception.class)
-    public Result<?> errorHandler(Exception e) {
-        e.printStackTrace();
+    public Result<?> handle(Exception e) {
         return Result.fail(StatusCodeEnum.SYSTEM_ERROR.getCode(), StatusCodeEnum.SYSTEM_ERROR.getDesc());
     }
-
 }

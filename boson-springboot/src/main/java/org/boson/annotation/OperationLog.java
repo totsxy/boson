@@ -1,5 +1,7 @@
 package org.boson.annotation;
 
+import org.boson.enums.OperationEnum;
+
 import java.lang.annotation.*;
 
 /**
@@ -16,6 +18,5 @@ public @interface OperationLog {
     /**
      * @return 操作类型
      */
-    String value() default "";
-
+    OperationEnum value();
 }

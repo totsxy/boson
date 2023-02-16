@@ -19,8 +19,8 @@ import java.util.List;
 /**
  * 菜单控制器
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Api(tags = "菜单模块")
 @RestController
@@ -36,8 +36,8 @@ public class MenuController {
     /**
      * 查询菜单列表
      *
-     * @param conditionVO 条件
-     * @return {@link Result< MenuDTO >} 菜单列表
+     * @param conditionVO 查询条件
+     * @return {@link Result<MenuDTO>} 菜单列表
      */
     @ApiOperation(value = "查看菜单列表")
     @GetMapping("/admin/menus")
@@ -54,8 +54,7 @@ public class MenuController {
     @ApiOperation(value = "新增或修改菜单")
     @PostMapping("/admin/menus")
     public Result<?> saveOrUpdateMenu(@Valid @RequestBody MenuVO menuVO) {
-        menuService.saveOrUpdateMenu(menuVO);
-        return Result.ok();
+        return Result.check(menuService.saveOrUpdateMenu(menuVO));
     }
 
     /**
@@ -66,9 +65,8 @@ public class MenuController {
      */
     @ApiOperation(value = "删除菜单")
     @DeleteMapping("/admin/menus/{menuId}")
-    public Result<?> deleteMenu(@PathVariable("menuId") Integer menuId){
-        menuService.deleteMenu(menuId);
-        return Result.ok();
+    public Result<?> deleteMenu(@PathVariable("menuId") Integer menuId) {
+        return Result.check(menuService.deleteMenu(menuId));
     }
 
     /**

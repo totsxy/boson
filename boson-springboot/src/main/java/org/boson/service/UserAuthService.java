@@ -3,10 +3,10 @@ package org.boson.service;
 import org.boson.domain.PageResult;
 import org.boson.domain.dto.UserAreaDTO;
 import org.boson.domain.dto.UserBackDTO;
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.dto.UserInfoDTO;
 import org.boson.domain.po.UserAuth;
 import org.boson.domain.vo.*;
+import org.boson.support.mybatisplus.service.Queryable;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author yezhiqiu
  * @date 2021/07/29
  */
-public interface UserAuthService extends IService<UserAuth> {
+public interface UserAuthService extends Queryable<UserAuth> {
 
     /**
      * 发送邮箱验证码

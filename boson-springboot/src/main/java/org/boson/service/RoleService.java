@@ -1,12 +1,13 @@
 package org.boson.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.PageResult;
+import org.boson.domain.dto.ResourceRoleDTO;
 import org.boson.domain.dto.RoleDTO;
 import org.boson.domain.dto.UserRoleDTO;
 import org.boson.domain.po.Role;
 import org.boson.domain.vo.ConditionVO;
 import org.boson.domain.vo.RoleVO;
+import org.boson.support.mybatisplus.service.Queryable;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @author yezhiqiu
  * @date 2021/08/10
  */
-public interface RoleService extends IService<Role> {
+public interface RoleService extends Queryable<Role> {
 
     /**
      * 获取用户角色选项
@@ -24,6 +25,12 @@ public interface RoleService extends IService<Role> {
      * @return 角色
      */
     List<UserRoleDTO> listUserRoles();
+
+    /**
+     * 获取资源角色选项
+     * @return 资源
+     */
+    List<ResourceRoleDTO> listResourceRoles();
 
     /**
      * 查询角色列表

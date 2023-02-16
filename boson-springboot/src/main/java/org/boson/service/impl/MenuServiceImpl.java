@@ -1,9 +1,9 @@
 package org.boson.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.boson.domain.dto.LabelOptionDTO;
 import org.boson.domain.vo.ConditionVO;
 import org.boson.mapper.MenuMapper;
@@ -15,7 +15,10 @@ import org.boson.domain.po.RoleMenu;
 import org.boson.exception.BizException;
 import org.boson.domain.vo.MenuVO;
 import org.boson.service.MenuService;
+import org.boson.service.RoleMenuService;
+import org.boson.support.mybatisplus.service.BaseServiceImpl;
 import org.boson.util.BeanCopyUtils;
+import org.boson.util.BeanUtils;
 import org.boson.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,15 +32,21 @@ import static org.boson.constant.CommonConst.*;
 /**
  * 菜单服务
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
+
+    private final RoleMenuService roleMenuService;
+
+    public MenuServiceImpl(RoleMenuService roleMenuService) {
+        this.roleMenuService = roleMenuService;
+    }
 
     /**
      * 查看菜单列表
@@ -48,29 +57,34 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<MenuDTO> listMenus(ConditionVO conditionVO) {
         // 查询菜单数据
-        List<Menu> menuList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
-                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Menu::getName, conditionVO.getKeywords()));
-        // 获取目录列表
-        List<Menu> catalogList = listCatalog(menuList);
+//        List<Menu> menuList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
+//                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Menu::getName, conditionVO.getKeywords()));
+
+        List<Menu> menuList = this.beginQuery()
+                .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Menu::getName, conditionVO.getKeywords())
+                .queryList();
+
         // 获取目录下的子菜单
         Map<Integer, List<Menu>> childrenMap = getMenuMap(menuList);
+
         // 组装目录菜单数据
-        List<MenuDTO> menuDTOList = catalogList.stream().map(item -> {
-            MenuDTO menuDTO = BeanCopyUtils.copyObject(item, MenuDTO.class);
-            // 获取目录下的菜单排序
-            List<MenuDTO> list = BeanCopyUtils.copyList(childrenMap.get(item.getId()), MenuDTO.class).stream()
-                    .sorted(Comparator.comparing(MenuDTO::getOrderNum))
-                    .collect(Collectors.toList());
-            menuDTO.setChildren(list);
-            childrenMap.remove(item.getId());
-            return menuDTO;
-        }).sorted(Comparator.comparing(MenuDTO::getOrderNum)).collect(Collectors.toList());
+        List<MenuDTO> menuDTOList = listCatalog(menuList).stream()
+                .map(it -> {
+                    MenuDTO menuDTO = BeanUtils.bean2Bean(it, MenuDTO.class);
+                    List<MenuDTO> children = BeanUtils.bean2Bean(childrenMap.remove(it.getId()), MenuDTO.class).stream()
+                            .sorted(Comparator.comparing(MenuDTO::getOrderNum))
+                            .collect(Collectors.toList());
+                    menuDTO.setChildren(children);
+                    return menuDTO;
+                }).sorted(Comparator.comparing(MenuDTO::getOrderNum)).collect(Collectors.toList());
+
         // 若还有菜单未取出则拼接
         if (CollectionUtils.isNotEmpty(childrenMap)) {
-            List<Menu> childrenList = new ArrayList<>();
+            List<Menu> childrenList = CollectionUtil.newArrayList();
             childrenMap.values().forEach(childrenList::addAll);
+
             List<MenuDTO> childrenDTOList = childrenList.stream()
-                    .map(item -> BeanCopyUtils.copyObject(item, MenuDTO.class))
+                    .map(it -> BeanUtils.bean2Bean(it, MenuDTO.class))
                     .sorted(Comparator.comparing(MenuDTO::getOrderNum))
                     .collect(Collectors.toList());
             menuDTOList.addAll(childrenDTOList);
@@ -80,28 +94,36 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveOrUpdateMenu(MenuVO menuVO) {
-        Menu menu = BeanCopyUtils.copyObject(menuVO, Menu.class);
-        this.saveOrUpdate(menu);
+    public Boolean saveOrUpdateMenu(MenuVO menuVO) {
+        Menu menu = BeanUtils.bean2Bean(menuVO, Menu.class);
+        return this.saveOrUpdate(menu);
     }
 
     @Override
-    public void deleteMenu(Integer menuId) {
+    public Boolean deleteMenu(Integer menuId) {
         // 查询是否有角色关联
-        Integer count = roleMenuMapper.selectCount(new LambdaQueryWrapper<RoleMenu>()
-                .eq(RoleMenu::getMenuId, menuId));
+//        Integer count = roleMenuMapper.selectCount(new LambdaQueryWrapper<RoleMenu>()
+//                .eq(RoleMenu::getMenuId, menuId));
+
+        int count = roleMenuService.beginQuery()
+                .eq(RoleMenu::getMenuId, menuId)
+                .count();
+
         if (count > 0) {
             throw new BizException("菜单下有角色关联");
         }
+
         // 查询子菜单
-        List<Integer> menuIdList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
-                        .select(Menu::getId)
-                        .eq(Menu::getPid, menuId))
+        List<Integer> menuIdList = this.beginQuery()
+                .select(Menu::getId)
+                .eq(Menu::getPid, menuId)
+                .queryList()
                 .stream()
                 .map(Menu::getId)
                 .collect(Collectors.toList());
+
         menuIdList.add(menuId);
-        menuMapper.deleteBatchIds(menuIdList);
+        return menuIdList.size() == menuMapper.deleteBatchIds(menuIdList);
     }
 
     @Override

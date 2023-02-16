@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -34,13 +33,13 @@ public class Entity {
     /**
      * 创建人
      */
-    @TableField("create_by")
+    @TableField(fill = FieldFill.INSERT)
     private Integer createBy;
 
     /**
      * 修改人
      */
-    @TableField("update_by")
+    @TableField(fill = FieldFill.UPDATE)
     private Integer updateBy;
 
     /**
