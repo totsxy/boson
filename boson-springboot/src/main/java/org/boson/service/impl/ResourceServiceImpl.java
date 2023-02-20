@@ -1,7 +1,6 @@
 package org.boson.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.boson.domain.dto.LabelOptionDto;
@@ -46,7 +45,11 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
     @Override
     public boolean saveOrUpdateResource(ResourceVo resourceVo) {
         Resource resource = BeanUtils.bean2Bean(resourceVo, Resource.class);
-        return this.resourceRoleMetadataSource.clearDataSource(this.saveOrUpdate(resource));
+        boolean savedOrUpdated = this.saveOrUpdate(resource);
+        if (savedOrUpdated) {
+            this.resourceRoleMetadataSource.clearDataSource();
+        }
+        return savedOrUpdated;
     }
 
     @Override
@@ -71,8 +74,11 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
 
         resourceIdList.add(resourceId);
 
-        boolean delResult = resourceIdList.size() == getBaseMapper().deleteBatchIds(resourceIdList);
-        return this.resourceRoleMetadataSource.clearDataSource(delResult);
+        boolean deleted = resourceIdList.size() == getBaseMapper().deleteBatchIds(resourceIdList);
+        if (deleted) {
+            this.resourceRoleMetadataSource.clearDataSource();
+        }
+        return deleted;
     }
 
     @Override
@@ -109,7 +115,6 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
                 .select(Resource::getId, Resource::getResourceName, Resource::getPid)
                 .eq(Resource::getIsAnonymous, FALSE)
                 .queryList();
-
         Map<Integer, List<Resource>> childrenResourceMap = listChildrenResource(resourceList);
 
         return this.listModule(resourceList).stream()

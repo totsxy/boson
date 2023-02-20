@@ -15,6 +15,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
-
-
 }

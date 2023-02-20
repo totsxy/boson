@@ -4,7 +4,7 @@ import org.boson.domain.PageResult;
 import org.boson.domain.dto.OperationLogDto;
 import org.boson.domain.po.OperationLog;
 import org.boson.domain.vo.ConditionVo;
-import org.boson.support.mybatisplus.service.Queryable;
+import org.boson.support.mybatisplus.service.LambdaCallable;
 
 
 /**
@@ -13,7 +13,7 @@ import org.boson.support.mybatisplus.service.Queryable;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface OperationLogService extends Queryable<OperationLog> {
+public interface OperationLogService extends LambdaCallable<OperationLog> {
 
     /**
      * 查询操作日志列表

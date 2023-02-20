@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public interface Queryable<T> extends IService<T> {
+public interface LambdaCallable<T> extends IService<T> {
 
     default <R> R getOneAndPo2Vo(Wrapper<T> queryWrapper, Class<R> clazz) {
         return BeanUtils.bean2Bean(this.getOne(Objects.requireNonNull(queryWrapper)), clazz);
@@ -65,6 +65,10 @@ public interface Queryable<T> extends IService<T> {
 
     default LambdaQueryActuator<T> beginQuery() {
         return new LambdaQueryActuator<>(this);
+    }
+
+    default LambdaUpdateActuator<T> beginUpdate() {
+        return new LambdaUpdateActuator<>(this);
     }
 
     Page<T> getPage();

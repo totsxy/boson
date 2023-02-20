@@ -6,7 +6,7 @@ import org.boson.domain.dto.UserMenuDto;
 import org.boson.domain.po.Menu;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.MenuVo;
-import org.boson.support.mybatisplus.service.Queryable;
+import org.boson.support.mybatisplus.service.LambdaCallable;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface MenuService extends Queryable<Menu> {
+public interface MenuService extends LambdaCallable<Menu> {
 
     /**
      * 新增或修改菜单
@@ -30,7 +30,7 @@ public interface MenuService extends Queryable<Menu> {
      *
      * @param menuId 菜单id
      */
-    boolean deleteMenuById(Integer menuId);
+    boolean deleteMenu(Integer menuId);
 
     /**
      * 查看菜单列表

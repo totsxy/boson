@@ -1,6 +1,5 @@
 package org.boson.controller;
 
-
 import org.boson.annotation.OperationLog;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
@@ -18,29 +17,34 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
+
 /**
  * 用户信息控制器
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Api(tags = "用户信息模块")
 @RestController
 public class UserInfoController {
+
+    private final UserInfoService userInfoService;
+
     @Autowired
-    private UserInfoService userInfoService;
+    public UserInfoController(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
 
     /**
      * 更新用户信息
      *
-     * @param userInfoVO 用户信息
-     * @return {@link Result <>}
+     * @param userInfoVo 用户信息
+     * @return {@link Result<>}
      */
     @ApiOperation(value = "更新用户信息")
     @PutMapping("/users/info")
-    public Result<?> updateUserInfo(@Valid @RequestBody UserInfoVo userInfoVO) {
-        userInfoService.updateUserInfo(userInfoVO);
-        return Result.ok();
+    public Result<?> updateUserInfo(@Valid @RequestBody UserInfoVo userInfoVo) {
+        return Result.check(userInfoService.updateUserInfo(userInfoVo));
     }
 
     /**
@@ -53,60 +57,57 @@ public class UserInfoController {
     @ApiImplicitParam(name = "file", value = "用户头像", required = true, dataType = "MultipartFile")
     @PostMapping("/users/avatar")
     public Result<String> updateUserAvatar(MultipartFile file) {
-        return Result.ok(userInfoService.updateUserAvatar(file));
+        return Result.check(userInfoService.updateUserAvatar(file));
     }
 
     /**
      * 绑定用户邮箱
      *
-     * @param emailVO 邮箱信息
+     * @param emailVo 邮箱信息
      * @return {@link Result<>}
      */
     @ApiOperation(value = "绑定用户邮箱")
     @PostMapping("/users/email")
-    public Result<?> saveUserEmail(@Valid @RequestBody EmailVo emailVO) {
-        userInfoService.saveUserEmail(emailVO);
-        return Result.ok();
+    public Result<?> saveUserEmail(@Valid @RequestBody EmailVo emailVo) {
+        return Result.check(userInfoService.saveUserEmail(emailVo));
     }
 
     /**
      * 修改用户角色
      *
-     * @param userRoleVO 用户角色信息
+     * @param userRoleVo 用户角色信息
      * @return {@link Result<>}
      */
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/admin/users/role")
-    public Result<?> updateUserRole(@Valid @RequestBody UserRoleVo userRoleVO) {
-        userInfoService.updateUserRole(userRoleVO);
-        return Result.ok();
+    public Result<?> updateUserRole(@Valid @RequestBody UserRoleVo userRoleVo) {
+        return Result.check(userInfoService.updateUserRole(userRoleVo));
     }
 
     /**
      * 修改用户禁用状态
      *
-     * @param userDisableVO 用户禁用信息
+     * @param userDisableVo 用户禁用信息
      * @return {@link Result<>}
      */
     @OperationLog(OperationEnum.Update)
     @ApiOperation(value = "修改用户禁用状态")
     @PutMapping("/admin/users/disable")
-    public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVo userDisableVO) {
-        userInfoService.updateUserDisable(userDisableVO);
-        return Result.ok();
+    public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVo userDisableVo) {
+        return Result.check(userInfoService.updateUserDisable(userDisableVo));
     }
 
     /**
      * 查看在线用户
      *
-     * @param conditionVO 条件
-     * @return {@link Result< UserOnlineDto >} 在线用户列表
+     * @param conditionVo 查询条件
+     * @return {@link Result<UserOnlineDto>} 在线用户列表
      */
     @ApiOperation(value = "查看在线用户")
     @GetMapping("/admin/users/online")
-    public Result<PageResult<UserOnlineDto>> listOnlineUsers(ConditionVo conditionVO) {
-        return Result.ok(userInfoService.listOnlineUsers(conditionVO));
+    public Result<PageResult<UserOnlineDto>> listOnlineUsers(ConditionVo conditionVo) {
+        return Result.ok(userInfoService.listOnlineUsers(conditionVo));
     }
 
     /**
@@ -121,6 +122,4 @@ public class UserInfoController {
         userInfoService.removeOnlineUser(userInfoId);
         return Result.ok();
     }
-
 }
-

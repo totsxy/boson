@@ -40,7 +40,7 @@ public class ResourceController {
     @ApiOperation(value = "新增或修改资源")
     @PostMapping("/admin/resources")
     public Result<?> saveOrUpdateResource(@RequestBody @Valid ResourceVo resourceVo) {
-        return Result.check(resourceService.saveOrUpdateResource(resourceVo));
+        return Result.check(this.resourceService.saveOrUpdateResource(resourceVo));
     }
 
     /**
@@ -52,7 +52,7 @@ public class ResourceController {
     @ApiOperation(value = "删除资源")
     @DeleteMapping("/admin/resources/{resourceId}")
     public Result<?> deleteResource(@PathVariable("resourceId") Integer resourceId) {
-        return Result.check(resourceService.deleteResource(resourceId));
+        return Result.check(this.resourceService.deleteResource(resourceId));
     }
 
     /**
@@ -63,7 +63,7 @@ public class ResourceController {
     @ApiOperation(value = "查看资源列表")
     @GetMapping("/admin/resources")
     public Result<List<ResourceDto>> listResources(ConditionVo conditionVo) {
-        return Result.ok(resourceService.listResources(conditionVo));
+        return Result.ok(this.resourceService.listResources(conditionVo));
     }
 
     /**
@@ -74,6 +74,6 @@ public class ResourceController {
     @ApiOperation(value = "查看角色资源选项")
     @GetMapping("/admin/role/resources")
     public Result<List<LabelOptionDto>> listResourceOption() {
-        return Result.ok(resourceService.listResourceOption());
+        return Result.ok(this.resourceService.listResourceOption());
     }
 }

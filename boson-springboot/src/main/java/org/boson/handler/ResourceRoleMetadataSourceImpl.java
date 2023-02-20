@@ -50,11 +50,8 @@ public class ResourceRoleMetadataSourceImpl implements FilterInvocationSecurityM
         }
     }
 
-    public boolean clearDataSource(boolean needClean) {
-        if (needClean) {
-            RESOURCE_ROLE_LIST = null;
-        }
-        return needClean;
+    public void clearDataSource() {
+        RESOURCE_ROLE_LIST = null;
     }
 
     @Override
@@ -78,7 +75,8 @@ public class ResourceRoleMetadataSourceImpl implements FilterInvocationSecurityM
 
 
         // 获取接口角色信息，若为匿名接口则放行，若无对应角色则禁止
-        for (ResourceRoleDto resourceRoleDTO : RESOURCE_ROLE_LIST) {
+        final List<ResourceRoleDto> resourceRoleDtoList = RESOURCE_ROLE_LIST;
+        for (ResourceRoleDto resourceRoleDTO : resourceRoleDtoList) {
             if (antPathMatcher.match(resourceRoleDTO.getUrl(), url) && resourceRoleDTO.getRequestMethod().equals(method)) {
                 List<String> roleList = resourceRoleDTO.getRoleList();
                 if (CollectionUtils.isEmpty(roleList)) {

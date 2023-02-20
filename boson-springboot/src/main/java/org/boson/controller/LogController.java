@@ -34,7 +34,7 @@ public class LogController {
     }
 
     /**
-     * 查看操作日志
+     * 分页查看操作日志
      *
      * @param conditionVo 查询条件
      * @return {@link Result<OperationLogDto>} 日志列表
@@ -42,7 +42,7 @@ public class LogController {
     @ApiOperation(value = "分页查看操作日志")
     @GetMapping("/admin/operation/logs")
     public Result<PageResult<OperationLogDto>> pageOperationLogs(ConditionVo conditionVo) {
-        return Result.ok(operationLogService.pageOperationLogs(conditionVo));
+        return Result.ok(this.operationLogService.pageOperationLogs(conditionVo));
     }
 
     /**
@@ -54,6 +54,6 @@ public class LogController {
     @ApiOperation(value = "删除操作日志")
     @DeleteMapping("/admin/operation/logs")
     public Result<?> deleteOperationLogs(@RequestBody List<Integer> logIdList) {
-        return Result.check(operationLogService.removeByIds(logIdList));
+        return Result.check(this.operationLogService.removeByIds(logIdList));
     }
 }

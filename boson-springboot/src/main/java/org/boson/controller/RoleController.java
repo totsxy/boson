@@ -20,50 +20,31 @@ import java.util.List;
 /**
  * 角色控制器
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Api(tags = "角色模块")
 @RestController
 public class RoleController {
+
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
-
-    /**
-     * 查询用户角色选项
-     *
-     * @return {@link Result< UserRoleDto >} 用户角色选项
-     */
-    @ApiOperation(value = "查询用户角色选项")
-    @GetMapping("/admin/users/role")
-    public Result<List<UserRoleDto>> listUserRoles() {
-        return Result.ok(roleService.listUserRoles());
-    }
-
-    /**
-     * 查询角色列表
-     *
-     * @param conditionVO 条件
-     * @return {@link Result<  RoleDto  >} 角色列表
-     */
-    @ApiOperation(value = "查询角色列表")
-    @GetMapping("/admin/roles")
-    public Result<PageResult<RoleDto>> listRoles(ConditionVo conditionVO) {
-        return Result.ok(roleService.listRoles(conditionVO));
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     /**
      * 保存或更新角色
      *
-     * @param roleVO 角色信息
+     * @param roleVo 角色信息
      * @return {@link Result<>}
      */
     @OperationLog(OperationEnum.SaveOrUpdate)
     @ApiOperation(value = "保存或更新角色")
     @PostMapping("/admin/role")
-    public Result<?> saveOrUpdateRole(@RequestBody @Valid RoleVo roleVO) {
-        roleService.saveOrUpdateRole(roleVO);
-        return Result.ok();
+    public Result<?> saveOrUpdateRole(@RequestBody @Valid RoleVo roleVo) {
+        return Result.check(this.roleService.saveOrUpdateRole(roleVo));
     }
 
     /**
@@ -76,8 +57,29 @@ public class RoleController {
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/admin/roles")
     public Result<?> deleteRoles(@RequestBody List<Integer> roleIdList) {
-        roleService.deleteRoles(roleIdList);
-        return Result.ok();
+        return Result.check(this.roleService.deleteRoles(roleIdList));
     }
 
+    /**
+     * 查询角色列表
+     *
+     * @param conditionVo 查询条件
+     * @return {@link Result<RoleDto>} 角色列表
+     */
+    @ApiOperation(value = "查询角色列表")
+    @GetMapping("/admin/roles")
+    public Result<PageResult<RoleDto>> listRoles(ConditionVo conditionVo) {
+        return Result.ok(this.roleService.listRoles(conditionVo));
+    }
+
+    /**
+     * 查询用户角色选项
+     *
+     * @return {@link Result<UserRoleDto>} 用户角色选项列表
+     */
+    @ApiOperation(value = "查询用户角色选项")
+    @GetMapping("/admin/users/role")
+    public Result<List<UserRoleDto>> listUserRoles() {
+        return Result.ok(this.roleService.listUserRoles());
+    }
 }

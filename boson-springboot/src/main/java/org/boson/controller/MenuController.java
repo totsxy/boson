@@ -42,7 +42,7 @@ public class MenuController {
     @ApiOperation(value = "新增或修改菜单")
     @PostMapping("/admin/menus")
     public Result<?> saveOrUpdateMenu(@Valid @RequestBody MenuVo menuVo) {
-        return Result.check(menuService.saveOrUpdateMenu(menuVo));
+        return Result.check(this.menuService.saveOrUpdateMenu(menuVo));
     }
 
     /**
@@ -54,7 +54,7 @@ public class MenuController {
     @ApiOperation(value = "删除菜单")
     @DeleteMapping("/admin/menus/{menuId}")
     public Result<?> deleteMenu(@PathVariable("menuId") Integer menuId) {
-        return Result.check(menuService.deleteMenuById(menuId));
+        return Result.check(this.menuService.deleteMenu(menuId));
     }
 
     /**
@@ -66,7 +66,7 @@ public class MenuController {
     @ApiOperation(value = "查看菜单列表")
     @GetMapping("/admin/menus")
     public Result<List<MenuDto>> listMenus(ConditionVo conditionVo) {
-        return Result.ok(menuService.listMenus(conditionVo));
+        return Result.ok(this.menuService.listMenus(conditionVo));
     }
 
     /**
@@ -77,7 +77,7 @@ public class MenuController {
     @ApiOperation(value = "查看角色菜单选项")
     @GetMapping("/admin/role/menus")
     public Result<List<LabelOptionDto>> listMenuOptions() {
-        return Result.ok(menuService.listMenuOptions());
+        return Result.ok(this.menuService.listMenuOptions());
     }
 
     /**
@@ -88,6 +88,6 @@ public class MenuController {
     @ApiOperation(value = "查看当前用户菜单")
     @GetMapping("/admin/user/menus")
     public Result<List<UserMenuDto>> listUserMenus() {
-        return Result.ok(menuService.listUserMenus());
+        return Result.ok(this.menuService.listUserMenus());
     }
 }

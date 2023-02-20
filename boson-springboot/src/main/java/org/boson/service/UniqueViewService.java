@@ -20,5 +20,4 @@ public interface UniqueViewService extends IService<UniqueView> {
      * @return 用户量
      */
     List<UniqueViewDto> listUniqueViews();
-
 }

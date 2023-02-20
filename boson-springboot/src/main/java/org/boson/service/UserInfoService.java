@@ -5,23 +5,24 @@ import org.boson.domain.vo.*;
 import org.boson.domain.dto.UserOnlineDto;
 import org.boson.domain.po.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.boson.support.mybatisplus.service.LambdaCallable;
 import org.springframework.web.multipart.MultipartFile;
 
 
 /**
  * 用户信息服务
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
-public interface UserInfoService extends IService<UserInfo> {
+public interface UserInfoService extends LambdaCallable<UserInfo> {
 
     /**
      * 修改用户资料
      *
-     * @param userInfoVO 用户资料
+     * @param userInfoVo 用户资料
      */
-    void updateUserInfo(UserInfoVo userInfoVO);
+    boolean updateUserInfo(UserInfoVo userInfoVo);
 
     /**
      * 修改用户头像
@@ -29,36 +30,36 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param file 头像图片
      * @return 头像地址
      */
-    String updateUserAvatar(MultipartFile file);
+    boolean updateUserAvatar(MultipartFile file);
 
     /**
      * 绑定用户邮箱
      *
-     * @param emailVO 邮箱
+     * @param emailVo 邮箱
      */
-    void saveUserEmail(EmailVo emailVO);
+    boolean saveUserEmail(EmailVo emailVo);
 
     /**
      * 更新用户角色
      *
-     * @param userRoleVO 更新用户角色
+     * @param userRoleVo 更新用户角色
      */
-    void updateUserRole(UserRoleVo userRoleVO);
+    boolean updateUserRole(UserRoleVo userRoleVo);
 
     /**
      * 修改用户禁用状态
      *
-     * @param userDisableVO 用户禁用信息
+     * @param userDisableVo 用户禁用信息
      */
-    void updateUserDisable(UserDisableVo userDisableVO);
+    boolean updateUserDisable(UserDisableVo userDisableVo);
 
     /**
      * 查看在线用户列表
      *
-     * @param conditionVO 条件
+     * @param conditionVo 查询条件
      * @return 在线用户列表
      */
-    PageResult<UserOnlineDto> listOnlineUsers(ConditionVo conditionVO);
+    PageResult<UserOnlineDto> listOnlineUsers(ConditionVo conditionVo);
 
     /**
      * 下线用户
@@ -66,5 +67,4 @@ public interface UserInfoService extends IService<UserInfo> {
      * @param userInfoId 用户信息id
      */
     void removeOnlineUser(Integer userInfoId);
-
 }

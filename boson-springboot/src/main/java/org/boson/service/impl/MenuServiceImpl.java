@@ -50,7 +50,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
     }
 
     @Override
-    public boolean deleteMenuById(Integer menuId) {
+    public boolean deleteMenu(Integer menuId) {
         // 查询是否有角色关联
         int count = this.roleMenuService.beginQuery()
                 .eq(RoleMenu::getMenuId, menuId)
@@ -197,6 +197,6 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                     userMenuDto.setHidden(catalog.getIsHidden().equals(TRUE));
                     userMenuDto.setChildren(children);
                     return userMenuDto;
-        }).collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
 }
