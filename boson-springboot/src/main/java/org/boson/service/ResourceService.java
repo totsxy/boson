@@ -5,7 +5,7 @@ import org.boson.domain.dto.ResourceDto;
 import org.boson.domain.po.Resource;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.ResourceVo;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface ResourceService extends LambdaCallable<Resource> {
+public interface ResourceService extends BaseService<Resource> {
 
     /**
      * 添加或修改资源

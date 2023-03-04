@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 聊天类型枚举
  *
- * @author yezhiqiu
- * @date 2021/08/06
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -31,11 +31,11 @@ public enum ChatTypeEnum {
     /**
      * 语音消息
      */
-    VOICE_MESSAGE(5,"语音消息"),
+    VOICE_MESSAGE(5, "语音消息"),
     /**
      * 心跳消息
      */
-    HEART_BEAT(6,"心跳消息");
+    HEART_BEAT(6, "心跳消息");
 
     /**
      * 类型
@@ -49,6 +49,7 @@ public enum ChatTypeEnum {
 
     /**
      * 根据类型获取枚举
+     *
      * @param type 类型
      * @return 枚举
      */
@@ -60,5 +61,4 @@ public enum ChatTypeEnum {
         }
         return null;
     }
-
 }

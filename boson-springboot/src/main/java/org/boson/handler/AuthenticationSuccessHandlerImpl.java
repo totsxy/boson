@@ -36,8 +36,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        UserInfoDto userInfoDTO = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDto.class);
-        HttpUtils.writeJSON(httpServletResponse, Result.ok(userInfoDTO));
+        UserInfoDto userInfoDto = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDto.class);
+        HttpUtils.writeJSON(httpServletResponse, Result.ok(userInfoDto));
         updateUserInfo();
     }
 

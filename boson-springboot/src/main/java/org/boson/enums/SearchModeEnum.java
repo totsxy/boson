@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 搜索类型枚举
  *
- * @author yezhiqiu
- * @date 2021/07/27
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -45,5 +45,4 @@ public enum SearchModeEnum {
         }
         return null;
     }
-
 }

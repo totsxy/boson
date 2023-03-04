@@ -11,14 +11,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 
-import static org.boson.constant.MQPrefixConst.EMAIL_QUEUE;
+import static org.boson.constant.MQPrefixConstants.EMAIL_QUEUE;
 
 /**
  * 通知邮箱
  *
- * @author yezhqiu
- * @date 2021/06/13
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Component
 @RabbitListener(queues = EMAIL_QUEUE)
@@ -30,8 +29,12 @@ public class EmailConsumer {
     @Value("${spring.mail.username}")
     private String email;
 
+    private final JavaMailSender javaMailSender;
+
     @Autowired
-    private JavaMailSender javaMailSender;
+    public EmailConsumer(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
     @RabbitHandler
     public void process(byte[] data) {
@@ -43,5 +46,4 @@ public class EmailConsumer {
         message.setText(emailDto.getContent());
         javaMailSender.send(message);
     }
-
 }

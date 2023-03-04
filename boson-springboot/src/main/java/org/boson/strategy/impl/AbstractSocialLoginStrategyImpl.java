@@ -2,7 +2,7 @@ package org.boson.strategy.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import org.boson.constant.CommonConst;
+import org.boson.constant.CommonConstants;
 import org.boson.domain.dto.SocialTokenDto;
 import org.boson.domain.dto.SocialUserInfoDto;
 import org.boson.domain.dto.UserInfoDto;
@@ -17,7 +17,7 @@ import org.boson.enums.RoleEnum;
 import org.boson.exception.BizException;
 import org.boson.service.impl.UserDetailsServiceImpl;
 import org.boson.strategy.SocialLoginStrategy;
-import org.boson.util.BeanCopyUtils;
+import org.boson.util.BeanUtils;
 import org.boson.util.IpUtils;
 import org.boson.enums.ZoneEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,14 +70,14 @@ public abstract class AbstractSocialLoginStrategyImpl implements SocialLoginStra
             userDetailDTO = saveUserDetail(socialToken, ipAddress, ipSource);
         }
         // 判断账号是否禁用
-        if (userDetailDTO.getIsDisable().equals(CommonConst.TRUE)) {
+        if (userDetailDTO.getIsDisable().equals(CommonConstants.TRUE)) {
             throw new BizException("账号已被禁用");
         }
         // 将登录信息放入springSecurity管理
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetailDTO, null, userDetailDTO.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
         // 返回用户信息
-        return BeanCopyUtils.copyObject(userDetailDTO, UserInfoDto.class);
+        return BeanUtils.bean2Bean(userDetailDTO, UserInfoDto.class);
     }
 
     /**

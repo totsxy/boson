@@ -10,16 +10,16 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * web mvc配置
+ * web mvc配置类
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
-    public WebSecurityHandler getWebSecurityHandler() {
+    public WebSecurityHandler webSecurityHandler() {
         return new WebSecurityHandler();
     }
 
@@ -35,8 +35,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new PageableHandlerInterceptor());
-        registry.addInterceptor(getWebSecurityHandler());
+        registry.addInterceptor(webSecurityHandler());
     }
-
-
 }

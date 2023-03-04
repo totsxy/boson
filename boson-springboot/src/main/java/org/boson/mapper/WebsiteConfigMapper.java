@@ -1,21 +1,17 @@
 package org.boson.mapper;
 
-import org.boson.domain.po.Photo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.boson.domain.po.WebsiteConfig;
 import org.springframework.stereotype.Repository;
 
-
 /**
- * 照片映射器
+ * 网站配置
  *
  * @author yezhiqiu
- * @date 2021/08/04
+ * @date 2021/08/09
  */
 @Repository
-public interface PhotoMapper extends BaseMapper<Photo> {
-
-
-
+public interface WebsiteConfigMapper extends BaseMapper<WebsiteConfig> {
 }
 
 

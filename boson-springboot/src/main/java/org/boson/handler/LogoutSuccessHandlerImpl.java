@@ -24,5 +24,4 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         HttpUtils.writeJSON(httpServletResponse, Result.ok());
     }
-
 }

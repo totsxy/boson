@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 用户区域类型枚举
  *
- * @author yezhiqiu
- * @date 2021/08/24
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor

@@ -7,7 +7,7 @@ package org.boson.constant;
  * @author yezhiqiu
  * @date 2021/07/28
  */
-public class MQPrefixConst {
+public class MQPrefixConstants {
 
     /**
      * maxwell交换机

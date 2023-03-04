@@ -6,7 +6,7 @@ import org.boson.domain.dto.UserMenuDto;
 import org.boson.domain.po.Menu;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.MenuVo;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface MenuService extends LambdaCallable<Menu> {
+public interface MenuService extends BaseService<Menu> {
 
     /**
      * 新增或修改菜单

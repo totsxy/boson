@@ -7,7 +7,7 @@ package org.boson.constant;
  * @date 2021/06/14
  * @since 1.0.0
  **/
-public class SocialLoginConst {
+public class SocialLoginConstants {
 
     /**
      * oauth2登录方式

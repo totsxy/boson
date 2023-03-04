@@ -1,6 +1,7 @@
 package org.boson.handler;
 
 import org.boson.domain.Result;
+import org.boson.enums.StatusCodeEnum;
 import org.boson.util.HttpUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -22,6 +23,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException {
-        HttpUtils.writeJSON(httpServletResponse, Result.fail("权限不足"));
+        HttpUtils.writeJSON(httpServletResponse, Result.fail(StatusCodeEnum.AUTHORIZED));
     }
 }

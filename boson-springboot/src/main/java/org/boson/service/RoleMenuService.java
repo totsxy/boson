@@ -1,7 +1,7 @@
 package org.boson.service;
 
 import org.boson.domain.po.RoleMenu;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 
 /**
  * 角色菜单服务
@@ -9,5 +9,5 @@ import org.boson.support.mybatisplus.service.LambdaCallable;
  * @author yezhiqiu
  * @date 2021/07/29
  */
-public interface RoleMenuService extends LambdaCallable<RoleMenu> {
+public interface RoleMenuService extends BaseService<RoleMenu> {
 }

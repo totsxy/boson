@@ -15,14 +15,13 @@ import org.boson.mapper.ResourceMapper;
 import org.boson.service.ResourceService;
 import org.boson.service.RoleResourceService;
 import org.boson.support.mybatisplus.service.BaseServiceImpl;
-import org.boson.util.BeanCopyUtils;
 import org.boson.util.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.boson.constant.CommonConst.FALSE;
+import static org.boson.constant.CommonConstants.FALSE;
 
 /**
  * 资源服务
@@ -102,7 +101,7 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
             childrenResourceMap.values().forEach(childrenResourceList::addAll);
 
             List<ResourceDto> childrenResourceDtoList = childrenResourceList.stream()
-                    .map(resource -> BeanCopyUtils.copyObject(resource, ResourceDto.class))
+                    .map(resource -> BeanUtils.bean2Bean(resource, ResourceDto.class))
                     .collect(Collectors.toList());
             resourceDtoList.addAll(childrenResourceDtoList);
         }

@@ -12,7 +12,7 @@ import org.boson.domain.vo.VoiceVo;
 import org.boson.enums.FilePathEnum;
 import org.boson.mapper.ChatRecordMapper;
 import org.boson.strategy.context.UploadStrategyContext;
-import org.boson.util.BeanCopyUtils;
+import org.boson.util.BeanUtils;
 import org.boson.util.HTMLUtils;
 import org.boson.util.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,6 +120,7 @@ public class WebSocketServiceImpl {
                 ChatRecord chatRecord = JSON.parseObject(JSON.toJSONString(messageDTO.getData()), ChatRecord.class);
                 // 过滤html标签
                 chatRecord.setContent(HTMLUtils.filter(chatRecord.getContent()));
+                chatRecord.setCreateBy(0);
                 chatRecordMapper.insert(chatRecord);
                 messageDTO.setData(chatRecord);
                 // 广播消息
@@ -197,7 +198,8 @@ public class WebSocketServiceImpl {
         String content = uploadStrategyContext.executeUploadStrategy(voiceVo.getFile(), FilePathEnum.VOICE.getPath());
         voiceVo.setContent(content);
         // 保存记录
-        ChatRecord chatRecord = BeanCopyUtils.copyObject(voiceVo, ChatRecord.class);
+        ChatRecord chatRecord = BeanUtils.bean2Bean(voiceVo, ChatRecord.class);
+        chatRecord.setCreateBy(0);
         chatRecordMapper.insert(chatRecord);
         // 发送消息
         WebsocketMessageDto messageDTO = WebsocketMessageDto.builder()

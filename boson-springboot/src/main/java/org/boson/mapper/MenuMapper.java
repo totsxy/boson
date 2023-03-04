@@ -22,5 +22,4 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return 菜单列表
      */
     List<Menu> listMenusByUserInfoId(Integer userInfoId);
-
 }

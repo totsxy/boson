@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 登录方式枚举
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -39,6 +39,4 @@ public enum LoginTypeEnum {
      * 策略
      */
     private final String strategy;
-
-
 }

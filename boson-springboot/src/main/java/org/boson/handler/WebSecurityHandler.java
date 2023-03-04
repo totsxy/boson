@@ -1,9 +1,11 @@
 package org.boson.handler;
 
+import cn.hutool.http.ContentType;
 import com.alibaba.fastjson.JSON;
 import org.boson.annotation.AccessLimit;
 import org.boson.domain.Result;
 import org.boson.service.RedisService;
+import org.boson.util.HttpUtils;
 import org.boson.util.IpUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.boson.constant.CommonConst.APPLICATION_JSON;
+import static org.boson.constant.CommonConstants.APPLICATION_JSON;
 
 /**
  * @author hnz
@@ -60,12 +62,14 @@ public class WebSecurityHandler implements HandlerInterceptor {
     }
 
     private void render(HttpServletResponse response, Result<?> result) throws Exception {
-        response.setContentType(APPLICATION_JSON);
-        OutputStream out = response.getOutputStream();
-        String str = JSON.toJSONString(result);
-        out.write(str.getBytes(StandardCharsets.UTF_8));
-        out.flush();
-        out.close();
+        // TODO check.
+        HttpUtils.writeJSON(response, result);
+//        response.setContentType(ContentType.build(ContentType.JSON.getValue(), StandardCharsets.UTF_8));
+//        OutputStream out = response.getOutputStream();
+//        String str = JSON.toJSONString(result);
+//        out.write(str.getBytes(StandardCharsets.UTF_8));
+//        out.flush();
+//        out.close();
     }
 
 }

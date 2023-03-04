@@ -1,7 +1,8 @@
 package org.boson.aspect;
 
 import com.alibaba.fastjson.JSON;
-import org.boson.annotation.OperationLog;
+import org.boson.annotation.LogOperation;
+import org.boson.domain.po.OperationLog;
 import org.boson.mapper.OperationLogMapper;
 import org.boson.util.IpUtils;
 import io.swagger.annotations.Api;
@@ -29,19 +30,19 @@ import java.util.Objects;
  */
 @Aspect
 @Component
-public class OperationLogAspect {
+public class LogOperationAspect {
 
     private final OperationLogMapper operationLogMapper;
 
     @Autowired
-    public OperationLogAspect(OperationLogMapper operationLogMapper) {
+    public LogOperationAspect(OperationLogMapper operationLogMapper) {
         this.operationLogMapper = operationLogMapper;
     }
 
     /**
      * 设置操作日志切入点 记录操作日志 在注解的位置切入代码
      */
-    @Pointcut("@annotation(org.boson.annotation.OperationLog)")
+    @Pointcut("@annotation(org.boson.annotation.LogOperation)")
     public void logPointCut() {
     }
 
@@ -58,19 +59,21 @@ public class OperationLogAspect {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         // 从获取RequestAttributes中获取HttpServletRequest的信息
         HttpServletRequest request = (HttpServletRequest) Objects.requireNonNull(requestAttributes).resolveReference(RequestAttributes.REFERENCE_REQUEST);
-        org.boson.domain.po.OperationLog operationLog = new org.boson.domain.po.OperationLog();
+        OperationLog operationLog = new OperationLog();
         // 从切面织入点处通过反射机制获取织入点处的方法
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 获取切入点所在的方法
         Method method = signature.getMethod();
+
         // 获取操作
-        Api api = (Api) signature.getDeclaringType().getAnnotation(Api.class);
+        Api swaggerApi = (Api) signature.getDeclaringType().getAnnotation(Api.class);
         ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-        OperationLog log = method.getAnnotation(OperationLog.class);
+        LogOperation logOperation = method.getAnnotation(LogOperation.class);
+
         // 操作模块
-        operationLog.setOptModule(api.tags()[0]);
+        operationLog.setOptModule(swaggerApi.tags()[0]);
         // 操作类型
-        operationLog.setOptType(log.value().getType());
+        operationLog.setOptType(logOperation.value().getType());
         // 操作描述
         operationLog.setOptDesc(apiOperation.value());
         // 获取请求的类名
@@ -96,6 +99,7 @@ public class OperationLogAspect {
         operationLog.setIpSource(IpUtils.getIpSource(ipAddress));
         // 请求URL
         operationLog.setOptUrl(request.getRequestURI());
+
         operationLogMapper.insert(operationLog);
     }
 

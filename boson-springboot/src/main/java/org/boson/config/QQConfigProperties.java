@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * qq配置属性
  *
- * @author yezhqiu
- * @date 2021/06/14
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @Configuration
@@ -29,5 +29,4 @@ public class QQConfigProperties {
      * QQ用户信息地址
      */
     private String userInfoUrl;
-
 }

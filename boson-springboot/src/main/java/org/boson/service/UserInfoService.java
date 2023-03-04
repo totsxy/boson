@@ -4,8 +4,7 @@ import org.boson.domain.PageResult;
 import org.boson.domain.vo.*;
 import org.boson.domain.dto.UserOnlineDto;
 import org.boson.domain.po.UserInfo;
-import com.baomidou.mybatisplus.extension.service.IService;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -15,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface UserInfoService extends LambdaCallable<UserInfo> {
+public interface UserInfoService extends BaseService<UserInfo> {
 
     /**
      * 修改用户资料

@@ -22,6 +22,6 @@ public class AuthenticationFailHandlerImpl implements AuthenticationFailureHandl
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-        HttpUtils.writeJSON(httpServletResponse, Result.fail(e.getMessage()));
+        HttpUtils.writeJSON(httpServletResponse, Result.fail(e));
     }
 }

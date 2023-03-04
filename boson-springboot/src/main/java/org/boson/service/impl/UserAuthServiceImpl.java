@@ -3,7 +3,7 @@ package org.boson.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import org.boson.constant.CommonConst;
+import org.boson.constant.CommonConstants;
 import org.boson.domain.PageResult;
 import org.boson.domain.dto.EmailDto;
 import org.boson.domain.dto.UserInfoDto;
@@ -39,9 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.boson.constant.CommonConst.*;
-import static org.boson.constant.MQPrefixConst.EMAIL_EXCHANGE;
-import static org.boson.constant.RedisPrefixConst.*;
+import static org.boson.constant.CommonConstants.*;
+import static org.boson.constant.MQPrefixConstants.EMAIL_EXCHANGE;
+import static org.boson.constant.RedisPrefixConstants.*;
 
 
 /**
@@ -107,7 +107,7 @@ public class UserAuthServiceImpl extends BaseServiceImpl<UserAuthMapper, UserAut
         // 新增用户信息
         UserInfo userInfo = UserInfo.builder()
                 .email(userVo.getUsername())
-                .nickname(CommonConst.DEFAULT_NICKNAME + IdWorker.getId())
+                .nickname(CommonConstants.DEFAULT_NICKNAME + IdWorker.getId())
                 // TODO add avatar
 //                .avatar(blogInfoService.getWebsiteConfig().getUserAvatar())
                 .build();

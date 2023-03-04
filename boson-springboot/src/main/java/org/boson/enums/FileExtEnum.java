@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 文件扩展名枚举
  *
- * @author yezhiqiu
- * @date 2021/08/12
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -45,7 +45,7 @@ public enum FileExtEnum {
      */
     public static FileExtEnum getFileExt(String extName) {
         for (FileExtEnum value : FileExtEnum.values()) {
-            if (value.getExtName().equalsIgnoreCase(extName)) {
+            if (value.getExt().equalsIgnoreCase(extName)) {
                 return value;
             }
         }
@@ -55,7 +55,7 @@ public enum FileExtEnum {
     /**
      * 扩展名
      */
-    private final String extName;
+    private final String ext;
 
     /**
      * 描述

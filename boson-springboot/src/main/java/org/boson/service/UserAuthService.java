@@ -6,7 +6,7 @@ import org.boson.domain.dto.UserBackDto;
 import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.domain.vo.*;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface UserAuthService extends LambdaCallable<UserAuth> {
+public interface UserAuthService extends BaseService<UserAuth> {
 
     /**
      * 发送邮箱验证码

@@ -5,8 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Lunatic
- * @since 2022/5/26 10:41
+ * cos配置属性
+ *
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @Configuration

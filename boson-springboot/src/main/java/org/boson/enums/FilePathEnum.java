@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 文件路径枚举
  *
- * @author yezhiqiu
- * @date 2021/08/04
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor

@@ -6,7 +6,7 @@ package org.boson.constant;
  * @author yezhiqiu
  * @date 2021/07/27
  */
-public class RedisPrefixConst {
+public class RedisPrefixConstants {
 
     /**
      * 验证码过期时间

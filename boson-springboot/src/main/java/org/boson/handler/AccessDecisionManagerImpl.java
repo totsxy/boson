@@ -1,5 +1,6 @@
 package org.boson.handler;
 
+import org.boson.enums.StatusCodeEnum;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -22,19 +23,19 @@ import java.util.stream.Collectors;
 @Component
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
     @Override
-    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
+    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection)
+            throws AccessDeniedException, InsufficientAuthenticationException {
         // 获取用户权限列表
         List<String> permissions = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-
-        if(collection.stream().anyMatch(it -> permissions.contains(it.getAttribute()))) {
+        if (collection.stream().anyMatch(it -> permissions.contains(it.getAttribute()))) {
             return;
         }
 
-        throw new AccessDeniedException("没有操作权限");
+        throw new AccessDeniedException(StatusCodeEnum.AUTHORIZED.getDesc());
     }
 
     @Override

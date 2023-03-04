@@ -1,7 +1,7 @@
 package org.boson.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import org.boson.constant.CommonConst;
+import org.boson.constant.CommonConstants;
 import org.boson.domain.PageResult;
 import org.boson.domain.dto.ResourceRoleDto;
 import org.boson.domain.dto.UserRoleDto;
@@ -76,7 +76,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 .id(roleVo.getId())
                 .roleName(roleVo.getRoleName())
                 .roleLabel(roleVo.getRoleLabel())
-                .isDisable(CommonConst.FALSE)
+                .isDisable(CommonConstants.FALSE)
                 .build();
 
         if (!this.saveOrUpdate(role)) {

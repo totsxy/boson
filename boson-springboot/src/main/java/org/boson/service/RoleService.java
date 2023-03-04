@@ -7,7 +7,7 @@ import org.boson.domain.dto.UserRoleDto;
 import org.boson.domain.po.Role;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.RoleVo;
-import org.boson.support.mybatisplus.service.LambdaCallable;
+import org.boson.support.mybatisplus.service.BaseService;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-public interface RoleService extends LambdaCallable<Role> {
+public interface RoleService extends BaseService<Role> {
 
     /**
      * 保存或更新角色

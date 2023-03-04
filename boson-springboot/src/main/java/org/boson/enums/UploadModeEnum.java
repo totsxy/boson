@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 上传模式枚举
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -20,7 +20,6 @@ public enum UploadModeEnum {
      * 本地
      */
     LOCAL("local", "localUploadStrategyImpl"),
-
     /**
      * cos
      */

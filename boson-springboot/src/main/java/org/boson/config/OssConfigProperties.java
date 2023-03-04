@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 /**
  * oss配置属性
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @Configuration
@@ -39,5 +39,4 @@ public class OssConfigProperties {
      * bucket名称
      */
     private String bucketName;
-
 }

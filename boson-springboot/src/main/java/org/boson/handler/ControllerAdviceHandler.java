@@ -29,7 +29,7 @@ public class ControllerAdviceHandler {
      */
     @ExceptionHandler(BizException.class)
     public Result<?> handle(BizException e) {
-        return Result.fail(e.getCode(), e.getMessage());
+        return Result.fail(e);
     }
 
     /**
@@ -51,6 +51,6 @@ public class ControllerAdviceHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public Result<?> handle(Exception e) {
-        return Result.fail(StatusCodeEnum.SYSTEM_ERROR.getCode(), StatusCodeEnum.SYSTEM_ERROR.getDesc());
+        return Result.fail(StatusCodeEnum.SYSTEM_ERROR);
     }
 }

@@ -2,6 +2,7 @@ package org.boson.domain;
 
 import org.boson.enums.StatusCodeEnum;
 import lombok.Data;
+import org.boson.exception.BizException;
 
 
 /**
@@ -33,40 +34,40 @@ public class Result<T> {
      */
     private T data;
 
-    public static <T> Result<T> ok() {
-        return restResult(true, null, StatusCodeEnum.SUCCESS);
-    }
-
     public static <T> Result<T> ok(T data) {
-        return restResult(true, data, StatusCodeEnum.SUCCESS);
+        return Result.restResult(true, data, StatusCodeEnum.SUCCESS);
     }
 
     public static <T> Result<T> ok(T data, String message) {
-        return restResult(true, data, StatusCodeEnum.SUCCESS.getCode(), message);
+        return Result.restResult(true, data, StatusCodeEnum.SUCCESS.getCode(), message);
     }
 
-    public static <T> Result<T> fail() {
-        return restResult(false, null, StatusCodeEnum.FAIL);
-    }
-
-    public static <T> Result<T> fail(T data) {
-        return restResult(false, data, StatusCodeEnum.FAIL);
-    }
-
-    public static <T> Result<T> fail(T data, String message) {
-        return restResult(false, data, StatusCodeEnum.FAIL.getCode(), message);
-    }
-
-    public static <T> Result<T> fail(String message) {
-        return restResult(false, null, StatusCodeEnum.FAIL.getCode(), message);
+    public static <T> Result<T> ok() {
+        return Result.ok(null);
     }
 
     public static <T> Result<T> fail(Integer code, String message) {
-        return restResult(false, null, code, message);
+        return Result.restResult(false, null, code, message);
     }
 
     public static <T> Result<T> fail(StatusCodeEnum statusCodeEnum) {
-        return restResult(false, null, statusCodeEnum.getCode(), statusCodeEnum.getDesc());
+        return Result.restResult(false, null, statusCodeEnum);
+    }
+
+    public static <T> Result<T> fail(String message) {
+        return Result.fail(StatusCodeEnum.FAIL.getCode(), message);
+    }
+
+    public static <T> Result<T> fail(Throwable e) {
+        return Result.fail(e.getMessage());
+    }
+
+    public static <T> Result<T> fail(BizException e) {
+        return Result.fail(e.getCode(), e.getMessage());
+    }
+
+    public static <T> Result<T> fail() {
+        return Result.fail(StatusCodeEnum.FAIL);
     }
 
     public static <T> Result<T> check(boolean condition) {

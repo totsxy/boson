@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.boson.constant.RedisPrefixConst;
+import org.boson.constant.RedisPrefixConstants;
 import org.boson.domain.dto.UniqueViewDto;
 import org.boson.domain.po.UniqueView;
 import org.boson.mapper.UniqueViewMapper;
@@ -47,7 +47,7 @@ public class UniqueViewServiceImpl extends ServiceImpl<UniqueViewMapper, UniqueV
     @Scheduled(cron = " 0 0 0 * * ?", zone = "Asia/Shanghai")
     public void saveUniqueView() {
         // 获取每天用户量
-        Long count = redisService.sSize(RedisPrefixConst.UNIQUE_VISITOR);
+        Long count = redisService.sSize(RedisPrefixConstants.UNIQUE_VISITOR);
         // 获取昨天日期插入数据
         UniqueView uniqueView = UniqueView.builder()
                 .createAt(LocalDateTimeUtil.offset(LocalDateTime.now(ZoneId.of(ZoneEnum.SHANGHAI.getZone())), -1, ChronoUnit.DAYS))
@@ -59,9 +59,9 @@ public class UniqueViewServiceImpl extends ServiceImpl<UniqueViewMapper, UniqueV
     @Scheduled(cron = " 0 1 0 * * ?", zone = "Asia/Shanghai")
     public void clear() {
         // 清空redis访客记录
-        redisService.del(RedisPrefixConst.UNIQUE_VISITOR);
+        redisService.del(RedisPrefixConstants.UNIQUE_VISITOR);
         // 清空redis游客区域统计
-        redisService.del(RedisPrefixConst.VISITOR_AREA);
+        redisService.del(RedisPrefixConstants.VISITOR_AREA);
     }
 
 }

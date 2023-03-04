@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 /**
  * 用户工具类
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Component
 public class UserUtils {
@@ -22,5 +22,4 @@ public class UserUtils {
     public static UserDetailDto getLoginUser() {
         return (UserDetailDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-
 }

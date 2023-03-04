@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static org.boson.constant.RedisPrefixConst.*;
+import static org.boson.constant.RedisPrefixConstants.*;
 
 
 /**

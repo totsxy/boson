@@ -1,6 +1,6 @@
 package org.boson.controller;
 
-import org.boson.annotation.OperationLog;
+import org.boson.annotation.LogOperation;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
 import org.boson.domain.dto.UserOnlineDto;
@@ -78,7 +78,7 @@ public class UserInfoController {
      * @param userRoleVo 用户角色信息
      * @return {@link Result<>}
      */
-    @OperationLog(OperationEnum.Update)
+    @LogOperation(OperationEnum.Update)
     @ApiOperation(value = "修改用户角色")
     @PutMapping("/admin/users/role")
     public Result<?> updateUserRole(@Valid @RequestBody UserRoleVo userRoleVo) {
@@ -91,7 +91,7 @@ public class UserInfoController {
      * @param userDisableVo 用户禁用信息
      * @return {@link Result<>}
      */
-    @OperationLog(OperationEnum.Update)
+    @LogOperation(OperationEnum.Update)
     @ApiOperation(value = "修改用户禁用状态")
     @PutMapping("/admin/users/disable")
     public Result<?> updateUserDisable(@Valid @RequestBody UserDisableVo userDisableVo) {

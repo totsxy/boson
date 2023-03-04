@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.boson.constant.CommonConst.*;
+import static org.boson.constant.CommonConstants.*;
 
 /**
  * 菜单服务

@@ -18,8 +18,8 @@ public class LambdaQueryActuator<T> extends LambdaActuator<T, LambdaQueryActuato
 
     private final SharedString sqlSelect;
 
-    public LambdaQueryActuator(LambdaCallable<T> lambdaCallable) {
-        super(lambdaCallable);
+    public LambdaQueryActuator(BaseService<T> baseService) {
+        super(baseService);
         this.sqlSelect = new SharedString();
         super.setEntity(null);
         super.initNeed();
@@ -27,7 +27,7 @@ public class LambdaQueryActuator<T> extends LambdaActuator<T, LambdaQueryActuato
 
     @Override
     protected LambdaQueryActuator<T> instance() {
-        return new LambdaQueryActuator<>(this.callable);
+        return new LambdaQueryActuator<>(this.service);
     }
 
     @SafeVarargs
@@ -52,27 +52,27 @@ public class LambdaQueryActuator<T> extends LambdaActuator<T, LambdaQueryActuato
     }
 
     public boolean remove() {
-        return this.callable.remove(this);
+        return this.service.remove(this);
     }
 
     public T getOne() {
-        return this.callable.getOne(this);
+        return this.service.getOne(this);
     }
 
     public <R> R getOneAndPo2Vo(Class<R> clazz) {
-        return this.callable.getOneAndPo2Vo(this, Objects.requireNonNull(clazz));
+        return this.service.getOneAndPo2Vo(this, Objects.requireNonNull(clazz));
     }
 
     public int count() {
-        return this.callable.count(this);
+        return this.service.count(this);
     }
 
     public List<T> queryList() {
-        return this.callable.queryList(this);
+        return this.service.queryList(this);
     }
 
     public <R> List<R> queryListAndPo2Vo(Class<R> clazz, Function<R, R> mapper) {
-        return this.callable.queryListAndPo2Vo(this, Objects.requireNonNull(clazz), mapper);
+        return this.service.queryListAndPo2Vo(this, Objects.requireNonNull(clazz), mapper);
     }
 
     public <R> List<R> queryListAndPo2Vo(Class<R> clazz) {
@@ -80,11 +80,11 @@ public class LambdaQueryActuator<T> extends LambdaActuator<T, LambdaQueryActuato
     }
 
     public PageResult<T> queryPage() {
-        return this.callable.queryPage(this);
+        return this.service.queryPage(this);
     }
 
     public <R> PageResult<R> queryPageAndPo2Vo(Class<R> clazz, Function<R, R> mapper) {
-        return this.callable.queryPageAndPo2Vo(this, Objects.requireNonNull(clazz), mapper);
+        return this.service.queryPageAndPo2Vo(this, Objects.requireNonNull(clazz), mapper);
     }
 
     public <R> PageResult<R> queryPageAndPo2Vo(Class<R> clazz) {

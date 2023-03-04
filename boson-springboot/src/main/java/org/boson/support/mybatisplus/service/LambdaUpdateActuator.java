@@ -13,8 +13,8 @@ public class LambdaUpdateActuator<T> extends LambdaActuator<T, LambdaUpdateActua
 
     private final List<String> sqlSet;
 
-    public LambdaUpdateActuator(LambdaCallable<T> lambdaCallable) {
-        super(lambdaCallable);
+    public LambdaUpdateActuator(BaseService<T> baseService) {
+        super(baseService);
 
         super.setEntity(null);
         super.initNeed();
@@ -23,7 +23,7 @@ public class LambdaUpdateActuator<T> extends LambdaActuator<T, LambdaUpdateActua
 
     @Override
     protected LambdaUpdateActuator<T> instance() {
-        return new LambdaUpdateActuator<>(this.callable);
+        return new LambdaUpdateActuator<>(this.service);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class LambdaUpdateActuator<T> extends LambdaActuator<T, LambdaUpdateActua
     }
 
     public boolean update(T entity) {
-        return this.callable.update(entity, this);
+        return this.service.update(entity, this);
     }
 }

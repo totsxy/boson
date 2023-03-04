@@ -1,6 +1,6 @@
 package org.boson.controller;
 
-import org.boson.annotation.OperationLog;
+import org.boson.annotation.LogOperation;
 import org.boson.domain.PageResult;
 import org.boson.domain.Result;
 import org.boson.domain.dto.RoleDto;
@@ -40,7 +40,7 @@ public class RoleController {
      * @param roleVo 角色信息
      * @return {@link Result<>}
      */
-    @OperationLog(OperationEnum.SaveOrUpdate)
+    @LogOperation(OperationEnum.SaveOrUpdate)
     @ApiOperation(value = "保存或更新角色")
     @PostMapping("/admin/role")
     public Result<?> saveOrUpdateRole(@RequestBody @Valid RoleVo roleVo) {
@@ -53,7 +53,7 @@ public class RoleController {
      * @param roleIdList 角色id列表
      * @return {@link Result<>}
      */
-    @OperationLog(OperationEnum.Remove)
+    @LogOperation(OperationEnum.Remove)
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/admin/roles")
     public Result<?> deleteRoles(@RequestBody List<Integer> roleIdList) {

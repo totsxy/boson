@@ -6,8 +6,8 @@ import lombok.Getter;
 /**
  * 角色枚举
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
@@ -39,5 +39,4 @@ public enum RoleEnum {
      * 权限标签
      */
     private final String label;
-
 }

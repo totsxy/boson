@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-public interface LambdaCallable<T> extends IService<T> {
+public interface BaseService<T> extends IService<T> {
 
     default <R> R getOneAndPo2Vo(Wrapper<T> queryWrapper, Class<R> clazz) {
         return BeanUtils.bean2Bean(this.getOne(Objects.requireNonNull(queryWrapper)), clazz);

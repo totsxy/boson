@@ -4,13 +4,13 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.boson.constant.MQPrefixConst.*;
+import static org.boson.constant.MQPrefixConstants.*;
 
 /**
  * Rabbitmq配置类
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Configuration
 public class RabbitMQConfig {
@@ -44,5 +44,4 @@ public class RabbitMQConfig {
     public Binding bindingEmailDirect() {
         return BindingBuilder.bind(emailQueue()).to(emailExchange());
     }
-
 }

@@ -6,13 +6,12 @@ import lombok.Getter;
 /**
  * 时区枚举
  *
- * @author yezhiqiu
- * @date 2021/08/13
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Getter
 @AllArgsConstructor
 public enum ZoneEnum {
-
     /**
      * 上海
      */

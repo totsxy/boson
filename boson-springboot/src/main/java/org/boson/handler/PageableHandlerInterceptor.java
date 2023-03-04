@@ -10,22 +10,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
-import static org.boson.constant.CommonConst.*;
+import static org.boson.constant.CommonConstants.*;
 
 /**
  * 分页拦截器
  *
- * @author yezhiqiu
- * @date 2021/07/18
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 public class PageableHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String currentPage = request.getParameter(CURRENT);
-        String pageSize = Optional.ofNullable(request.getParameter(SIZE)).orElse(DEFAULT_SIZE);
-        if (!StringUtils.isNullOrEmpty(currentPage)) {
-            PageUtils.setCurrentPage(new Page<>(Long.parseLong(currentPage), Long.parseLong(pageSize)));
+        String current = request.getParameter(CURRENT);
+        String size = Optional.ofNullable(request.getParameter(SIZE)).orElse(DEFAULT_SIZE);
+        if (!StringUtils.isNullOrEmpty(current)) {
+            PageUtils.setCurrentPage(new Page<>(Long.parseLong(current), Long.parseLong(size)));
         }
         return true;
     }

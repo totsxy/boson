@@ -189,6 +189,7 @@ INSERT INTO `tb_resource` VALUES (177, '角色模块', NULL, NULL, NULL, 0, 1, n
 INSERT INTO `tb_resource` VALUES (178, '评论模块', NULL, NULL, NULL, 0, 1, null, '2021-08-11 21:04:21', NULL);
 INSERT INTO `tb_resource` VALUES (179, '资源模块', NULL, NULL, NULL, 0, 1, null, '2021-08-11 21:04:21', NULL);
 INSERT INTO `tb_resource` VALUES (180, '页面模块', NULL, NULL, NULL, 0, 1, null, '2021-08-11 21:04:21', NULL);
+
 INSERT INTO `tb_resource` VALUES (181, '查看博客信息', '/', 'GET', 166, 1, 1, null, '2021-08-11 21:04:22', '2021-08-11 21:05:29');
 INSERT INTO `tb_resource` VALUES (182, '查看关于我信息', '/about', 'GET', 166, 1, 1, null, '2021-08-11 21:04:22', '2021-08-11 21:05:29');
 INSERT INTO `tb_resource` VALUES (183, '查看后台信息', '/admin', 'GET', 166, 0, 1, null, '2021-08-11 21:04:22', NULL);

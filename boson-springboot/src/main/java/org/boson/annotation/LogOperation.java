@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface OperationLog {
+public @interface LogOperation {
 
     /**
      * @return 操作类型

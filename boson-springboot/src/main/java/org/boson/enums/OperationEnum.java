@@ -7,23 +7,23 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum OperationEnum {
     /**
-     * 新增或修改操作
+     * 新增或修改
      */
     SaveOrUpdate("新增或修改"),
     /**
-     * 新增操作
+     * 新增
      */
     Save("新增"),
     /**
-     * 修改操作
+     * 修改
      */
     Update("修改"),
     /**
-     * 删除操作
+     * 删除
      */
     Remove("删除"),
     /**
-     * 上传操作
+     * 上传
      */
     Upload("上传");
 
