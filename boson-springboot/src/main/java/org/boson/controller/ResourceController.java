@@ -1,5 +1,6 @@
 package org.boson.controller;
 
+import org.boson.annotation.LogOperation;
 import org.boson.domain.Result;
 import org.boson.domain.dto.LabelOptionDto;
 import org.boson.domain.dto.ResourceDto;
@@ -7,12 +8,14 @@ import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.ResourceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.boson.enums.OperationEnum;
 import org.boson.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
 
 /**
  * 资源控制器
@@ -24,20 +27,17 @@ import java.util.List;
 @RestController
 public class ResourceController {
 
-    private final ResourceService resourceService;
-
     @Autowired
-    public ResourceController(ResourceService resourceService) {
-        this.resourceService = resourceService;
-    }
+    private ResourceService resourceService;
 
     /**
-     * 新增或修改资源
+     * 保存或修改资源
      *
      * @param resourceVo 资源信息
      * @return {@link Result<>}
      */
-    @ApiOperation(value = "新增或修改资源")
+    @LogOperation(OperationEnum.SaveOrUpdate)
+    @ApiOperation(value = "保存或修改资源")
     @PostMapping("/admin/resources")
     public Result<?> saveOrUpdateResource(@RequestBody @Valid ResourceVo resourceVo) {
         return Result.check(this.resourceService.saveOrUpdateResource(resourceVo));
@@ -49,6 +49,7 @@ public class ResourceController {
      * @param resourceId 资源id
      * @return {@link Result<>}
      */
+    @LogOperation(OperationEnum.Delete)
     @ApiOperation(value = "删除资源")
     @DeleteMapping("/admin/resources/{resourceId}")
     public Result<?> deleteResource(@PathVariable("resourceId") Integer resourceId) {
@@ -56,11 +57,12 @@ public class ResourceController {
     }
 
     /**
-     * 查看资源列表
+     * 查询资源列表
      *
+     * @param conditionVo 查询条件
      * @return {@link Result<ResourceDto>} 资源列表
      */
-    @ApiOperation(value = "查看资源列表")
+    @ApiOperation(value = "查询资源列表")
     @GetMapping("/admin/resources")
     public Result<List<ResourceDto>> listResources(ConditionVo conditionVo) {
         return Result.ok(this.resourceService.listResources(conditionVo));

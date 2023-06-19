@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 邮件
+ * 邮件DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @Builder
@@ -18,9 +19,9 @@ import lombok.NoArgsConstructor;
 public class EmailDto {
 
     /**
-     * 邮箱号
+     * 目标邮箱号
      */
-    private String email;
+    private String to;
 
     /**
      * 主题

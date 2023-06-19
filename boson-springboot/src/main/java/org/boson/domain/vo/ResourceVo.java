@@ -30,6 +30,12 @@ public class ResourceVo {
     private Integer id;
 
     /**
+     * 父资源id
+     */
+    @ApiModelProperty(name = "pid", value = "父资源id", required = true, dataType = "Integer")
+    private Integer pid;
+
+    /**
      * 资源名
      */
     @NotBlank(message = "资源名不能为空")
@@ -37,7 +43,7 @@ public class ResourceVo {
     private String resourceName;
 
     /**
-     * 路径
+     * 资源路径
      */
     @ApiModelProperty(name = "url", value = "资源路径", required = true, dataType = "String")
     private String url;
@@ -47,12 +53,6 @@ public class ResourceVo {
      */
     @ApiModelProperty(name = "url", value = "资源路径", required = true, dataType = "String")
     private String requestMethod;
-
-    /**
-     * 父资源id
-     */
-    @ApiModelProperty(name = "parentId", value = "父资源id", required = true, dataType = "Integer")
-    private Integer parentId;
 
     /**
      * 是否匿名访问

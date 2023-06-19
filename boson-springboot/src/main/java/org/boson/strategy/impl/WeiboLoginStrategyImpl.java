@@ -23,25 +23,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
 /**
  * 微博登录策略实现
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service("weiboLoginStrategyImpl")
 public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
-    @Autowired
-    private WeiboConfigProperties weiboConfigProperties;
+
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private WeiboConfigProperties weiboConfigProperties;
 
     @Override
     public SocialTokenDto getSocialToken(String data) {
-        WeiboLoginVo weiBoLoginVO = JSON.parseObject(data, WeiboLoginVo.class);
-        // 获取微博token信息
-        WeiboTokenDto weiboToken = getWeiboToken(weiBoLoginVO);
-        // 返回token信息
+        WeiboLoginVo weiboLoginVo = JSON.parseObject(data, WeiboLoginVo.class);
+        WeiboTokenDto weiboToken = this.getWeiboToken(weiboLoginVo);
+
         return SocialTokenDto.builder()
                 .openId(weiboToken.getUid())
                 .accessToken(weiboToken.getAccess_token())
@@ -50,41 +51,39 @@ public class WeiboLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
     }
 
     @Override
-    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDTO) {
-        // 定义请求参数
-        Map<String, String> data = new HashMap<>(2);
-        data.put(SocialLoginConstants.UID, socialTokenDTO.getOpenId());
-        data.put(SocialLoginConstants.ACCESS_TOKEN, socialTokenDTO.getAccessToken());
-        // 获取微博用户信息
-        WeiboUserInfoDto weiboUserInfoDTO = restTemplate.getForObject(weiboConfigProperties.getUserInfoUrl(), WeiboUserInfoDto.class, data);
-        // 返回用户信息
+    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDto) {
+        Map<String, String> fromData = new HashMap<>(2);
+        fromData.put(SocialLoginConstants.UID, socialTokenDto.getOpenId());
+        fromData.put(SocialLoginConstants.ACCESS_TOKEN, socialTokenDto.getAccessToken());
+
+        WeiboUserInfoDto weiboUserInfoDto = this.restTemplate.getForObject(this.weiboConfigProperties.getUserInfoUrl(), WeiboUserInfoDto.class, fromData);
         return SocialUserInfoDto.builder()
-                .nickname(Objects.requireNonNull(weiboUserInfoDTO).getScreen_name())
-                .avatar(weiboUserInfoDTO.getAvatar_hd())
+                .nickname(Objects.requireNonNull(weiboUserInfoDto).getScreen_name())
+                .avatar(weiboUserInfoDto.getAvatar_hd())
                 .build();
     }
 
     /**
      * 获取微博token信息
      *
-     * @param weiBoLoginVO 微博登录信息
+     * @param weiboLoginVo 微博登录信息
      * @return {@link WeiboTokenDto} 微博token
      */
-    private WeiboTokenDto getWeiboToken(WeiboLoginVo weiBoLoginVO) {
+    private WeiboTokenDto getWeiboToken(WeiboLoginVo weiboLoginVo) {
         // 根据code换取微博uid和accessToken
-        MultiValueMap<String, String> weiboData = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> fromData = new LinkedMultiValueMap<>();
         // 定义微博token请求参数
-        weiboData.add(SocialLoginConstants.CLIENT_ID, weiboConfigProperties.getAppId());
-        weiboData.add(SocialLoginConstants.CLIENT_SECRET, weiboConfigProperties.getAppSecret());
-        weiboData.add(SocialLoginConstants.GRANT_TYPE, weiboConfigProperties.getGrantType());
-        weiboData.add(SocialLoginConstants.REDIRECT_URI, weiboConfigProperties.getRedirectUrl());
-        weiboData.add(SocialLoginConstants.CODE, weiBoLoginVO.getCode());
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(weiboData, null);
+        fromData.add(SocialLoginConstants.CLIENT_ID, this.weiboConfigProperties.getAppId());
+        fromData.add(SocialLoginConstants.CLIENT_SECRET, this.weiboConfigProperties.getAppSecret());
+        fromData.add(SocialLoginConstants.GRANT_TYPE, this.weiboConfigProperties.getGrantType());
+        fromData.add(SocialLoginConstants.REDIRECT_URI, this.weiboConfigProperties.getRedirectUrl());
+        fromData.add(SocialLoginConstants.CODE, weiboLoginVo.getCode());
+
         try {
-            return restTemplate.exchange(weiboConfigProperties.getAccessTokenUrl(), HttpMethod.POST, requestEntity, WeiboTokenDto.class).getBody();
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(fromData, null);
+            return this.restTemplate.exchange(this.weiboConfigProperties.getAccessTokenUrl(), HttpMethod.POST, requestEntity, WeiboTokenDto.class).getBody();
         } catch (Exception e) {
-            throw new BizException(StatusCodeEnum.WEIBO_LOGIN_ERROR);
+            throw new BizException(StatusCodeEnum.WEIBO_LOGIN_ERROR.getCode(), e.getMessage());
         }
     }
-
 }

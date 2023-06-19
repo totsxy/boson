@@ -5,16 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 用户角色选项
+ * 用户角色DTO
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserRoleDto {
 
     /**
@@ -26,5 +27,4 @@ public class UserRoleDto {
      * 角色名
      */
     private String roleName;
-
 }

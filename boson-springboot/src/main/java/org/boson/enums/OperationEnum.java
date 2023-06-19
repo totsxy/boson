@@ -3,6 +3,12 @@ package org.boson.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 操作类型枚举
+ *
+ * @author ShenXiaoYu
+ * @since 0.0.1
+ */
 @Getter
 @AllArgsConstructor
 public enum OperationEnum {
@@ -21,7 +27,7 @@ public enum OperationEnum {
     /**
      * 删除
      */
-    Remove("删除"),
+    Delete("删除"),
     /**
      * 上传
      */

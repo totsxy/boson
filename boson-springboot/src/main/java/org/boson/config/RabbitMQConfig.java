@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.boson.constant.MQPrefixConstants.*;
 
+
 /**
  * Rabbitmq配置类
  *

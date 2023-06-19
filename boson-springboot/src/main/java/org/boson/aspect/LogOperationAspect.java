@@ -32,12 +32,8 @@ import java.util.Objects;
 @Component
 public class LogOperationAspect {
 
-    private final OperationLogMapper operationLogMapper;
-
     @Autowired
-    public LogOperationAspect(OperationLogMapper operationLogMapper) {
-        this.operationLogMapper = operationLogMapper;
-    }
+    private OperationLogMapper operationLogMapper;
 
     /**
      * 设置操作日志切入点 记录操作日志 在注解的位置切入代码
@@ -54,7 +50,7 @@ public class LogOperationAspect {
      */
     @AfterReturning(value = "logPointCut()", returning = "keys")
     @SuppressWarnings("unchecked")
-    public void saveOptLog(JoinPoint joinPoint, Object keys) {
+    public void saveLog(JoinPoint joinPoint, Object keys) {
         // 获取RequestAttributes
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         // 从获取RequestAttributes中获取HttpServletRequest的信息
@@ -99,7 +95,6 @@ public class LogOperationAspect {
         operationLog.setIpSource(IpUtils.getIpSource(ipAddress));
         // 请求URL
         operationLog.setOptUrl(request.getRequestURI());
-
         operationLogMapper.insert(operationLog);
     }
 

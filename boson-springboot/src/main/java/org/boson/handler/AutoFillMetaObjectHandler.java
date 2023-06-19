@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 /**
- * mybatis plus自动填充
+ * mybatis plus自动填充处理器
  *
  * @author ShenXiaoYu
  * @since 0.0.1

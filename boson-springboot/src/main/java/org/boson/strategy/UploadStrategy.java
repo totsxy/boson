@@ -4,11 +4,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 
+
 /**
  * 上传策略
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 public interface UploadStrategy {
 
@@ -26,9 +27,8 @@ public interface UploadStrategy {
      *
      * @param fileName    文件名
      * @param inputStream 输入流
-     * @param path        路径
+     * @param path        上传路径
      * @return {@link String}
      */
     String uploadFile(String fileName, InputStream inputStream, String path);
-
 }

@@ -9,36 +9,26 @@ import java.util.List;
 
 
 /**
- * 博客后台信息
+ * 博客后台信息DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlogBackInfoDto {
+@Builder
+public class AppBackInfoDto {
+
     /**
      * 访问量
      */
-    private Integer viewsCount;
-
-    /**
-     * 留言量
-     */
-    private Integer messageCount;
+    private Integer viewCount;
 
     /**
      * 用户量
      */
     private Integer userCount;
-
-    /**
-     * 文章量
-     */
-    private Integer articleCount;
-
 
     /**
      * 一周用户量集合

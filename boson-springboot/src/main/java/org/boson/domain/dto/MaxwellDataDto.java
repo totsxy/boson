@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
+
 /**
- * maxwell监听数据
+ * maxwell监听数据DTO
  *
- * @author yezhqiu
- * @date 2021/07/02
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @AllArgsConstructor

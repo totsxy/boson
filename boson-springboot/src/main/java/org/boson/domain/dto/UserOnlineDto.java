@@ -9,15 +9,15 @@ import java.time.LocalDateTime;
 
 
 /**
- * 在线用户
+ * 在线用户DTO
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserOnlineDto {
 
     /**
@@ -59,5 +59,4 @@ public class UserOnlineDto {
      * 最近登录时间
      */
     private LocalDateTime lastLoginTime;
-
 }

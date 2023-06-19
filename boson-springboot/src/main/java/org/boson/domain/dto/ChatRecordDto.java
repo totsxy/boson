@@ -10,15 +10,15 @@ import java.util.List;
 
 
 /**
- * 聊天记录
+ * 聊天记录DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChatRecordDto {
 
     /**
@@ -35,5 +35,4 @@ public class ChatRecordDto {
      * ip来源
      */
     private String ipSource;
-
 }

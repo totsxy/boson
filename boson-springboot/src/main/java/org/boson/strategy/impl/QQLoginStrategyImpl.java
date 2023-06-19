@@ -20,68 +20,68 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
 /**
  * qq登录策略实现
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service("qqLoginStrategyImpl")
 public class QQLoginStrategyImpl extends AbstractSocialLoginStrategyImpl {
-    @Autowired
-    private QQConfigProperties qqConfigProperties;
+
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private QQConfigProperties qqConfigProperties;
 
     @Override
     public SocialTokenDto getSocialToken(String data) {
-        QQLoginVo qqLoginVO = JSON.parseObject(data, QQLoginVo.class);
-        // 校验QQ token信息
-        checkQQToken(qqLoginVO);
-        // 返回token信息
+        // 校验token信息
+        QQLoginVo qqLoginVo = JSON.parseObject(data, QQLoginVo.class);
+        this.checkQQToken(qqLoginVo);
+
         return SocialTokenDto.builder()
-                .openId(qqLoginVO.getOpenId())
-                .accessToken(qqLoginVO.getAccessToken())
+                .openId(qqLoginVo.getOpenId())
+                .accessToken(qqLoginVo.getAccessToken())
                 .loginType(LoginTypeEnum.QQ.getType())
                 .build();
     }
 
     @Override
-    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDTO) {
-        // 定义请求参数
+    public SocialUserInfoDto getSocialUserInfo(SocialTokenDto socialTokenDto) {
         Map<String, String> formData = new HashMap<>(3);
-        formData.put(SocialLoginConstants.QQ_OPEN_ID, socialTokenDTO.getOpenId());
-        formData.put(SocialLoginConstants.ACCESS_TOKEN, socialTokenDTO.getAccessToken());
-        formData.put(SocialLoginConstants.OAUTH_CONSUMER_KEY, qqConfigProperties.getAppId());
-        // 获取QQ返回的用户信息
-        QQUserInfoDto qqUserInfoDTO = JSON.parseObject(restTemplate.getForObject(qqConfigProperties.getUserInfoUrl(), String.class, formData), QQUserInfoDto.class);
-        // 返回用户信息
+        formData.put(SocialLoginConstants.QQ_OPEN_ID, socialTokenDto.getOpenId());
+        formData.put(SocialLoginConstants.ACCESS_TOKEN, socialTokenDto.getAccessToken());
+        formData.put(SocialLoginConstants.OAUTH_CONSUMER_KEY, this.qqConfigProperties.getAppId());
+
+        QQUserInfoDto qqUserInfoDto = JSON.parseObject(this.restTemplate.getForObject(this.qqConfigProperties.getUserInfoUrl(), String.class, formData), QQUserInfoDto.class);
         return SocialUserInfoDto.builder()
-                .nickname(Objects.requireNonNull(qqUserInfoDTO).getNickname())
-                .avatar(qqUserInfoDTO.getFigureurl_qq_1())
+                .nickname(Objects.requireNonNull(qqUserInfoDto).getNickname())
+                .avatar(qqUserInfoDto.getFigureurl_qq_1())
                 .build();
     }
 
     /**
-     * 校验qq token信息
+     * 校验token信息
      *
-     * @param qqLoginVO qq登录信息
+     * @param qqLoginVo qq登录信息
      */
-    private void checkQQToken(QQLoginVo qqLoginVO) {
-        // 根据token获取qq openId信息
-        Map<String, String> qqData = new HashMap<>(1);
-        qqData.put(SocialLoginConstants.ACCESS_TOKEN, qqLoginVO.getAccessToken());
+    private void checkQQToken(QQLoginVo qqLoginVo) {
+        Map<String, String> fromData = new HashMap<>(1);
+        fromData.put(SocialLoginConstants.ACCESS_TOKEN, qqLoginVo.getAccessToken());
+
         try {
-            String result = restTemplate.getForObject(qqConfigProperties.getCheckTokenUrl(), String.class, qqData);
-            QQTokenDto qqTokenDTO = JSON.parseObject(CommonUtils.getBracketsContent(Objects.requireNonNull(result)), QQTokenDto.class);
+            // 根据token获取openId信息
+            String result = this.restTemplate.getForObject(this.qqConfigProperties.getCheckTokenUrl(), String.class, fromData);
+            QQTokenDto qqTokenDto = JSON.parseObject(CommonUtils.getBracketsContent(Objects.requireNonNull(result)), QQTokenDto.class);
+
             // 判断openId是否一致
-            if (!qqLoginVO.getOpenId().equals(qqTokenDTO.getOpenid())) {
+            if (!qqLoginVo.getOpenId().equals(qqTokenDto.getOpenid())) {
                 throw new BizException(StatusCodeEnum.QQ_LOGIN_ERROR);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new BizException(StatusCodeEnum.QQ_LOGIN_ERROR);
+            throw new BizException(StatusCodeEnum.QQ_LOGIN_ERROR.getCode(), e.getMessage());
         }
     }
-
 }

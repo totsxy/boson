@@ -17,7 +17,7 @@
         <id column="id" property="id"/>
         <result column="role_name" property="roleName"/>
         <result column="role_label" property="roleLabel"/>
-        <result column="create_time" property="createTime"/>
+        <result column="create_at" property="createAt"/>
         <result column="is_disable" property="isDisable"/>
         <collection property="resourceIdList" ofType="java.lang.Integer">
             <constructor>
@@ -57,12 +57,12 @@
         AND ur.user_id = #{userInfoId}
     </select>
 
-    <select id="listRoles" resultMap="RoleMap">
+    <select id="pageRoles" resultMap="RoleMap">
         SELECT
         r.id,
         role_name,
         role_label,
-        r.create_at as create_time,
+        r.create_at,
         r.is_disable,
         rr.resource_id,
         rm.menu_id
@@ -77,8 +77,8 @@
           FROM
             tb_role
         <where>
-            <if test="conditionVO.keywords != null ">
-                role_name like concat('%',#{conditionVO.keywords},'%')
+            <if test="condition.keywords != null ">
+                role_name like concat('%',#{condition.keywords},'%')
             </if>
         </where>
         LIMIT #{current}, #{size}

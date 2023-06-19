@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 /**
  * 公共工具类
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 public class CommonUtils {
 
@@ -51,42 +51,4 @@ public class CommonUtils {
         }
         return str.toString();
     }
-
-    /**
-     * 转换List
-     *
-     * @param obj   obj
-     * @param clazz clazz
-     * @return {@link List<T>}
-     */
-    public static <T> List<T> castList(Object obj, Class<T> clazz) {
-        List<T> result = new ArrayList<T>();
-        if (obj instanceof List<?>) {
-            for (Object o : (List<?>) obj) {
-                result.add(clazz.cast(o));
-            }
-            return result;
-        }
-        return result;
-    }
-
-    /**
-     * 转换set
-     *
-     * @param obj   obj
-     * @param clazz clazz
-     * @return {@link Set<T>}
-     */
-    public static <T> Set<T> castSet(Object obj, Class<T> clazz) {
-        Set<T> result = new HashSet<>();
-        if (obj instanceof Set<?>) {
-            for (Object o : (Set<?>) obj) {
-                result.add(clazz.cast(o));
-            }
-            return result;
-        }
-        return result;
-    }
-
-
 }

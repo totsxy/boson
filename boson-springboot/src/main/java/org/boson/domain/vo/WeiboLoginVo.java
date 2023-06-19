@@ -27,6 +27,6 @@ public class WeiboLoginVo {
      * code
      */
     @NotBlank(message = "code不能为空")
-    @ApiModelProperty(name = "openId", value = "qq openId", required = true, dataType = "String")
+    @ApiModelProperty(name = "openId", value = "微博 openId", required = true, dataType = "String")
     private String code;
 }

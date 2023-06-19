@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * qq用户信息dto
+ * QQ用户信息DTO
  *
- * @author yezhqiu
- * @date 2021/06/14
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @AllArgsConstructor
@@ -27,6 +27,4 @@ public class QQUserInfoDto {
      * qq头像
      */
     private String figureurl_qq_1;
-
-
 }

@@ -16,13 +16,14 @@ import org.boson.exception.BizException;
 import org.boson.service.RedisService;
 
 import org.boson.domain.vo.*;
-import org.boson.support.mybatisplus.service.BaseServiceImpl;
+import org.boson.support.service.BaseServiceImpl;
 import org.boson.util.PageUtils;
 import org.boson.util.UserUtils;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -42,25 +43,26 @@ import static org.boson.constant.RedisPrefixConstants.USER_CODE_KEY;
 @Service
 public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoMapper, UserInfo> implements UserInfoService {
 
-    private final UploadStrategyContext uploadStrategyContext;
     private final RedisService redisService;
+
     private final UserRoleService userRoleService;
+
     private final SessionRegistry sessionRegistry;
 
-    public UserInfoServiceImpl(UploadStrategyContext uploadStrategyContext,
-                               RedisService redisService,
+    private final UploadStrategyContext uploadStrategyContext;
+
+    public UserInfoServiceImpl(RedisService redisService,
                                UserRoleService userRoleService,
-                               SessionRegistry sessionRegistry) {
-        this.uploadStrategyContext = uploadStrategyContext;
+                               SessionRegistry sessionRegistry,
+                               UploadStrategyContext uploadStrategyContext) {
         this.redisService = redisService;
         this.userRoleService = userRoleService;
         this.sessionRegistry = sessionRegistry;
+        this.uploadStrategyContext = uploadStrategyContext;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateUserInfo(UserInfoVo userInfoVo) {
-        // 封装用户信息
         UserInfo userInfo = UserInfo.builder()
                 .id(UserUtils.getLoginUser().getUserInfoId())
                 .nickname(userInfoVo.getNickname())
@@ -71,25 +73,27 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoMapper, UserInf
         return this.updateById(userInfo);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean updateUserAvatar(MultipartFile file) {
+    public String updateUserAvatar(MultipartFile file) {
         // 头像上传
-        String avatar = uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.AVATAR.getPath());
+        String avatar = this.uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.AVATAR.getPath());
         // 更新头像
         UserInfo userInfo = UserInfo.builder()
                 .id(UserUtils.getLoginUser().getUserInfoId())
                 .avatar(avatar)
                 .build();
 
-        return this.updateById(userInfo);
+        if (!this.updateById(userInfo)) {
+            throw new BizException("更新用户头像失败");
+        }
+
+        return avatar;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean saveUserEmail(EmailVo emailVo) {
-        if (!emailVo.getCode().equals(redisService.get(USER_CODE_KEY + emailVo.getEmail()).toString())) {
-            throw new BizException("验证码错误！");
+        if (!emailVo.getCode().equals(this.redisService.get(USER_CODE_KEY + emailVo.getEmail()).toString())) {
+            throw new BizException("验证码错误");
         }
 
         UserInfo userInfo = UserInfo.builder()
@@ -100,7 +104,6 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoMapper, UserInf
         return this.updateById(userInfo);
     }
 
-    // TODO 优化回滚
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateUserRole(UserRoleVo userRoleVo) {
@@ -115,13 +118,9 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoMapper, UserInf
         }
 
         // 删除用户角色重新添加
-        boolean removed = this.userRoleService.beginQuery()
-                .eq(UserRole::getUserId, userRoleVo.getUserInfoId())
-                .remove();
-
-        // 失败时触发回滚
-        if (!removed) {
-            throw new BizException("删除用户角色失败");
+        if (!this.userRoleService.removeByUserInfoId(userRoleVo.getUserInfoId())) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
         }
 
         List<UserRole> userRoleList = userRoleVo.getRoleIdList()
@@ -132,48 +131,42 @@ public class UserInfoServiceImpl extends BaseServiceImpl<UserInfoMapper, UserInf
                         .build())
                 .collect(Collectors.toList());
 
-        // 失败时触发回滚
-        if (!userRoleService.saveBatch(userRoleList)) {
-            throw new BizException("更新用户角色失败");
+        if (!this.userRoleService.saveBatch(userRoleList)) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
         }
 
         return true;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateUserDisable(UserDisableVo userDisableVo) {
-        // 更新用户禁用状态
         UserInfo userInfo = UserInfo.builder()
                 .id(userDisableVo.getId())
                 .isDisable(userDisableVo.getIsDisable())
                 .build();
+
         return this.updateById(userInfo);
     }
 
     @Override
     public PageResult<UserOnlineDto> listOnlineUsers(ConditionVo conditionVo) {
         // 获取security在线session
-        List<UserOnlineDto> userOnlineDtoList = sessionRegistry.getAllPrincipals()
+        List<UserOnlineDto> userOnlineDtoList = this.sessionRegistry.getAllPrincipals()
                 .stream()
-                .filter(item -> sessionRegistry.getAllSessions(item, false).size() > 0)
-                .map(item -> JSON.parseObject(JSON.toJSONString(item), UserOnlineDto.class))
-                .filter(item -> StringUtils.isBlank(conditionVo.getKeywords()) || item.getNickname().contains(conditionVo.getKeywords()))
+                .filter(it -> this.sessionRegistry.getAllSessions(it, false).size() > 0)
+                .map(it -> JSON.parseObject(JSON.toJSONString(it), UserOnlineDto.class))
+                .filter(it -> StringUtils.isBlank(conditionVo.getKeywords()) || it.getNickname().contains(conditionVo.getKeywords()))
                 .sorted(Comparator.comparing(UserOnlineDto::getLastLoginTime).reversed())
                 .collect(Collectors.toList());
 
-        // 执行分页
-        int fromIndex = PageUtils.getLimitCurrent().intValue();
-        int size = PageUtils.getSize().intValue();
-        int toIndex = userOnlineDtoList.size() - fromIndex > size ? fromIndex + size : userOnlineDtoList.size();
-        List<UserOnlineDto> userOnlineList = userOnlineDtoList.subList(fromIndex, toIndex);
-        return new PageResult<>(userOnlineList, userOnlineDtoList.size());
+        return PageUtils.limit(userOnlineDtoList);
     }
 
     @Override
     public void removeOnlineUser(Integer userInfoId) {
         // 获取用户session
-        List<Object> userInfoList = sessionRegistry.getAllPrincipals()
+        List<Object> userInfoList = this.sessionRegistry.getAllPrincipals()
                 .stream()
                 .filter(it -> ((UserDetailDto) it).getUserInfoId().equals(userInfoId))
                 .collect(Collectors.toList());

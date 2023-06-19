@@ -4,7 +4,7 @@ import org.boson.domain.PageResult;
 import org.boson.domain.vo.*;
 import org.boson.domain.dto.UserOnlineDto;
 import org.boson.domain.po.UserInfo;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -17,31 +17,31 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserInfoService extends BaseService<UserInfo> {
 
     /**
-     * 修改用户资料
+     * 更新用户信息
      *
-     * @param userInfoVo 用户资料
+     * @param userInfoVo 用户信息
      */
     boolean updateUserInfo(UserInfoVo userInfoVo);
 
     /**
-     * 修改用户头像
+     * 更新用户头像
      *
-     * @param file 头像图片
+     * @param file 头像文件
      * @return 头像地址
      */
-    boolean updateUserAvatar(MultipartFile file);
+    String updateUserAvatar(MultipartFile file);
 
     /**
      * 绑定用户邮箱
      *
-     * @param emailVo 邮箱
+     * @param emailVo 邮箱信息
      */
     boolean saveUserEmail(EmailVo emailVo);
 
     /**
      * 更新用户角色
      *
-     * @param userRoleVo 更新用户角色
+     * @param userRoleVo 用户角色信息
      */
     boolean updateUserRole(UserRoleVo userRoleVo);
 
@@ -53,7 +53,7 @@ public interface UserInfoService extends BaseService<UserInfo> {
     boolean updateUserDisable(UserDisableVo userDisableVo);
 
     /**
-     * 查看在线用户列表
+     * 查看在线用户
      *
      * @param conditionVo 查询条件
      * @return 在线用户列表

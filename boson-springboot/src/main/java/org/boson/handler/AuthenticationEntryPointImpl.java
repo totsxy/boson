@@ -2,7 +2,7 @@ package org.boson.handler;
 
 import org.boson.domain.Result;
 import org.boson.enums.StatusCodeEnum;
-import org.boson.util.HttpUtils;
+import org.boson.util.IOUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 /**
- * 用户未登录处理
+ * 用户未登录处理器
  *
  * @author ShenXiaoYu
  * @since 0.0.1
@@ -23,6 +23,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-        HttpUtils.writeJSON(httpServletResponse, Result.fail(StatusCodeEnum.NO_LOGIN));
+        IOUtils.writeJSON(httpServletResponse, Result.fail(StatusCodeEnum.NO_LOGIN));
     }
 }

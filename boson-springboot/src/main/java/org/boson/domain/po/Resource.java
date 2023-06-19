@@ -21,18 +21,17 @@ import org.boson.domain.Entity;
 public class Resource extends Entity {
 
     /**
-     * 父id
+     * 父资源id
      */
-    @TableField("pid")
     private Integer pid;
 
     /**
-     * 权限名
+     * 资源名
      */
     private String resourceName;
 
     /**
-     * 权限路径
+     * 资源路径
      */
     private String url;
 

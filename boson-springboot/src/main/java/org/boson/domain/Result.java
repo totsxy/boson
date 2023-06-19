@@ -74,8 +74,8 @@ public class Result<T> {
         return condition ? Result.ok() : Result.fail();
     }
 
-    public static <T> Result<T> check(boolean condition, String failMessage) {
-        return condition ? Result.ok() : Result.fail(failMessage);
+    public static <T> Result<T> check(boolean condition, String message) {
+        return condition ? Result.ok() : Result.fail(message);
     }
 
     private static <T> Result<T> restResult(boolean flag, T data, Integer code, String message) {

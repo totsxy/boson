@@ -36,15 +36,15 @@ public class UserVo {
     /**
      * 密码
      */
-    @Size(min = 6, message = "密码不能少于6位")
     @NotBlank(message = "密码不能为空")
+    @Size(min = 6, message = "密码不能少于6位")
     @ApiModelProperty(name = "password", value = "密码", required = true, dataType = "String")
     private String password;
 
     /**
      * 验证码
      */
-    @NotBlank(message = "验证码不能为空")
+    @NotBlank(message = "邮箱验证码不能为空")
     @ApiModelProperty(name = "code", value = "邮箱验证码", required = true, dataType = "String")
     private String code;
 }

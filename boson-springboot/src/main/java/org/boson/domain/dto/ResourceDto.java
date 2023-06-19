@@ -8,16 +8,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 /**
- * 资源
+ * 资源DTO
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ResourceDto {
 
     /**
@@ -31,7 +32,7 @@ public class ResourceDto {
     private String resourceName;
 
     /**
-     * 权限路径
+     * 资源路径
      */
     private String url;
 
@@ -53,12 +54,10 @@ public class ResourceDto {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createAt;
 
     /**
-     * 权限列表
+     * 子资源列表
      */
     private List<ResourceDto> children;
-
-
 }

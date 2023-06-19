@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.boson.domain.po.RoleMenu;
 import org.springframework.stereotype.Repository;
 
+
 /**
- * 角色菜单
+ * 角色菜单表mapper
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
-
 }

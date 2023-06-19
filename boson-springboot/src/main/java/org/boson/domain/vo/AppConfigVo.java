@@ -9,18 +9,19 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 /**
- * 网站配置信息
+ * 应用配置VO
  *
- * @author yezhiqiu
- * @date 2021/08/09
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(description = "网站配置")
-public class WebsiteConfigVo {
+@ApiModel(description = "应用配置")
+public class AppConfigVo {
 
     /**
      * 网站头像
@@ -165,5 +166,4 @@ public class WebsiteConfigVo {
      */
     @ApiModelProperty(name = "isMusicPlayer", value = "是否开启音乐", required = true, dataType = "Integer")
     private Integer isMusicPlayer;
-
 }

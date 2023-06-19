@@ -1,15 +1,14 @@
 package org.boson.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.boson.domain.po.UserAuth;
-import org.boson.mapper.RoleMapper;
-import org.boson.mapper.UserAuthMapper;
-import org.boson.mapper.UserInfoMapper;
 import org.boson.domain.dto.UserDetailDto;
 import org.boson.domain.po.UserInfo;
 import org.boson.exception.BizException;
 import org.boson.service.RedisService;
+import org.boson.service.RoleService;
+import org.boson.service.UserAuthService;
+import org.boson.service.UserInfoService;
 import org.boson.util.IpUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.boson.enums.ZoneEnum;
@@ -24,64 +23,64 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static org.boson.constant.RedisPrefixConstants.*;
-
 
 /**
  * 用户详细信息服务
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private UserAuthMapper userAuthMapper;
-    @Autowired
-    private UserInfoMapper userInfoMapper;
-    @Autowired
-    private RoleMapper roleMapper;
+
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UserAuthService userAuthService;
+    @Autowired
+    private UserInfoService userInfoService;
     @Resource
     private HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         if (StringUtils.isBlank(username)) {
-            throw new BizException("用户名不能为空！");
+            throw new BizException("用户名不能为空");
         }
-        // 查询账号是否存在
-        UserAuth userAuth = userAuthMapper.selectOne(new LambdaQueryWrapper<UserAuth>()
+
+        // 查询账户是否存在
+        UserAuth userAuth = this.userAuthService.beginQuery()
                 .select(UserAuth::getId, UserAuth::getUserInfoId, UserAuth::getUsername, UserAuth::getPassword, UserAuth::getLoginType)
-                .eq(UserAuth::getUsername, username));
+                .eq(UserAuth::getUsername, username)
+                .getOne();
+
         if (Objects.isNull(userAuth)) {
-            throw new BizException("用户名不存在!");
+            throw new BizException("用户账户不存在");
         }
+
         // 封装登录信息
-        return convertUserDetail(userAuth, request);
+        return this.convertUserDetail(userAuth, request);
     }
 
     /**
      * 封装用户登录信息
      *
      * @param user    用户账号
-     * @param request 请求
+     * @param request 用户请求
      * @return 用户登录信息
      */
     public UserDetailDto convertUserDetail(UserAuth user, HttpServletRequest request) {
-        // 查询账号信息
-        UserInfo userInfo = userInfoMapper.selectById(user.getUserInfoId());
-        // 查询账号角色
-        List<String> roleList = roleMapper.listRolesByUserInfoId(userInfo.getId());
-        // 查询账号点赞信息
-        Set<Object> articleLikeSet = redisService.sMembers(ARTICLE_USER_LIKE + userInfo.getId());
-        Set<Object> commentLikeSet = redisService.sMembers(COMMENT_USER_LIKE + userInfo.getId());
-        Set<Object> talkLikeSet = redisService.sMembers(TALK_USER_LIKE + userInfo.getId());
+        // 查询账号及角色信息
+        UserInfo userInfo = this.userInfoService.getById(user.getUserInfoId());
+        List<String> roleList = this.roleService.listRolesByUserInfoId(userInfo.getId());
+
         // 获取设备信息
         String ipAddress = IpUtils.getIpAddress(request);
         String ipSource = IpUtils.getIpSource(ipAddress);
         UserAgent userAgent = IpUtils.getUserAgent(request);
+
         // 封装权限集合
         return UserDetailDto.builder()
                 .id(user.getId())
@@ -95,9 +94,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .avatar(userInfo.getAvatar())
                 .intro(userInfo.getIntro())
                 .webSite(userInfo.getWebSite())
-                .articleLikeSet(articleLikeSet)
-                .commentLikeSet(commentLikeSet)
-                .talkLikeSet(talkLikeSet)
                 .ipAddress(ipAddress)
                 .ipSource(ipSource)
                 .isDisable(userInfo.getIsDisable())
@@ -106,5 +102,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .lastLoginTime(LocalDateTime.now(ZoneId.of(ZoneEnum.SHANGHAI.getZone())))
                 .build();
     }
-
 }

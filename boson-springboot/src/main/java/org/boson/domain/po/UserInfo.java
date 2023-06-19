@@ -46,7 +46,7 @@ public class UserInfo extends Entity {
     private String webSite;
 
     /**
-     * 是否禁言
+     * 是否禁用
      */
     private Integer isDisable;
 }

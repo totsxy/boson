@@ -23,14 +23,14 @@ import java.util.stream.Collectors;
 
 
 /**
- * redis操作
+ * redis服务
  *
  * @author ShenXiaoYu
  * @since 0.0.1
  **/
 @Service
 public class RedisServiceImpl implements RedisService {
-    
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 

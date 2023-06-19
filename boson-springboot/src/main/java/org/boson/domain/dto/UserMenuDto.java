@@ -7,16 +7,17 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 /**
- * 用户菜单
+ * 用户菜单DTO
  *
  * @author ShenXiaoYu
  * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserMenuDto {
 
     /**

@@ -34,8 +34,8 @@ public class PasswordVo {
     /**
      * 新密码
      */
-    @Size(min = 6, message = "新密码不能少于6位")
     @NotBlank(message = "新密码不能为空")
+    @Size(min = 6, message = "新密码不能少于6位")
     @ApiModelProperty(name = "newPassword", value = "新密码", required = true, dataType = "String")
     private String newPassword;
 }

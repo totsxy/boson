@@ -6,12 +6,11 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * 用户信息
+ * 用户信息表mapper
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
-
 }

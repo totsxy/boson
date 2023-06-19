@@ -7,8 +7,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.boson.domain.Entity;
 
+
 /**
- * 用户账号PO
+ * 用户账户PO
  *
  * @author ShenXiaoYu
  * @since 0.0.1

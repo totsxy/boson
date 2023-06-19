@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
 /**
  * 标签选项
  *
@@ -32,5 +33,4 @@ public class LabelOptionDto {
      * 子选项
      */
     private List<LabelOptionDto> children;
-
 }

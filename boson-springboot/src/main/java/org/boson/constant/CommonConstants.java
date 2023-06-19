@@ -1,18 +1,12 @@
 package org.boson.constant;
 
-
 /**
  * 公共常量
  *
- * @author yezhiqiu
- * @date 2021/07/27
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
-public class CommonConstants {
-
-    /**
-     * 否
-     */
-    public static final int FALSE = 0;
+public final class CommonConstants {
 
     /**
      * 是
@@ -20,44 +14,19 @@ public class CommonConstants {
     public static final int TRUE = 1;
 
     /**
-     * 高亮标签
+     * 否
      */
-    public static final String PRE_TAG = "<span style='color:#f47466'>";
+    public static final int FALSE = 0;
 
     /**
-     * 高亮标签
+     * 默认的配置id
      */
-    public static final String POST_TAG = "</span>";
-
-    /**
-     * 当前页码
-     */
-    public static final String CURRENT = "current";
-
-    /**
-     * 页码条数
-     */
-    public static final String SIZE = "size";
-
-    /**
-     * 博主id
-     */
-    public static final Integer BLOGGER_ID = 1;
-
-    /**
-     * 默认条数
-     */
-    public static final String DEFAULT_SIZE = "10";
+    public static final Integer DEFAULT_CONFIG_ID = 1;
 
     /**
      * 默认用户昵称
      */
     public static final String DEFAULT_NICKNAME = "用户";
-
-    /**
-     * 浏览文章集合
-     */
-    public static String ARTICLE_SET = "articleSet";
 
     /**
      * 前端组件名
@@ -78,15 +47,4 @@ public class CommonConstants {
      * 未知的
      */
     public static final String UNKNOWN = "未知";
-
-    /**
-     * JSON 格式
-     */
-    public static final String APPLICATION_JSON = "application/json;charset=utf-8";
-
-    /**
-     * 默认的配置id
-     */
-    public static final Integer DEFAULT_CONFIG_ID = 1;
-
 }

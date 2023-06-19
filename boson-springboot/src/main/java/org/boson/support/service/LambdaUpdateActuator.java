@@ -1,12 +1,15 @@
-package org.boson.support.mybatisplus.service;
+package org.boson.support.service;
 
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.update.Update;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class LambdaUpdateActuator<T> extends LambdaActuator<T, LambdaUpdateActuator<T>>
         implements Update<LambdaUpdateActuator<T>, SFunction<T, ?>> {
@@ -49,5 +52,10 @@ public class LambdaUpdateActuator<T> extends LambdaActuator<T, LambdaUpdateActua
 
     public boolean update(T entity) {
         return this.service.update(entity, this);
+    }
+
+    public boolean update() {
+        T entity = (T) ReflectUtil.newInstance(ReflectionKit.getSuperClassGenericType(this.getClass(), 0));
+        return this.update(entity);
     }
 }

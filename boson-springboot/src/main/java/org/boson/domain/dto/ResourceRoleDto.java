@@ -32,5 +32,4 @@ public class ResourceRoleDto {
      * 角色名
      */
     private List<String> roleList;
-
 }

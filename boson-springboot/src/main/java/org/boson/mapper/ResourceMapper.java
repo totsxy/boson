@@ -4,15 +4,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.boson.domain.po.Resource;
 import org.springframework.stereotype.Repository;
 
+
 /**
- * 资源
+ * 资源表mapper
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface ResourceMapper extends BaseMapper<Resource> {
-
-
-
 }

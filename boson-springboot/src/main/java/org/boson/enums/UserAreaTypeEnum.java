@@ -45,5 +45,4 @@ public enum UserAreaTypeEnum {
         }
         return null;
     }
-
 }

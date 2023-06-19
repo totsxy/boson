@@ -9,16 +9,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 /**
- * 角色
+ * 角色DTO
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class RoleDto {
 
     /**
@@ -37,14 +38,14 @@ public class RoleDto {
     private String roleLabel;
 
     /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
      * 是否禁用
      */
     private Integer isDisable;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createAt;
 
     /**
      * 资源id列表
@@ -55,5 +56,4 @@ public class RoleDto {
      * 菜单id列表
      */
     private List<Integer> menuIdList;
-
 }

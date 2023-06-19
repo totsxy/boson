@@ -17,22 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+
 /**
- * 用户账号控制器
+ * 用户账户控制器
  *
  * @author ShenXiaoYu
  * @since 0.0.1
  */
-@Api(tags = "用户账号模块")
+@Api(tags = "用户账户模块")
 @RestController
 public class UserAuthController {
 
-    private final UserAuthService userAuthService;
-
     @Autowired
-    public UserAuthController(UserAuthService userAuthService) {
-        this.userAuthService = userAuthService;
-    }
+    private UserAuthService userAuthService;
 
     /**
      * 发送邮箱验证码
@@ -110,24 +107,24 @@ public class UserAuthController {
     }
 
     /**
-     * 分页查询后台用户列表
+     * 分页查询后台用户
      *
      * @param conditionVo 查询条件
      * @return {@link Result<UserBackDto>} 后台用户列表
      */
     @ApiOperation(value = "分页查询后台用户列表")
     @GetMapping("/admin/users")
-    public Result<PageResult<UserBackDto>> listUsers(ConditionVo conditionVo) {
+    public Result<PageResult<UserBackDto>> pageUserBacks(ConditionVo conditionVo) {
         return Result.ok(this.userAuthService.pageUserBacks(conditionVo));
     }
 
     /**
-     * 获取用户区域分布
+     * 查询用户区域分布
      *
      * @param conditionVo 查询条件
-     * @return {@link Result<UserAreaDto>} 用户区域分布
+     * @return {@link Result<UserAreaDto>} 用户区域分布列表
      */
-    @ApiOperation(value = "获取用户区域分布")
+    @ApiOperation(value = "查询用户区域分布列表")
     @GetMapping("/admin/users/area")
     public Result<List<UserAreaDto>> listUserAreas(ConditionVo conditionVo) {
         return Result.ok(this.userAuthService.listUserAreas(conditionVo));

@@ -16,6 +16,7 @@ import java.io.InputStream;
  */
 @Service("ossUploadStrategyImpl")
 public class OssUploadStrategyImpl extends AbstractUploadStrategyImpl {
+
     @Autowired
     private OssConfigProperties ossConfigProperties;
 

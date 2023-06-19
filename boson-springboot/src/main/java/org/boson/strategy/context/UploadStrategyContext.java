@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * 上传策略上下文
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Service
 public class UploadStrategyContext {
@@ -36,9 +36,8 @@ public class UploadStrategyContext {
      * @return {@link String} 文件地址
      */
     public String executeUploadStrategy(MultipartFile file, String path) {
-        return uploadStrategyMap.get(UploadModeEnum.getStrategy(uploadMode)).uploadFile(file, path);
+        return this.uploadStrategyMap.get(UploadModeEnum.getStrategy(uploadMode)).uploadFile(file, path);
     }
-
 
     /**
      * 执行上传策略
@@ -49,7 +48,10 @@ public class UploadStrategyContext {
      * @return {@link String} 文件地址
      */
     public String executeUploadStrategy(String fileName, InputStream inputStream, String path) {
-        return uploadStrategyMap.get(UploadModeEnum.getStrategy(uploadMode)).uploadFile(fileName, inputStream, path);
+        return this.uploadStrategyMap.get(UploadModeEnum.getStrategy(uploadMode)).uploadFile(fileName, inputStream, path);
     }
 
+    public void setUploadMode(String uploadMode) {
+        this.uploadMode = uploadMode;
+    }
 }

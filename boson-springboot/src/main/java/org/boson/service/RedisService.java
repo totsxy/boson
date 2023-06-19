@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
- * redis操作
+ * redis服务
  *
- * @author yezhqiu
- * @date 2021/06/13
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @SuppressWarnings("all")
 public interface RedisService {
@@ -95,7 +95,7 @@ public interface RedisService {
     Long incr(String key, long delta);
 
     /**
-     * 获取自增1后的 值
+     * 获取自增1后的值
      *
      * @param key  key值
      * @param time 过期时间

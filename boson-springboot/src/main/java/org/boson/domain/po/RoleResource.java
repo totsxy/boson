@@ -29,5 +29,4 @@ public class RoleResource extends Entity {
      * 资源id
      */
     private Integer resourceId;
-
 }

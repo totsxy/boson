@@ -36,33 +36,15 @@ public class ConditionVo {
     private Long size;
 
     /**
-     * 搜索内容
+     * 关键字
      */
-    @ApiModelProperty(name = "keywords", value = "搜索内容", dataType = "String")
+    @ApiModelProperty(name = "keywords", value = "关键字", dataType = "String")
     private String keywords;
-
-    /**
-     * 分类id
-     */
-    @ApiModelProperty(name = "categoryId", value = "分类id", dataType = "Integer")
-    private Integer categoryId;
-
-    /**
-     * 标签id
-     */
-    @ApiModelProperty(name = "tagId", value = "标签id", dataType = "Integer")
-    private Integer tagId;
-
-    /**
-     * 相册id
-     */
-    @ApiModelProperty(name = "albumId", value = "相册id", dataType = "Integer")
-    private Integer albumId;
 
     /**
      * 登录类型
      */
-    @ApiModelProperty(name = "type", value = "登录类型", dataType = "Integer")
+    @ApiModelProperty(name = "loginType", value = "登录类型", dataType = "Integer")
     private Integer loginType;
 
     /**
@@ -100,5 +82,4 @@ public class ConditionVo {
      */
     @ApiModelProperty(name = "isReview", value = "是否审核", dataType = "Integer")
     private Integer isReview;
-
 }

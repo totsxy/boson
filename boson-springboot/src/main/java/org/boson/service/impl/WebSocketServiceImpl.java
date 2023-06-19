@@ -31,11 +31,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import static org.boson.enums.ChatTypeEnum.*;
 
+
 /**
  * websocket服务
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @Service
@@ -50,7 +51,7 @@ public class WebSocketServiceImpl {
     /**
      * 用户session集合
      */
-    private static CopyOnWriteArraySet<WebSocketServiceImpl> webSocketSet = new CopyOnWriteArraySet<>();
+    private static CopyOnWriteArraySet<WebSocketServiceImpl> WEB_SOCKET_SET = new CopyOnWriteArraySet<>();
 
     @Autowired
     public void setChatRecordMapper(ChatRecordMapper chatRecordMapper) {
@@ -91,7 +92,7 @@ public class WebSocketServiceImpl {
     public void onOpen(Session session, EndpointConfig endpointConfig) throws IOException {
         // 加入连接
         this.session = session;
-        webSocketSet.add(this);
+        WEB_SOCKET_SET.add(this);
         // 更新在线人数
         updateOnlineCount();
         // 加载历史聊天记录
@@ -149,7 +150,7 @@ public class WebSocketServiceImpl {
     @OnClose
     public void onClose() throws IOException {
         // 更新在线人数
-        webSocketSet.remove(this);
+        WEB_SOCKET_SET.remove(this);
         updateOnlineCount();
     }
 
@@ -182,7 +183,7 @@ public class WebSocketServiceImpl {
         // 获取当前在线人数
         WebsocketMessageDto messageDto = WebsocketMessageDto.builder()
                 .type(ONLINE_COUNT.getType())
-                .data(webSocketSet.size())
+                .data(WEB_SOCKET_SET.size())
                 .build();
         // 广播消息
         broadcastMessage(messageDto);
@@ -221,7 +222,7 @@ public class WebSocketServiceImpl {
      * @throws IOException io异常
      */
     private void broadcastMessage(WebsocketMessageDto messageDto) throws IOException {
-        for (WebSocketServiceImpl webSocketService : webSocketSet) {
+        for (WebSocketServiceImpl webSocketService : WEB_SOCKET_SET) {
             synchronized (webSocketService.session) {
                 webSocketService.session.getBasicRemote().sendText(JSON.toJSONString(messageDto));
             }

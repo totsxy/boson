@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 撤回消息dto
+ * 撤回消息DTO
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -26,5 +27,4 @@ public class RecallMessageDto {
      * 是否为语音
      */
     private Boolean isVoice;
-
 }

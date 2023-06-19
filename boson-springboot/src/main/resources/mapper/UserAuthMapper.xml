@@ -10,7 +10,7 @@
         <result column="login_type" property="loginType"/>
         <result column="ip_address" property="ipAddress"/>
         <result column="ip_source" property="ipSource"/>
-        <result column="create_at" property="createTime"/>
+        <result column="create_at" property="createAt"/>
         <result column="last_login_time" property="lastLoginTime"/>
         <result column="is_disable" property="isDisable"/>
         <collection property="roleList" ofType="org.boson.domain.dto.UserRoleDto">
@@ -19,7 +19,7 @@
         </collection>
     </resultMap>
 
-    <select id="listUsers" resultMap="UserBackMap">
+    <select id="pageUsers" resultMap="UserBackMap">
         SELECT
         ua.id,
         user_info_id,
@@ -30,7 +30,7 @@
         role_name,
         ip_address,
         ip_source,
-        ua.create_at as create_time,
+        ua.create_at,
         last_login_time,
         ui.is_disable
         FROM

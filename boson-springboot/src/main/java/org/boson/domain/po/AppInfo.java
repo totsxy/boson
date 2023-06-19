@@ -5,10 +5,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.boson.domain.Entity;
 
-import java.time.LocalDateTime;
 
 /**
- * 网站配置PO
+ * 应用信息PO
  *
  * @author ShenXiaoYu
  * @since 0.0.1
@@ -18,8 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-@TableName(value = "tb_website_config")
-public class WebsiteConfig extends Entity {
+@TableName(value = "tb_app_info")
+public class AppInfo extends Entity {
 
     /**
      * 配置信息

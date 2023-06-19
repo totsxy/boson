@@ -10,15 +10,15 @@ import java.util.List;
 
 
 /**
- * 后台用户
+ * 后台用户DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserBackDto {
 
     /**
@@ -32,9 +32,9 @@ public class UserBackDto {
     private Integer userInfoId;
 
     /**
-     * 头像
+     * 登录类型
      */
-    private String avatar;
+    private Integer loginType;
 
     /**
      * 昵称
@@ -42,14 +42,14 @@ public class UserBackDto {
     private String nickname;
 
     /**
-     * 用户角色
+     * 头像
      */
-    private List<UserRoleDto> roleList;
+    private String avatar;
 
     /**
-     * 登录类型
+     * 是否禁用
      */
-    private Integer loginType;
+    private Integer isDisable;
 
     /**
      * 用户登录ip
@@ -64,7 +64,7 @@ public class UserBackDto {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date createAt;
 
     /**
      * 最近登录时间
@@ -72,13 +72,12 @@ public class UserBackDto {
     private Date lastLoginTime;
 
     /**
-     * 用户评论状态
-     */
-    private Integer isDisable;
-
-    /**
      * 状态
      */
     private Integer status;
 
+    /**
+     * 用户角色
+     */
+    private List<UserRoleDto> roleList;
 }

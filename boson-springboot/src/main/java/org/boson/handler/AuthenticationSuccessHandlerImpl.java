@@ -5,7 +5,7 @@ import org.boson.domain.dto.UserInfoDto;
 import org.boson.domain.po.UserAuth;
 import org.boson.service.UserAuthService;
 import org.boson.util.BeanUtils;
-import org.boson.util.HttpUtils;
+import org.boson.util.IOUtils;
 import org.boson.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -19,7 +19,7 @@ import java.io.IOException;
 
 
 /**
- * 登录成功处理
+ * 用户登录成功处理器
  *
  * @author ShenXiaoYu
  * @since 0.0.1
@@ -27,17 +27,13 @@ import java.io.IOException;
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
-    private final UserAuthService userAuthService;
-
     @Autowired
-    public AuthenticationSuccessHandlerImpl(UserAuthService userAuthService) {
-        this.userAuthService = userAuthService;
-    }
+    private UserAuthService userAuthService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         UserInfoDto userInfoDto = BeanUtils.bean2Bean(UserUtils.getLoginUser(), UserInfoDto.class);
-        HttpUtils.writeJSON(httpServletResponse, Result.ok(userInfoDto));
+        IOUtils.writeJSON(httpServletResponse, Result.ok(userInfoDto));
         updateUserInfo();
     }
 
@@ -52,6 +48,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 .ipSource(UserUtils.getLoginUser().getIpSource())
                 .lastLoginTime(UserUtils.getLoginUser().getLastLoginTime())
                 .build();
-        userAuthService.updateById(userAuth);
+        this.userAuthService.updateById(userAuth);
     }
 }

@@ -6,16 +6,17 @@ import org.boson.domain.po.UniqueView;
 
 import java.util.List;
 
+
 /**
- * 用户量统计
+ * 访问量统计服务
  *
- * @author xiaojie
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 public interface UniqueViewService extends IService<UniqueView> {
 
     /**
-     * 获取7天用户量统计
+     * 查看7天用户量统计
      *
      * @return 用户量
      */

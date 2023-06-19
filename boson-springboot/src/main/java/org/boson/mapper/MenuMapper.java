@@ -11,12 +11,13 @@ import java.util.List;
  * 菜单表Mapper
  *
  * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface MenuMapper extends BaseMapper<Menu> {
 
     /**
-     * 根据用户id查询菜单
+     * 根据用户信息id查询菜单
      *
      * @param userInfoId 用户信息id
      * @return 菜单列表

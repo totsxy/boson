@@ -7,9 +7,10 @@ import org.boson.domain.dto.UserRoleDto;
 import org.boson.domain.po.Role;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.RoleVo;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 
 import java.util.List;
+
 
 /**
  * 角色服务
@@ -22,7 +23,7 @@ public interface RoleService extends BaseService<Role> {
     /**
      * 保存或更新角色
      *
-     * @param roleVo 角色
+     * @param roleVo 角色信息
      */
     boolean saveOrUpdateRole(RoleVo roleVo);
 
@@ -34,24 +35,32 @@ public interface RoleService extends BaseService<Role> {
     boolean deleteRoles(List<Integer> roleIdList);
 
     /**
-     * 查询角色列表
+     * 分页查询角色列表
      *
      * @param conditionVo 查询条件
      * @return 角色列表
      */
-    PageResult<RoleDto> listRoles(ConditionVo conditionVo);
+    PageResult<RoleDto> pageRoles(ConditionVo conditionVo);
 
     /**
-     * 获取用户角色选项
+     * 根据用户信息id查询角色列表
      *
-     * @return 用户角色选项列表
+     * @param userInfoId 用户信息id
+     * @return 角色标签
+     */
+    List<String> listRolesByUserInfoId(Integer userInfoId);
+
+    /**
+     * 查看用户角色列表
+     *
+     * @return 用户角色列表
      */
     List<UserRoleDto> listUserRoles();
 
     /**
-     * 获取资源角色选项
+     * 查看资源角色列表
      *
-     * @return 资源角色选项列表
+     * @return 资源角色列表
      */
     List<ResourceRoleDto> listResourceRoles();
 }

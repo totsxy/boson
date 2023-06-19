@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.Optional;
 
-import static org.boson.constant.CommonConstants.*;
+import static org.boson.constant.PageConstants.*;
+
 
 /**
  * 分页拦截器

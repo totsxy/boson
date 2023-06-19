@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * 用户信息
+ * 用户信息DTO
  *
- * @author yezhiqiu
- * @date 2021/07/27
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -21,7 +21,7 @@ import java.util.Set;
 public class UserInfoDto {
 
     /**
-     * 用户账号id
+     * 用户账户id
      */
     private Integer id;
 
@@ -31,9 +31,9 @@ public class UserInfoDto {
     private Integer userInfoId;
 
     /**
-     * 邮箱号
+     * 用户名
      */
-    private String email;
+    private String username;
 
     /**
      * 登录方式
@@ -41,9 +41,9 @@ public class UserInfoDto {
     private Integer loginType;
 
     /**
-     * 用户名
+     * 邮箱号
      */
-    private String username;
+    private String email;
 
     /**
      * 用户昵称
@@ -66,21 +66,6 @@ public class UserInfoDto {
     private String webSite;
 
     /**
-     * 点赞文章集合
-     */
-    private Set<Object> articleLikeSet;
-
-    /**
-     * 点赞评论集合
-     */
-    private Set<Object> commentLikeSet;
-
-    /**
-     * 点赞评论集合
-     */
-    private Set<Object> talkLikeSet;
-
-    /**
      * 用户登录ip
      */
     private String ipAddress;
@@ -94,5 +79,4 @@ public class UserInfoDto {
      * 最近登录时间
      */
     private LocalDateTime lastLoginTime;
-
 }

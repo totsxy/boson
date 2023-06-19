@@ -1,4 +1,4 @@
-package org.boson.support.mybatisplus.service;
+package org.boson.support.service;
 
 import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.query.Query;

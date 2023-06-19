@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * 角色资源
+ * 角色资源表mapper
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface RoleResourceMapper extends BaseMapper<RoleResource> {

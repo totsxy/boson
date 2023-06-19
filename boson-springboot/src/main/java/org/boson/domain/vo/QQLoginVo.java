@@ -20,20 +20,20 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(description = "qq登录信息")
+@ApiModel(description = "QQ登录信息")
 public class QQLoginVo {
 
     /**
      * openId
      */
     @NotBlank(message = "openId不能为空")
-    @ApiModelProperty(name = "openId", value = "qq openId", required = true, dataType = "String")
+    @ApiModelProperty(name = "openId", value = "QQ openId", required = true, dataType = "String")
     private String openId;
 
     /**
      * accessToken
      */
     @NotBlank(message = "accessToken不能为空")
-    @ApiModelProperty(name = "accessToken", value = "qq accessToken", required = true, dataType = "String")
+    @ApiModelProperty(name = "accessToken", value = "QQ accessToken", required = true, dataType = "String")
     private String accessToken;
 }

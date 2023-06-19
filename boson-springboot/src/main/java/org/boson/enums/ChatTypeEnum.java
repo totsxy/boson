@@ -48,10 +48,10 @@ public enum ChatTypeEnum {
     private final String desc;
 
     /**
-     * 根据类型获取枚举
+     * 获取聊天类型枚举
      *
      * @param type 类型
-     * @return 枚举
+     * @return 聊天类型枚举
      */
     public static ChatTypeEnum getChatType(Integer type) {
         for (ChatTypeEnum chatType : ChatTypeEnum.values()) {

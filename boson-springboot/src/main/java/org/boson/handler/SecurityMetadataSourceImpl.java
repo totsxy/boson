@@ -22,63 +22,44 @@ import java.util.List;
  * @since 0.0.1
  */
 @Component
-public class ResourceRoleMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
+public class SecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
 
     /**
      * 资源角色列表
      */
     private static List<ResourceRoleDto> RESOURCE_ROLE_LIST;
 
-    private RoleService roleService;
-
     @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
+    private RoleService roleService;
 
     /**
      * 加载资源角色信息
      */
-    @PostConstruct
-    private void loadDataSource() {
-        RESOURCE_ROLE_LIST = this.roleService.listResourceRoles();
-    }
-
-    public void reloadDataSource() {
-        if (CollectionUtils.isEmpty(RESOURCE_ROLE_LIST)) {
-            this.loadDataSource();
+    public boolean loadResourceRole(boolean reload) {
+        if (reload) {
+            RESOURCE_ROLE_LIST = this.roleService.listResourceRoles();
         }
+        return reload;
     }
 
-    public void clearDataSource() {
-        RESOURCE_ROLE_LIST = null;
+    @PostConstruct
+    public void loadResourceRole() {
+        this.loadResourceRole(true);
     }
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        // 修改接口角色关系后重新加载
-        this.reloadDataSource();
+        FilterInvocation invocation = (FilterInvocation) object;
+        String method = invocation.getRequest().getMethod();
+        String url = invocation.getRequest().getRequestURI();
 
-        FilterInvocation fi = (FilterInvocation) object;
-        // 获取用户请求方式
-        String method = fi.getRequest().getMethod();
-        // 获取用户请求Url
-        String url = fi.getRequest().getRequestURI();
-
-
-//        HttpServletRequest request = fi.getRequest();
         AntPathMatcher antPathMatcher = new AntPathMatcher();
-//
-//        List<String> roleList = resourceRoleList.stream()
-//                .anyMatch(it->antPathMatcher.match(it.getUrl(), request.getRequestURI()) && it.getRequestMethod().equals(request.getMethod()))
-//
-
+        final List<ResourceRoleDto> resourceRoleDtoList = RESOURCE_ROLE_LIST;
 
         // 获取接口角色信息，若为匿名接口则放行，若无对应角色则禁止
-        final List<ResourceRoleDto> resourceRoleDtoList = RESOURCE_ROLE_LIST;
-        for (ResourceRoleDto resourceRoleDTO : resourceRoleDtoList) {
-            if (antPathMatcher.match(resourceRoleDTO.getUrl(), url) && resourceRoleDTO.getRequestMethod().equals(method)) {
-                List<String> roleList = resourceRoleDTO.getRoleList();
+        for (ResourceRoleDto resourceRoleDto : resourceRoleDtoList) {
+            if (antPathMatcher.match(resourceRoleDto.getUrl(), url) && resourceRoleDto.getRequestMethod().equals(method)) {
+                List<String> roleList = resourceRoleDto.getRoleList();
                 if (CollectionUtils.isEmpty(roleList)) {
                     return SecurityConfig.createList("disable");
                 }

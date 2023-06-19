@@ -1,7 +1,7 @@
 package org.boson.handler;
 
 import org.boson.domain.Result;
-import org.boson.util.HttpUtils;
+import org.boson.util.IOUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 
 /**
- * 注销处理
+ * 用户注销处理器
  *
  * @author ShenXiaoYu
  * @since 0.0.1
@@ -22,6 +22,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        HttpUtils.writeJSON(httpServletResponse, Result.ok());
+        IOUtils.writeJSON(httpServletResponse, Result.ok());
     }
 }

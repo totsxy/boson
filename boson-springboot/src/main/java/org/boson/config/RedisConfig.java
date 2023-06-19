@@ -12,11 +12,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+
 /**
- * redis配置
+ * redis配置类
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Configuration
 public class RedisConfig {
@@ -31,12 +32,15 @@ public class RedisConfig {
         // mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
         mapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+
         jackson2JsonRedisSerializer.setObjectMapper(mapper);
+
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         // key采用String的序列化方式
         redisTemplate.setKeySerializer(stringRedisSerializer);
         // hash的key也采用String的序列化方式
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
+
         // value序列化方式采用jackson
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         // hash的value序列化方式采用jackson

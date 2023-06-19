@@ -1,7 +1,7 @@
 package org.boson.service;
 
 import org.boson.domain.po.RoleMenu;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 
 /**
  * 角色菜单服务

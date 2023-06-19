@@ -14,12 +14,11 @@ import org.boson.exception.BizException;
 import org.boson.domain.vo.MenuVo;
 import org.boson.service.MenuService;
 import org.boson.service.RoleMenuService;
-import org.boson.support.mybatisplus.service.BaseServiceImpl;
+import org.boson.support.service.BaseServiceImpl;
 import org.boson.util.BeanUtils;
 import org.boson.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,18 +34,12 @@ import static org.boson.constant.CommonConstants.*;
 @Service
 public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implements MenuService {
 
-    private final RoleMenuService roleMenuService;
-
     @Autowired
-    public MenuServiceImpl(RoleMenuService roleMenuService) {
-        this.roleMenuService = roleMenuService;
-    }
+    private RoleMenuService roleMenuService;
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean saveOrUpdateMenu(MenuVo menuVo) {
-        Menu menu = BeanUtils.bean2Bean(menuVo, Menu.class);
-        return this.saveOrUpdate(menu);
+        return this.saveOrUpdate(BeanUtils.bean2Bean(menuVo, Menu.class));
     }
 
     @Override
@@ -70,7 +63,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                 .collect(Collectors.toList());
 
         menuIdList.add(menuId);
-        return menuIdList.size() == this.getBaseMapper().deleteBatchIds(menuIdList);
+        return this.removeByIds(menuIdList);
     }
 
     @Override
@@ -80,12 +73,15 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                 .queryList();
 
         Map<Integer, List<Menu>> childrenMenuMap = this.mapChildrenMenu(menuList);
-        List<MenuDto> menuDtoList = this.listCatalog(menuList).stream()
+        List<MenuDto> menuDtoList = this.listCatalog(menuList)
+                .stream()
                 .map(catalog -> {
-                    MenuDto menuDto = BeanUtils.bean2Bean(catalog, MenuDto.class);
-                    List<MenuDto> children = BeanUtils.bean2Bean(childrenMenuMap.remove(catalog.getId()), MenuDto.class).stream()
+                    List<MenuDto> children = BeanUtils.bean2Bean(childrenMenuMap.remove(catalog.getId()), MenuDto.class)
+                            .stream()
                             .sorted(Comparator.comparing(MenuDto::getOrderNum))
                             .collect(Collectors.toList());
+
+                    MenuDto menuDto = BeanUtils.bean2Bean(catalog, MenuDto.class);
                     menuDto.setChildren(children);
                     return menuDto;
                 })
@@ -122,23 +118,18 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                 .queryList();
 
         Map<Integer, List<Menu>> childrenMenuMap = this.mapChildrenMenu(menuList);
-        return this.listCatalog(menuList).stream()
+        return this.listCatalog(menuList)
+                .stream()
                 .map(catalog -> {
-                    // 获取目录下的菜单排序
-                    List<Menu> childrenMenuList = childrenMenuMap.get(catalog.getId());
-
-                    List<LabelOptionDto> children;
-                    if (CollectionUtil.isEmpty(childrenMenuList)) {
-                        children = new ArrayList<>(0);
-                    } else {
-                        children = childrenMenuList.stream()
-                                .sorted(Comparator.comparing(Menu::getOrderNum))
-                                .map(menu -> LabelOptionDto.builder()
-                                        .id(menu.getId())
-                                        .label(menu.getName())
-                                        .build())
-                                .collect(Collectors.toList());
-                    }
+                    List<LabelOptionDto> children = Optional.ofNullable(childrenMenuMap.get(catalog.getId()))
+                            .orElse(new ArrayList<>(0))
+                            .stream()
+                            .sorted(Comparator.comparing(Menu::getOrderNum))
+                            .map(menu -> LabelOptionDto.builder()
+                                    .id(menu.getId())
+                                    .label(menu.getName())
+                                    .build())
+                            .collect(Collectors.toList());
 
                     return LabelOptionDto.builder()
                             .id(catalog.getId())
@@ -164,11 +155,10 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
     private List<UserMenuDto> convertUserMenuList(List<Menu> catalogList, Map<Integer, List<Menu>> childrenMap) {
         return catalogList.stream()
                 .map(catalog -> {
-                    List<Menu> childrenMenuList = childrenMap.get(catalog.getId());
-
-                    UserMenuDto userMenuDto = new UserMenuDto();
+                    UserMenuDto userMenuDto;
                     List<UserMenuDto> children;
 
+                    List<Menu> childrenMenuList = childrenMap.get(catalog.getId());
                     if (CollectionUtils.isNotEmpty(childrenMenuList)) {
                         // 多级菜单处理
                         userMenuDto = BeanUtils.bean2Bean(catalog, UserMenuDto.class);
@@ -182,11 +172,12 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                                 .collect(Collectors.toList());
                     } else {
                         // 一级菜单处理
-                        userMenuDto.setPath(catalog.getPath());
-                        userMenuDto.setComponent(COMPONENT);
+                        userMenuDto = UserMenuDto.builder()
+                                .path(catalog.getPath())
+                                .component(COMPONENT)
+                                .build();
 
-                        children = new ArrayList<>(0);
-                        children.add(UserMenuDto.builder()
+                        children = CollectionUtil.newArrayList(UserMenuDto.builder()
                                 .path("")
                                 .name(catalog.getName())
                                 .icon(catalog.getIcon())

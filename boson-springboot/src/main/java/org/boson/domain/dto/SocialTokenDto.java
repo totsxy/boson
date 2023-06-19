@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 社交登录token
+ * 第三方token信息DTO
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -31,5 +32,4 @@ public class SocialTokenDto {
      * 登录类型
      */
     private Integer loginType;
-
 }

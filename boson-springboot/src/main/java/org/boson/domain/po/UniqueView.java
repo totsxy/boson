@@ -7,7 +7,7 @@ import org.boson.domain.Entity;
 
 
 /**
- * 网站访问量PO
+ * 应用访问量PO
  *
  * @author ShenXiaoYu
  * @since 0.0.1

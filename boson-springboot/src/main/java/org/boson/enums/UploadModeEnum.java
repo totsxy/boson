@@ -36,10 +36,10 @@ public enum UploadModeEnum {
     private final String strategy;
 
     /**
-     * 获取策略
+     * 获取上传策略
      *
      * @param mode 模式
-     * @return {@link String} 搜索策略
+     * @return {@link String} 上传策略
      */
     public static String getStrategy(String mode) {
         for (UploadModeEnum value : UploadModeEnum.values()) {
@@ -49,5 +49,4 @@ public enum UploadModeEnum {
         }
         return null;
     }
-
 }

@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 用户地区dto
+ * 用户地区DTO
  *
- * @author yezhiqiu
- * @date 2021/08/23
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -26,5 +27,4 @@ public class UserAreaDto {
      * 数量
      */
     private Long value;
-
 }

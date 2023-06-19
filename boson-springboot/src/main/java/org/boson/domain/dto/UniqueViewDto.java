@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * 访问量
+ * 访问量DTO
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -27,5 +27,4 @@ public class UniqueViewDto {
      * 访问量
      */
     private Integer viewsCount;
-
 }

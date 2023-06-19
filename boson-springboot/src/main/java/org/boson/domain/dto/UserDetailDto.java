@@ -12,17 +12,17 @@ import java.util.stream.Collectors;
 
 
 /**
- * 用户信息
+ * 用户信息DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @Builder
 public class UserDetailDto implements UserDetails {
 
     /**
-     * 用户账号id
+     * 用户账户id
      */
     private Integer id;
 
@@ -30,16 +30,6 @@ public class UserDetailDto implements UserDetails {
      * 用户信息id
      */
     private Integer userInfoId;
-
-    /**
-     * 邮箱号
-     */
-    private String email;
-
-    /**
-     * 登录方式
-     */
-    private Integer loginType;
 
     /**
      * 用户名
@@ -52,9 +42,14 @@ public class UserDetailDto implements UserDetails {
     private String password;
 
     /**
-     * 用户角色
+     * 登录方式
      */
-    private List<String> roleList;
+    private Integer loginType;
+
+    /**
+     * 邮箱号
+     */
+    private String email;
 
     /**
      * 用户昵称
@@ -77,19 +72,9 @@ public class UserDetailDto implements UserDetails {
     private String webSite;
 
     /**
-     * 点赞文章集合
+     * 是否禁用
      */
-    private Set<Object> articleLikeSet;
-
-    /**
-     * 点赞评论集合
-     */
-    private Set<Object> commentLikeSet;
-
-    /**
-     * 点赞说说集合
-     */
-    private Set<Object> talkLikeSet;
+    private Integer isDisable;
 
     /**
      * 用户登录ip
@@ -100,11 +85,6 @@ public class UserDetailDto implements UserDetails {
      * ip来源
      */
     private String ipSource;
-
-    /**
-     * 是否禁用
-     */
-    private Integer isDisable;
 
     /**
      * 浏览器
@@ -121,6 +101,10 @@ public class UserDetailDto implements UserDetails {
      */
     private LocalDateTime lastLoginTime;
 
+    /**
+     * 用户角色
+     */
+    private List<String> roleList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -158,5 +142,4 @@ public class UserDetailDto implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

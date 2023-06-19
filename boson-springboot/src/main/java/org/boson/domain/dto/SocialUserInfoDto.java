@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 社交账号信息
+ * 第三方账户信息DTO
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor
@@ -26,5 +27,4 @@ public class SocialUserInfoDto {
      * 头像
      */
     private String avatar;
-
 }

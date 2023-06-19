@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+
 /**
  * oss配置属性
  *
@@ -21,7 +22,7 @@ public class OssConfigProperties {
     private String url;
 
     /**
-     * 终点
+     * 站点
      */
     private String endpoint;
 

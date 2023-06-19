@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 微博token
+ * 微博token信息DTO
  *
- * @author yezhqiu
- * @date 2021/06/14
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @AllArgsConstructor
@@ -27,5 +27,4 @@ public class WeiboTokenDto {
      * 访问令牌
      */
     private String access_token;
-
 }

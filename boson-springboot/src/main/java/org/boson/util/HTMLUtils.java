@@ -5,8 +5,8 @@ import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 /**
  * HTML工具类
  *
- * @author yezhiqiu
- * @date 2021/07/27
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 public class HTMLUtils {
 

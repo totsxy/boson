@@ -7,8 +7,9 @@ import org.boson.domain.po.OperationLog;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.mapper.OperationLogMapper;
 import org.boson.service.OperationLogService;
-import org.boson.support.mybatisplus.service.BaseServiceImpl;
+import org.boson.support.service.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+
 
 /**
  * 操作日志服务

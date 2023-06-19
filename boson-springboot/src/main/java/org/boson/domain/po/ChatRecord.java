@@ -5,13 +5,12 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.boson.domain.Entity;
 
-import java.time.LocalDateTime;
 
 /**
- * 聊天记录
+ * 聊天记录PO
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
 @AllArgsConstructor

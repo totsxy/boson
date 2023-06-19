@@ -28,12 +28,8 @@ import javax.validation.Valid;
 @RestController
 public class UserInfoController {
 
-    private final UserInfoService userInfoService;
-
     @Autowired
-    public UserInfoController(UserInfoService userInfoService) {
-        this.userInfoService = userInfoService;
-    }
+    private UserInfoService userInfoService;
 
     /**
      * 更新用户信息
@@ -50,14 +46,14 @@ public class UserInfoController {
     /**
      * 更新用户头像
      *
-     * @param file 文件
+     * @param file 头像文件
      * @return {@link Result<String>} 头像地址
      */
     @ApiOperation(value = "更新用户头像")
     @ApiImplicitParam(name = "file", value = "用户头像", required = true, dataType = "MultipartFile")
     @PostMapping("/users/avatar")
     public Result<String> updateUserAvatar(MultipartFile file) {
-        return Result.check(userInfoService.updateUserAvatar(file));
+        return Result.ok(userInfoService.updateUserAvatar(file));
     }
 
     /**
@@ -113,7 +109,7 @@ public class UserInfoController {
     /**
      * 下线用户
      *
-     * @param userInfoId 用户信息
+     * @param userInfoId 用户信息id
      * @return {@link Result<>}
      */
     @ApiOperation(value = "下线用户")

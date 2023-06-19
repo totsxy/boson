@@ -1,6 +1,5 @@
 package org.boson.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.boson.domain.dto.LabelOptionDto;
@@ -9,13 +8,14 @@ import org.boson.domain.po.Resource;
 import org.boson.domain.po.RoleResource;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.exception.BizException;
-import org.boson.handler.ResourceRoleMetadataSourceImpl;
+import org.boson.handler.SecurityMetadataSourceImpl;
 import org.boson.domain.vo.ResourceVo;
 import org.boson.mapper.ResourceMapper;
 import org.boson.service.ResourceService;
 import org.boson.service.RoleResourceService;
-import org.boson.support.mybatisplus.service.BaseServiceImpl;
+import org.boson.support.service.BaseServiceImpl;
 import org.boson.util.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,23 +32,15 @@ import static org.boson.constant.CommonConstants.FALSE;
 @Service
 public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resource> implements ResourceService {
 
-    private final RoleResourceService roleResourceService;
-
-    private final ResourceRoleMetadataSourceImpl resourceRoleMetadataSource;
-
-    public ResourceServiceImpl(RoleResourceService roleResourceService, ResourceRoleMetadataSourceImpl resourceRoleMetadataSource) {
-        this.roleResourceService = roleResourceService;
-        this.resourceRoleMetadataSource = resourceRoleMetadataSource;
-    }
+    @Autowired
+    private RoleResourceService roleResourceService;
+    @Autowired
+    private SecurityMetadataSourceImpl securityMetadataSource;
 
     @Override
     public boolean saveOrUpdateResource(ResourceVo resourceVo) {
         Resource resource = BeanUtils.bean2Bean(resourceVo, Resource.class);
-        boolean savedOrUpdated = this.saveOrUpdate(resource);
-        if (savedOrUpdated) {
-            this.resourceRoleMetadataSource.clearDataSource();
-        }
-        return savedOrUpdated;
+        return this.securityMetadataSource.loadResourceRole(this.saveOrUpdate(resource));
     }
 
     @Override
@@ -72,12 +64,7 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
                 .collect(Collectors.toList());
 
         resourceIdList.add(resourceId);
-
-        boolean deleted = resourceIdList.size() == getBaseMapper().deleteBatchIds(resourceIdList);
-        if (deleted) {
-            this.resourceRoleMetadataSource.clearDataSource();
-        }
-        return deleted;
+        return this.securityMetadataSource.loadResourceRole(this.removeByIds(resourceIdList));
     }
 
     @Override
@@ -85,12 +72,13 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
         List<Resource> resourceList = this.beginQuery()
                 .like(StringUtils.isNotBlank(conditionVo.getKeywords()), Resource::getResourceName, conditionVo.getKeywords())
                 .queryList();
-        Map<Integer, List<Resource>> childrenResourceMap = this.listChildrenResource(resourceList);
 
-        List<ResourceDto> resourceDtoList = this.listModule(resourceList).stream()
+        Map<Integer, List<Resource>> childrenResourceMap = this.listChildrenResource(resourceList);
+        List<ResourceDto> resourceDtoList = this.listModule(resourceList)
+                .stream()
                 .map(module -> {
-                    ResourceDto resourceDto = BeanUtils.bean2Bean(module, ResourceDto.class);
                     List<ResourceDto> children = BeanUtils.bean2Bean(childrenResourceMap.remove(module.getId()), ResourceDto.class);
+                    ResourceDto resourceDto = BeanUtils.bean2Bean(module, ResourceDto.class);
                     resourceDto.setChildren(children);
                     return resourceDto;
                 }).collect(Collectors.toList());
@@ -114,23 +102,19 @@ public class ResourceServiceImpl extends BaseServiceImpl<ResourceMapper, Resourc
                 .select(Resource::getId, Resource::getResourceName, Resource::getPid)
                 .eq(Resource::getIsAnonymous, FALSE)
                 .queryList();
-        Map<Integer, List<Resource>> childrenResourceMap = listChildrenResource(resourceList);
 
-        return this.listModule(resourceList).stream()
+        Map<Integer, List<Resource>> childrenResourceMap = this.listChildrenResource(resourceList);
+        return this.listModule(resourceList)
+                .stream()
                 .map(module -> {
-                    List<LabelOptionDto> children;
-                    List<Resource> childrenResourceList = childrenResourceMap.get(module.getId());
-
-                    if (CollectionUtil.isEmpty(childrenResourceList)) {
-                        children = new ArrayList<>(0);
-                    } else {
-                        children = childrenResourceList.stream()
-                                .map(resource -> LabelOptionDto.builder()
-                                        .id(resource.getId())
-                                        .label(resource.getResourceName())
-                                        .build())
-                                .collect(Collectors.toList());
-                    }
+                    List<LabelOptionDto> children = Optional.ofNullable(childrenResourceMap.get(module.getId()))
+                            .orElse(new ArrayList<>(0))
+                            .stream()
+                            .map(resource -> LabelOptionDto.builder()
+                                    .id(resource.getId())
+                                    .label(resource.getResourceName())
+                                    .build())
+                            .collect(Collectors.toList());
 
                     return LabelOptionDto.builder()
                             .id(module.getId())

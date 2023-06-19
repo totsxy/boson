@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+
 /**
  * 角色控制器
  *
@@ -27,12 +28,8 @@ import java.util.List;
 @RestController
 public class RoleController {
 
-    private final RoleService roleService;
-
     @Autowired
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
+    private RoleService roleService;
 
     /**
      * 保存或更新角色
@@ -53,7 +50,7 @@ public class RoleController {
      * @param roleIdList 角色id列表
      * @return {@link Result<>}
      */
-    @LogOperation(OperationEnum.Remove)
+    @LogOperation(OperationEnum.Delete)
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/admin/roles")
     public Result<?> deleteRoles(@RequestBody List<Integer> roleIdList) {
@@ -61,23 +58,23 @@ public class RoleController {
     }
 
     /**
-     * 查询角色列表
+     * 分页查询角色列表
      *
      * @param conditionVo 查询条件
      * @return {@link Result<RoleDto>} 角色列表
      */
-    @ApiOperation(value = "查询角色列表")
+    @ApiOperation(value = "分页查询角色列表")
     @GetMapping("/admin/roles")
-    public Result<PageResult<RoleDto>> listRoles(ConditionVo conditionVo) {
-        return Result.ok(this.roleService.listRoles(conditionVo));
+    public Result<PageResult<RoleDto>> pageRoles(ConditionVo conditionVo) {
+        return Result.ok(this.roleService.pageRoles(conditionVo));
     }
 
     /**
-     * 查询用户角色选项
+     * 查看用户角色列表
      *
-     * @return {@link Result<UserRoleDto>} 用户角色选项列表
+     * @return {@link Result<UserRoleDto>} 用户角色列表
      */
-    @ApiOperation(value = "查询用户角色选项")
+    @ApiOperation(value = "查看用户角色列表")
     @GetMapping("/admin/users/role")
     public Result<List<UserRoleDto>> listUserRoles() {
         return Result.ok(this.roleService.listUserRoles());

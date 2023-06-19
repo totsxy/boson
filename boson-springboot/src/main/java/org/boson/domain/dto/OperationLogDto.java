@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 /**
  * 操作日志
  *
- * @author yezhiqiu
- * @date 2021/08/01
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class OperationLogDto {
+
     /**
      * 日志id
      */
@@ -81,6 +83,6 @@ public class OperationLogDto {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createAt;
 
 }

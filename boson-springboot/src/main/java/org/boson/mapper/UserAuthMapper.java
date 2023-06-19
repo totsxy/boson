@@ -11,30 +11,29 @@ import java.util.List;
 
 
 /**
- * 用户账号
+ * 用户账户表mapper
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Repository
 public interface UserAuthMapper extends BaseMapper<UserAuth> {
 
     /**
-     * 查询后台用户列表
+     * 分页查询后台用户列表
      *
      * @param current   页码
      * @param size      大小
-     * @param condition 条件
-     * @return {@link List<  UserBackDto  >} 用户列表
+     * @param condition 查询条件
+     * @return {@link List<UserBackDto>} 后台用户列表
      */
-    List<UserBackDto> listUsers(@Param("current") Long current, @Param("size") Long size, @Param("condition") ConditionVo condition);
+    List<UserBackDto> pageUsers(@Param("current") Long current, @Param("size") Long size, @Param("condition") ConditionVo condition);
 
     /**
      * 查询后台用户数量
      *
-     * @param condition 条件
-     * @return 用户数量
+     * @param condition 查询条件
+     * @return 后台用户数量
      */
     Integer countUser(@Param("condition") ConditionVo condition);
-
 }

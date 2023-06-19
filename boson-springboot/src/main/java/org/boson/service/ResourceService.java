@@ -5,7 +5,7 @@ import org.boson.domain.dto.ResourceDto;
 import org.boson.domain.po.Resource;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.ResourceVo;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ import java.util.List;
 public interface ResourceService extends BaseService<Resource> {
 
     /**
-     * 添加或修改资源
+     * 保存或修改资源
      *
-     * @param resourceVo 资源对象
+     * @param resourceVo 资源信息
      */
     boolean saveOrUpdateResource(ResourceVo resourceVo);
 
@@ -33,17 +33,17 @@ public interface ResourceService extends BaseService<Resource> {
     boolean deleteResource(Integer resourceId);
 
     /**
-     * 查看资源列表
+     * 查询资源列表
      *
-     * @param conditionVo 条件
+     * @param conditionVo 查询条件
      * @return 资源列表
      */
     List<ResourceDto> listResources(ConditionVo conditionVo);
 
     /**
-     * 查看资源选项
+     * 查看角色资源选项
      *
-     * @return 资源选项列表
+     * @return 角色资源选项列表
      */
     List<LabelOptionDto> listResourceOption();
 }

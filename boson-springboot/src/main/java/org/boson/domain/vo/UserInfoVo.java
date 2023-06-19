@@ -20,20 +20,20 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(description = "用户信息对象")
+@ApiModel(description = "用户信息")
 public class UserInfoVo {
 
     /**
      * 用户昵称
      */
-    @NotBlank(message = "昵称不能为空")
-    @ApiModelProperty(name = "nickname", value = "昵称", dataType = "String")
+    @NotBlank(message = "用户昵称不能为空")
+    @ApiModelProperty(name = "nickname", value = "用户昵称", dataType = "String")
     private String nickname;
 
     /**
      * 用户简介
      */
-    @ApiModelProperty(name = "intro", value = "介绍", dataType = "String")
+    @ApiModelProperty(name = "intro", value = "用户简介", dataType = "String")
     private String intro;
 
     /**

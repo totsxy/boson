@@ -1,5 +1,6 @@
 package org.boson.controller;
 
+import org.boson.annotation.LogOperation;
 import org.boson.domain.Result;
 import org.boson.domain.dto.LabelOptionDto;
 import org.boson.domain.dto.MenuDto;
@@ -8,6 +9,7 @@ import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.MenuVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.boson.enums.OperationEnum;
 import org.boson.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,20 +28,17 @@ import java.util.List;
 @RestController
 public class MenuController {
 
-    private final MenuService menuService;
-
     @Autowired
-    public MenuController(MenuService menuService) {
-        this.menuService = menuService;
-    }
+    private MenuService menuService;
 
     /**
-     * 新增或修改菜单
+     * 保存或修改菜单
      *
-     * @param menuVo 菜单
+     * @param menuVo 菜单信息
      * @return {@link Result<>}
      */
-    @ApiOperation(value = "新增或修改菜单")
+    @LogOperation(OperationEnum.SaveOrUpdate)
+    @ApiOperation(value = "保存或修改菜单")
     @PostMapping("/admin/menus")
     public Result<?> saveOrUpdateMenu(@Valid @RequestBody MenuVo menuVo) {
         return Result.check(this.menuService.saveOrUpdateMenu(menuVo));
@@ -51,6 +50,7 @@ public class MenuController {
      * @param menuId 菜单id
      * @return {@link Result<>}
      */
+    @LogOperation(OperationEnum.Delete)
     @ApiOperation(value = "删除菜单")
     @DeleteMapping("/admin/menus/{menuId}")
     public Result<?> deleteMenu(@PathVariable("menuId") Integer menuId) {
@@ -63,21 +63,10 @@ public class MenuController {
      * @param conditionVo 查询条件
      * @return {@link Result<MenuDto>} 菜单列表
      */
-    @ApiOperation(value = "查看菜单列表")
+    @ApiOperation(value = "查询菜单列表")
     @GetMapping("/admin/menus")
     public Result<List<MenuDto>> listMenus(ConditionVo conditionVo) {
         return Result.ok(this.menuService.listMenus(conditionVo));
-    }
-
-    /**
-     * 查看角色菜单选项
-     *
-     * @return {@link Result<LabelOptionDto>} 角色菜单选项列表
-     */
-    @ApiOperation(value = "查看角色菜单选项")
-    @GetMapping("/admin/role/menus")
-    public Result<List<LabelOptionDto>> listMenuOptions() {
-        return Result.ok(this.menuService.listMenuOptions());
     }
 
     /**
@@ -89,5 +78,16 @@ public class MenuController {
     @GetMapping("/admin/user/menus")
     public Result<List<UserMenuDto>> listUserMenus() {
         return Result.ok(this.menuService.listUserMenus());
+    }
+
+    /**
+     * 查看角色菜单选项
+     *
+     * @return {@link Result<LabelOptionDto>} 角色菜单选项列表
+     */
+    @ApiOperation(value = "查看角色菜单选项")
+    @GetMapping("/admin/role/menus")
+    public Result<List<LabelOptionDto>> listMenuOptions() {
+        return Result.ok(this.menuService.listMenuOptions());
     }
 }

@@ -1,15 +1,17 @@
 package org.boson.util;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.boson.domain.PageResult;
 
+import java.util.List;
 import java.util.Objects;
+
 
 /**
  * 分页工具类
  *
- * @author yezhqiu
- * @date 2021/07/18
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 public class PageUtils {
 
@@ -43,4 +45,12 @@ public class PageUtils {
         PAGE_HOLDER.remove();
     }
 
+    public static <T> PageResult<T> limit(List<T> records) {
+        int fromIndex = getLimitCurrent().intValue();
+        int size = getSize().intValue();
+        int toIndex = records.size() - fromIndex > size ? fromIndex + size : records.size();
+
+        List<T> subRecords = records.subList(fromIndex, toIndex);
+        return PageResult.of(subRecords, records.size());
+    }
 }

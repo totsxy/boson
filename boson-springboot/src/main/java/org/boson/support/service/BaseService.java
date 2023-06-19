@@ -1,4 +1,4 @@
-package org.boson.support.mybatisplus.service;
+package org.boson.support.service;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.boson.domain.PageResult;
 import org.boson.util.BeanUtils;
+import org.boson.util.PageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,5 +72,7 @@ public interface BaseService<T> extends IService<T> {
         return new LambdaUpdateActuator<>(this);
     }
 
-    Page<T> getPage();
+    default Page<T> getPage() {
+        return new Page<>(PageUtils.getCurrent(), PageUtils.getSize());
+    }
 }

@@ -6,6 +6,13 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+
+/**
+ * 实体工具类
+ *
+ * @author ShenXiaoYu
+ * @since 0.0.1
+ **/
 public final class BeanUtils {
 
     public static <T> Supplier<? extends T> class2Supplier(Class<T> clazz) {
@@ -62,8 +69,11 @@ public final class BeanUtils {
      * @return 目标对象序列
      */
     public static <T1, T2> List<T2> bean2Bean(Collection<T1> from, Supplier<? extends T2> supplier) {
-        return Objects.isNull(from) ? new ArrayList<>(0)
-                : from.stream()
+        if (Objects.isNull(from)) {
+            return new ArrayList<>(0);
+        }
+
+        return from.stream()
                 .map(t -> bean2Bean(t, supplier))
                 .collect(Collectors.toList());
     }
@@ -87,8 +97,11 @@ public final class BeanUtils {
      * @return 目标字典
      */
     public static <T1, T2, T3> Map<T1, T3> bean2Bean(Map<T1, T2> from, Supplier<? extends T3> supplier) {
-        return Objects.isNull(from) ? new HashMap<>(0)
-                : from.entrySet()
+        if (Objects.isNull(from)) {
+            return new HashMap<>(0);
+        }
+
+        return from.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, t -> bean2Bean(t.getValue(), supplier)));
     }

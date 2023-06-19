@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 角色枚举
+ * 默认角色枚举
  *
  * @author ShenXiaoYu
  * @since 0.0.1

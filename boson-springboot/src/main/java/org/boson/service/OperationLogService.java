@@ -4,7 +4,7 @@ import org.boson.domain.PageResult;
 import org.boson.domain.dto.OperationLogDto;
 import org.boson.domain.po.OperationLog;
 import org.boson.domain.vo.ConditionVo;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 
 
 /**

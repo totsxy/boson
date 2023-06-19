@@ -29,19 +29,15 @@ public class EmailConsumer {
     @Value("${spring.mail.username}")
     private String email;
 
-    private final JavaMailSender javaMailSender;
-
     @Autowired
-    public EmailConsumer(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+    private  JavaMailSender javaMailSender;
 
     @RabbitHandler
     public void process(byte[] data) {
         EmailDto emailDto = JSON.parseObject(new String(data), EmailDto.class);
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(email);
-        message.setTo(emailDto.getEmail());
+        message.setTo(emailDto.getTo());
         message.setSubject(emailDto.getSubject());
         message.setText(emailDto.getContent());
         javaMailSender.send(message);

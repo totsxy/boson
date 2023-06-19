@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * 微博用户信息
+ * 微博用户信息DTO
  *
- * @author yezhqiu
- * @date 2021/06/14
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @AllArgsConstructor
@@ -27,5 +27,4 @@ public class WeiboUserInfoDto {
      * 头像
      */
     private String avatar_hd;
-
 }

@@ -18,29 +18,31 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+
 /**
  * Security配置类
  *
- * @author yezhiqiu
- * @date 2021/07/29
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private AuthenticationEntryPointImpl authenticationEntryPoint;
+
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandler;
     @Autowired
-    private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
     @Autowired
     private AuthenticationFailHandlerImpl authenticationFailHandler;
+    @Autowired
+    private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
     @Autowired
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
 
     @Bean
     public FilterInvocationSecurityMetadataSource securityMetadataSource() {
-        return new ResourceRoleMetadataSourceImpl();
+        return new SecurityMetadataSourceImpl();
     }
 
     @Bean
@@ -58,11 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpSessionEventPublisher();
     }
 
-    /**
-     * 密码加密
-     *
-     * @return {@link PasswordEncoder} 加密方式
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -71,20 +68,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 配置权限
      *
-     * @param http http
-     * @throws Exception 异常
+     * @param http http安全对象
+     * @throws Exception 配置异常
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 配置登录注销路径
         http.formLogin()
                 .loginProcessingUrl("/login")
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailHandler)
+                .successHandler(this.authenticationSuccessHandler)
+                .failureHandler(this.authenticationFailHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessHandler(logoutSuccessHandler);
+                .logoutSuccessHandler(this.logoutSuccessHandler);
 
         // 配置路由权限信息
         http.authorizeRequests()
@@ -100,14 +97,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 关闭跨站请求防护
                 .csrf().disable().exceptionHandling()
-                // 未登录处理
-                .authenticationEntryPoint(authenticationEntryPoint)
-                // 权限不足处理
-                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(this.authenticationEntryPoint)
+                .accessDeniedHandler(this.accessDeniedHandler)
                 .and()
                 .sessionManagement()
                 .maximumSessions(20)
                 .sessionRegistry(sessionRegistry());
     }
-
 }

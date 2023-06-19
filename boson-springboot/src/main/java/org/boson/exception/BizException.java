@@ -23,6 +23,8 @@ public class BizException extends RuntimeException {
     private final String message;
 
     public BizException(Integer code, String message) {
+        super(message);
+
         this.code = code;
         this.message = message;
     }

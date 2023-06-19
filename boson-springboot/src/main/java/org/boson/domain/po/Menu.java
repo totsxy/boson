@@ -42,7 +42,7 @@ public class Menu extends Entity {
     private String icon;
 
     /**
-     * 组件
+     * 菜单组件
      */
     private String component;
 
@@ -52,7 +52,7 @@ public class Menu extends Entity {
     private Integer isHidden;
 
     /**
-     * 排序
+     * 菜单排序
      */
     private Integer orderNum;
 }

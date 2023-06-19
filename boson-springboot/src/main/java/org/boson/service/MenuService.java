@@ -6,9 +6,10 @@ import org.boson.domain.dto.UserMenuDto;
 import org.boson.domain.po.Menu;
 import org.boson.domain.vo.ConditionVo;
 import org.boson.domain.vo.MenuVo;
-import org.boson.support.mybatisplus.service.BaseService;
+import org.boson.support.service.BaseService;
 
 import java.util.List;
+
 
 /**
  * 菜单服务
@@ -19,7 +20,7 @@ import java.util.List;
 public interface MenuService extends BaseService<Menu> {
 
     /**
-     * 新增或修改菜单
+     * 保存或修改菜单
      *
      * @param menuVo 菜单信息
      */
@@ -33,7 +34,7 @@ public interface MenuService extends BaseService<Menu> {
     boolean deleteMenu(Integer menuId);
 
     /**
-     * 查看菜单列表
+     * 查询菜单列表
      *
      * @param conditionVo 查询条件
      * @return 菜单列表

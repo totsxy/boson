@@ -12,8 +12,8 @@ import java.util.Objects;
 /**
  * 文件md5工具类
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Log4j2
 public class FileUtils {

@@ -32,7 +32,7 @@ public enum SearchModeEnum {
     private final String strategy;
 
     /**
-     * 获取策略
+     * 获取搜索策略
      *
      * @param mode 模式
      * @return {@link String} 搜索策略

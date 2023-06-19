@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * 实体
+ * 公共PO实体
  *
  * @author ShenXiaoYu
  * @since 0.0.1

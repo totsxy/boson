@@ -1,13 +1,12 @@
 package org.boson.constant;
 
 /**
- * mqprefix常量
  * mq常量
  *
- * @author yezhiqiu
- * @date 2021/07/28
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
-public class MQPrefixConstants {
+public final class MQPrefixConstants {
 
     /**
      * maxwell交换机
@@ -25,8 +24,7 @@ public class MQPrefixConstants {
     public static final String EMAIL_EXCHANGE = "email_exchange";
 
     /**
-     * 邮件队列
+     * email队列
      */
     public static final String EMAIL_QUEUE = "email_queue";
-
 }

@@ -8,16 +8,17 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 /**
- * 菜单
+ * 菜单DTO
  *
- * @author yezhiqiu
- * @date 2021/08/10
+ * @author ShenXiaoYu
+ * @since 0.0.1
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MenuDto {
 
     /**
@@ -63,7 +64,7 @@ public class MenuDto {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private LocalDateTime createAt;
 
     /**
      * 子菜单列表

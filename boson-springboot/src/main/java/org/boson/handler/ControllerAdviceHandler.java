@@ -12,7 +12,7 @@ import java.util.Objects;
 
 
 /**
- * 全局异常处理
+ * 全局异常处理器
  *
  * @author ShenXiaoYu
  * @since 0.0.1
@@ -22,9 +22,9 @@ import java.util.Objects;
 public class ControllerAdviceHandler {
 
     /**
-     * 处理服务异常
+     * 处理业务异常
      *
-     * @param e 异常
+     * @param e 业务异常对象
      * @return 接口异常信息
      */
     @ExceptionHandler(BizException.class)
@@ -35,7 +35,7 @@ public class ControllerAdviceHandler {
     /**
      * 处理参数校验异常
      *
-     * @param e 异常
+     * @param e 参数校验异常对象
      * @return 接口异常信息
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -46,11 +46,11 @@ public class ControllerAdviceHandler {
     /**
      * 处理系统异常
      *
-     * @param e 异常
+     * @param e 系统异常对象
      * @return 接口异常信息
      */
     @ExceptionHandler(value = Exception.class)
     public Result<?> handle(Exception e) {
-        return Result.fail(StatusCodeEnum.SYSTEM_ERROR);
+        return Result.fail(StatusCodeEnum.SYSTEM_ERROR.getCode(), e.getMessage());
     }
 }

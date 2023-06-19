@@ -26,15 +26,11 @@ import java.util.List;
 @RestController
 public class LogController {
 
-    private final OperationLogService operationLogService;
-
     @Autowired
-    public LogController(OperationLogService operationLogService) {
-        this.operationLogService = operationLogService;
-    }
+    private  OperationLogService operationLogService;
 
     /**
-     * 分页查看操作日志
+     * 分页查询操作日志
      *
      * @param conditionVo 查询条件
      * @return {@link Result<OperationLogDto>} 日志列表

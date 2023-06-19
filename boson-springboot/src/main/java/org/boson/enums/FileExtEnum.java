@@ -31,17 +31,17 @@ public enum FileExtEnum {
     /**
      * md文件
      */
-    MD(".md","markdown文件"),
+    MD(".md", "markdown文件"),
     /**
      * txt文件
      */
-    TXT(".txt","txt文件");
+    TXT(".txt", "txt文件");
 
     /**
-     * 获取文件格式
+     * 获取文件格式枚举
      *
      * @param extName 扩展名
-     * @return {@link FileExtEnum} 文件格式
+     * @return {@link FileExtEnum} 文件格式枚举
      */
     public static FileExtEnum getFileExt(String extName) {
         for (FileExtEnum value : FileExtEnum.values()) {

@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 /**
- * qq token信息
+ * QQ token信息DTO
  *
- * @author yezhqiu
- * @date 2021/06/15
- * @since 1.0.0
+ * @author ShenXiaoYu
+ * @since 0.0.1
  **/
 @Data
 @AllArgsConstructor
@@ -27,5 +27,4 @@ public class QQTokenDto {
      * 客户端id
      */
     private String client_id;
-
 }
